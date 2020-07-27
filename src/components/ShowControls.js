@@ -73,7 +73,7 @@ export class ShowControls extends Component {
 					}}
 				>
 					<img
-						src='/images/projector.png'
+						src='images/projector.png'
 						alt=''
 						onClick={this.props.projectorMode}
 						style={{

@@ -12,12 +12,20 @@ const ScoreBoardDiv = styled.div`
 
 export class ScoreBoard extends Component {
 	render() {
+		const { score, changeScore } = this.props;
 		return (
 			<ScoreBoardDiv>
-				<ScoreCard name='Player One' score={0} />
-				<ScoreCard name='Player Two' score={0} />
-				<ScoreCard name='Player Three' score={0} />
-				<ScoreCard name='Player Four' score={0} />
+				{score.scoreBoard.map((number, index) => {
+					return (
+						<ScoreCard
+							name={`${score.type === 'team' ? 'Team' : 'Player'} ${index + 1}`}
+							key={index}
+							index={index}
+							score={number}
+							changeScore={changeScore}
+						/>
+					);
+				})}
 			</ScoreBoardDiv>
 		);
 	}

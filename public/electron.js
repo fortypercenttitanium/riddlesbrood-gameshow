@@ -95,7 +95,7 @@ function createWindow() {
 	});
 
 	// Dev Tools
-	// gameWindow.webContents.openDevTools();
+	gameWindow.webContents.openDevTools();
 }
 
 app.on('ready', createWindow);

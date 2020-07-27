@@ -17,8 +17,8 @@ const GamesMenuModalDiv = styled.div`
 	position: absolute;
 	display: flex;
 	flex-wrap: wrap;
-	width: 60%;
-	max-height: 60%;
+	width: 70%;
+	max-height: 85%;
 	margin: auto;
 	left: 0;
 	right: 0;
@@ -32,9 +32,10 @@ const GamesMenuModalDiv = styled.div`
 
 const GameButton = styled.div`
 	width: 25%;
+	height: 120px;
 	padding: 1rem;
 	border: 1px solid white;
-	margin: auto;
+	margin: 1rem auto;
 	text-align: center;
 	cursor: pointer;
 	user-select: none;
@@ -44,37 +45,108 @@ const GameButton = styled.div`
 	}
 `;
 
-const GameTitle = styled.h1`
-	font-size: 2rem;
+const GameLogo = styled.img`
+	height: 150px;
+	width: 200px;
+`;
+
+const VersionSelectContainer = styled.div`
+	display: flex;
+	flex-direction: column;
 `;
 
 export class GamesMenuModal extends Component {
-	handleOutsideClick = (e) => {
+	state = {
+		selectedVersion: {
+			Jeopardy: 0,
+			'Name That Tune': 0,
+			'Family Feud': 0,
+			'What The Hell Is It?': 0,
+			'Wheel Of Fortune': 0,
+			'$25,000 Pyramid': 0,
+			'Newlywed Game': 0,
+			'Couples Conundrum': 0,
+			ESP: 0,
+			'Card Sharks': 0,
+		},
+	};
+	handleOutsideClick = () => {
 		this.props.close();
 	};
 	handleModalClick = (e) => {
 		e.stopPropagation();
 	};
 	handleGameClick = (game) => {
-		this.props.setGame(game);
+		this.props.goToVersionSelect(game);
+	};
+
+	openGame = () => {
+		const { title, scoreType, logo } = this.props.selectedGame;
+		const selectedGame = {
+			title,
+			scoreType,
+			logo,
+			version: this.state.selectedVersion[title],
+		};
+		this.props.setGame(selectedGame);
 		this.props.close();
 	};
+
+	handleChange = (e, title) => {
+		const gameList = this.state.selectedVersion;
+		gameList[title] = Number(e.target.value);
+		this.setState({
+			selectedVersion: gameList,
+		});
+	};
+
 	render() {
 		return (
 			<ModalContainer open={this.props.open} onClick={this.handleOutsideClick}>
 				<GamesMenuModalDiv onClick={this.handleModalClick}>
-					{gamesArray.map((game, index) => {
-						return (
-							<GameButton
-								key={index}
-								onClick={() => {
-									this.handleGameClick(game);
-								}}
-							>
-								<GameTitle>{game.title}</GameTitle>
-							</GameButton>
-						);
-					})}
+					{this.props.timeline === 'gamesMenu' &&
+						gamesArray.map((game, index) => {
+							return (
+								<GameButton
+									key={index}
+									onClick={() => {
+										this.handleGameClick(game);
+									}}
+								>
+									<GameLogo src={`images/${game.logo}`} />
+								</GameButton>
+							);
+						})}
+					{this.props.timeline === 'versionSelect' &&
+						gamesArray
+							.filter((game) => game.title === this.props.currentGame.title)
+							.reduce((acc, val) => {
+								if (!acc.includes(val.versions.rating)) {
+									acc.push(val.versions.rating);
+								}
+							})
+							.map((rating) => {
+								return (
+									<VersionSelectContainer>
+										<h1>{rating.toUpperCase()}</h1>
+										{gamesArray
+											.filter(
+												(game) => game.title === this.props.selectedGame.title
+											)
+											.map((game) => {
+												return (
+													<select size='5'>
+														{game.versions.map((version) => {
+															if (version.rating === rating) {
+																return <option>{version.title}</option>;
+															} else return null;
+														})}
+													</select>
+												);
+											})}
+									</VersionSelectContainer>
+								);
+							})}
 				</GamesMenuModalDiv>
 			</ModalContainer>
 		);

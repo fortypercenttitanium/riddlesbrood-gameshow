@@ -1,65 +1,69 @@
-export { Jeopardy } from './Jeopardy';
-export { FamilyFeud } from './FamilyFeud';
+import * as gameVersions from './versions/gameVersions';
 
 export const gamesArray = [
 	{
 		title: 'Jeopardy',
 		logo: 'JeopardyLogo.png',
-		versions: [],
+		versions: gameVersions.jeopardy,
+		scoreType: 'players',
+	},
+	{
+		title: 'Name That Tune',
+		logo: 'NameThatTuneLogo.png',
+		versions: [{ title: '', content: [] }],
 		scoreType: '',
 	},
 	{
 		title: 'Family Feud',
 		logo: 'FamilyFeudLogo.png',
-		versions: [],
+		versions: [{ title: '', content: [] }],
 		scoreType: '',
 	},
 	{
-		title: 'Game #3',
+		title: 'What The Hell Is It?',
 		logo: '',
-		versions: [],
+		versions: [{ title: '', content: [] }],
 		scoreType: '',
 	},
 	{
-		title: 'Game #4',
-		logo: '',
-		versions: [],
+		title: 'Wheel Of Fortune',
+		logo: 'WheelOfFortuneLogo.jpeg',
+		versions: gameVersions.wheel,
+		scoreType: 'players',
+	},
+	{
+		title: '$25,000 Pyramid',
+		logo: '25kPyramidLogo.png',
+		versions: gameVersions.pyramid,
+		scoreType: 'teams',
+	},
+	{
+		title: 'Newlywed Game',
+		logo: 'NewlywedLogo.jpg',
+		versions: [{ title: '', content: [] }],
 		scoreType: '',
 	},
 	{
-		title: 'Game #5',
+		title: 'Couples Conundrum',
 		logo: '',
-		versions: [],
+		versions: [{ title: '', content: [] }],
 		scoreType: '',
 	},
 	{
-		title: 'Game #6',
+		title: 'ESP',
 		logo: '',
-		versions: [],
+		versions: [{ title: '', content: [] }],
 		scoreType: '',
 	},
 	{
-		title: 'Game #7',
-		logo: '',
-		versions: [],
-		scoreType: '',
-	},
-	{
-		title: 'Game #8',
-		logo: '',
-		versions: [],
-		scoreType: '',
-	},
-	{
-		title: 'Game #9',
-		logo: '',
-		versions: [],
-		scoreType: '',
-	},
-	{
-		title: 'Game #10',
-		logo: '',
-		versions: [],
+		title: 'Card Sharks',
+		logo: 'CardSharksLogo.png',
+		versions: [{ title: '', content: [] }],
 		scoreType: '',
 	},
 ];
+
+export { Jeopardy } from './Jeopardy';
+export { FamilyFeud } from './FamilyFeud';
+export { Pyramid } from './Pyramid';
+export { Wheel } from './Wheel';

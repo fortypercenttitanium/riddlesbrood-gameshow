@@ -34,11 +34,16 @@ const Text = styled.h3`
 export class FxButtons extends Component {
 	clickHandler = (e) => {
 		const audio = e.currentTarget.querySelector('audio');
-		e.currentTarget.parentNode.querySelectorAll('audio').forEach((sound) => {
-			sound.pause();
-		});
-		audio.load();
-		audio.play();
+		if (!audio.paused) {
+			audio.pause();
+			audio.load();
+		} else {
+			e.currentTarget.parentNode.querySelectorAll('audio').forEach((sound) => {
+				sound.pause();
+			});
+			audio.load();
+			audio.play();
+		}
 	};
 
 	render() {
@@ -49,15 +54,17 @@ export class FxButtons extends Component {
 						<FxButton
 							key={index}
 							onClick={(e) => {
-								if (this.props.buttons[index].type === 'audio') {
+								if (button.type === 'audio') {
 									this.clickHandler(e);
+								} else if (button.type === 'video') {
+									this.props.playVideo(button.file);
 								}
 							}}
 						>
 							<Text>{button.name}</Text>
 							{button.type === 'audio' ? (
 								<ReactAudioPlayer
-									src={button.path}
+									src={`soundfx/${button.file}`}
 									volume={this.props.volume}
 								/>
 							) : null}

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { jeopardy as versions } from './versions/gameVersions';
+import VideoPlayer from '../VideoPlayer';
 
 const JeopardyContainer = styled.div`
 	height: 100%;
@@ -24,8 +26,9 @@ const Modal = styled.div`
 	height: 100%;
 	width: 100%;
 	position: absolute;
-	background: blue;
-	color: white;
+	font-family: impact;
+	color: #ddd;
+	background: linear-gradient(to top left, #000088, #0000ff);
 	font-size: 5rem;
 	text-align: center;
 	cursor: pointer;
@@ -42,14 +45,18 @@ const CatCell = styled.div`
 	text-align: center;
 	display: flex;
 	flex: 1;
-	border: 1px solid white;
 	cursor: pointer;
+	font-size: 2rem;
+	font-family: impact;
+	color: #eee;
+	background: linear-gradient(to top left, #000088, #0000ff);
+	border: 3px solid #000;
 `;
 
 const QCell = styled(CatCell)`
+	color: #ccc;
 	&:hover {
-		background: white;
-		transition: 0.5s;
+		color: #fff;
 	}
 `;
 
@@ -67,232 +74,83 @@ export class Jeopardy extends Component {
 			question: '',
 			answer: '',
 			completed: false,
+			dailyDouble: false,
 		},
-		board: [
-			{
-				category: 'Category One',
-				questions: [
-					{
-						value: 100,
-						type: 'text',
-						question: 'Test Question 1',
-						answer: 'Test Answer 1',
-						completed: false,
-					},
-					{
-						value: 200,
-						type: 'text',
-						question: 'Test Question 2',
-						answer: 'Test Answer 2',
-						completed: false,
-					},
-					{
-						value: 300,
-						type: 'text',
-						question: 'Test Question 3',
-						answer: 'Test Answer 3',
-						completed: false,
-					},
-					{
-						value: 400,
-						type: 'text',
-						question: 'Test Question 4',
-						answer: 'Test Answer 4',
-						completed: false,
-					},
-					{
-						value: 500,
-						type: 'text',
-						question: 'Test Question 5',
-						answer: 'Test Answer 5',
-						completed: false,
-					},
-				],
-			},
-			{
-				category: 'Category Two',
-				questions: [
-					{
-						value: 100,
-						type: 'text',
-						question: 'Test Question 1',
-						answer: 'Test Answer 1',
-						completed: false,
-					},
-					{
-						value: 200,
-						type: 'text',
-						question: 'Test Question 2',
-						answer: 'Test Answer 2',
-						completed: false,
-					},
-					{
-						value: 300,
-						type: 'text',
-						question: 'Test Question 3',
-						answer: 'Test Answer 3',
-						completed: false,
-					},
-					{
-						value: 400,
-						type: 'text',
-						question: 'Test Question 4',
-						answer: 'Test Answer 4',
-						completed: false,
-					},
-					{
-						value: 500,
-						type: 'text',
-						question: 'Test Question 5',
-						answer: 'Test Answer 5',
-						completed: false,
-					},
-				],
-			},
-			{
-				category: 'Category Three',
-				questions: [
-					{
-						value: 100,
-						type: 'text',
-						question: 'Test Question 1',
-						answer: 'Test Answer 1',
-						completed: false,
-					},
-					{
-						value: 200,
-						type: 'text',
-						question: 'Test Question 2',
-						answer: 'Test Answer 2',
-						completed: false,
-					},
-					{
-						value: 300,
-						type: 'text',
-						question: 'Test Question 3',
-						answer: 'Test Answer 3',
-						completed: false,
-					},
-					{
-						value: 400,
-						type: 'text',
-						question: 'Test Question 4',
-						answer: 'Test Answer 4',
-						completed: false,
-					},
-					{
-						value: 500,
-						type: 'text',
-						question: 'Test Question 5',
-						answer: 'Test Answer 5',
-						completed: false,
-					},
-				],
-			},
-			{
-				category: 'Category Four',
-				questions: [
-					{
-						value: 100,
-						type: 'text',
-						question: 'Test Question 1',
-						answer: 'Test Answer 1',
-						completed: false,
-					},
-					{
-						value: 200,
-						type: 'text',
-						question: 'Test Question 2',
-						answer: 'Test Answer 2',
-						completed: false,
-					},
-					{
-						value: 300,
-						type: 'text',
-						question: 'Test Question 3',
-						answer: 'Test Answer 3',
-						completed: false,
-					},
-					{
-						value: 400,
-						type: 'text',
-						question: 'Test Question 4',
-						answer: 'Test Answer 4',
-						completed: false,
-					},
-					{
-						value: 500,
-						type: 'text',
-						question: 'Test Question 5',
-						answer: 'Test Answer 5',
-						completed: false,
-					},
-				],
-			},
-			{
-				category: 'Category Five',
-				questions: [
-					{
-						value: 100,
-						type: 'text',
-						question: 'Test Question 1',
-						answer: 'Test Answer 1',
-						completed: false,
-					},
-					{
-						value: 200,
-						type: 'text',
-						question: 'Test Question 2',
-						answer: 'Test Answer 2',
-						completed: false,
-					},
-					{
-						value: 300,
-						type: 'text',
-						question: 'Test Question 3',
-						answer: 'Test Answer 3',
-						completed: false,
-					},
-					{
-						value: 400,
-						type: 'text',
-						question: 'Test Question 4',
-						answer: 'Test Answer 4',
-						completed: false,
-					},
-					{
-						value: 500,
-						type: 'text',
-						question: 'Test Question 5',
-						answer: 'Test Answer 5',
-						completed: false,
-					},
-				],
-			},
-		],
+		board: [],
+	};
+
+	componentDidMount() {
+		localStorage.setItem(
+			'board',
+			JSON.stringify(versions[this.props.version].content)
+		);
+		localStorage.setItem(
+			'currentQuestion',
+			JSON.stringify(this.state.currentQuestion)
+		);
+		localStorage.setItem('display', 'board');
+		this.props.setScoreType('player', 3);
+		this.localStorageUpdated();
+		window.addEventListener('storage', this.localStorageUpdated);
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('storage', this.localStorageUpdated);
+	}
+
+	componentDidUpdate() {
+		if (this.props.timer === 0) {
+			this.props.killTimer();
+			this.props.playSound('sfx', 'soundfx/jeopardytimeup.mp3');
+			localStorage.setItem('display', 'answer');
+		}
+	}
+
+	localStorageUpdated = () => {
+		this.setState({
+			display: localStorage.getItem('display'),
+			currentQuestion: JSON.parse(localStorage.getItem('currentQuestion')),
+			board: JSON.parse(localStorage.getItem('board')),
+		});
 	};
 
 	clickHandlerBoard = (question, categoryIndex, questionIndex) => {
 		if (!question.completed) {
+			if (!question.dailyDouble) {
+				this.props.setAnswer(question.answer);
+				this.props.setTimer(3);
+				this.props.runTimer();
+			} else {
+				this.props.playSound('sfx', 'soundfx/dailydoublesound.mp3');
+			}
 			const board = [...this.state.board];
 			let completedQuestionCategory = board[categoryIndex];
 			completedQuestionCategory.questions[questionIndex].completed = true;
 			board[categoryIndex] = completedQuestionCategory;
-			this.setState({
-				currentQuestion: question,
-				display: 'question',
-				board: board,
-			});
+			localStorage.setItem('currentQuestion', JSON.stringify(question));
+			localStorage.setItem(
+				'display',
+				question.dailyDouble ? 'daily-double' : 'question'
+			);
+			localStorage.setItem('board', JSON.stringify(board));
+			this.localStorageUpdated();
 		}
 	};
 
 	clickHandlerModal = () => {
-		if (this.state.display === 'question') {
-			this.setState({
-				display: 'answer',
-			});
+		if (this.state.display === 'daily-double') {
+			this.props.setAnswer(this.state.currentQuestion.answer);
+			this.props.setTimer(13);
+			this.props.runTimer();
+			localStorage.setItem('display', 'question');
+			this.localStorageUpdated();
+		} else if (this.state.display === 'question') {
+			this.props.killTimer();
+			localStorage.setItem('display', 'answer');
+			this.localStorageUpdated();
 		} else {
-			this.setState({ display: 'board' });
+			localStorage.setItem('display', 'board');
+			this.localStorageUpdated();
 		}
 	};
 
@@ -300,13 +158,30 @@ export class Jeopardy extends Component {
 		return (
 			<JeopardyContainer>
 				<Modal display={this.state.display} onClick={this.clickHandlerModal}>
-					<StyledSpan>
-						{this.state.display === 'question'
+					{this.state.display === 'daily-double' && (
+						<div
+							style={{
+								height: '100%',
+								width: '100%',
+							}}
+						>
+							<img src='images/dailydouble.png' width='100%' alt='' />
+						</div>
+					)}
+					<StyledSpan questionType={this.state.currentQuestion.type}>
+						{this.state.display === 'question' &&
+						this.state.currentQuestion.type === 'text'
 							? this.state.currentQuestion.question
 							: this.state.display === 'answer'
 							? this.state.currentQuestion.answer
 							: ''}
 					</StyledSpan>
+					{this.state.currentQuestion.type === 'video' &&
+					this.state.display === 'question' ? (
+						<VideoPlayer
+							file={'/jeopardy/' + this.state.currentQuestion.question}
+						/>
+					) : null}
 				</Modal>
 				<Board>
 					{this.state.board.map((block, index) => {
