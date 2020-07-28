@@ -254,18 +254,20 @@ export class App extends Component {
 				gamesMenu: {
 					open: !prevState.gamesMenu.open,
 					timeline: 'gamesMenu',
+					selectedGame: {},
 				},
 			};
 		});
 	};
 
 	goToVersionSelect = (game) => {
+		const newState = {
+			open: true,
+			timeline: 'versionSelect',
+			selectedGame: game,
+		};
 		this.setState({
-			gamesMenu: {
-				open: true,
-				timeline: 'versionSelect',
-				selectedGame: game,
-			},
+			gamesMenu: newState,
 		});
 	};
 
@@ -282,14 +284,15 @@ export class App extends Component {
 		return (
 			<StyledApp>
 				<GamesMenu toggleGamesMenu={this.toggleGamesMenu} />
-				<GamesMenuModal
-					open={this.state.gamesMenu.open}
-					close={this.toggleGamesMenu}
-					selectedGame={this.state.gamesMenu.selectedGame}
-					timeline={this.state.gamesMenu.timeline}
-					setGame={this.setGame}
-					goToVersionSelect={this.goToVersionSelect}
-				/>
+				{this.state.gamesMenu.open && (
+					<GamesMenuModal
+						close={this.toggleGamesMenu}
+						selectedGame={this.state.gamesMenu.selectedGame}
+						timeline={this.state.gamesMenu.timeline}
+						setGame={this.setGame}
+						goToVersionSelect={this.goToVersionSelect}
+					/>
+				)}
 				<GameLogo logo={this.state.currentGame.logo} />
 				<VolumeControls
 					volume={this.state.audio.volume}
