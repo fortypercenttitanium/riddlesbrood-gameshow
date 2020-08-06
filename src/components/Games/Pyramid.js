@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { pyramid as versions } from './versions/gameVersions';
-import ReactAudioPlayer from 'react-audio-player';
+import { StoreContext as StoreContextCP } from '../../App';
+import { StoreContext as StoreContextGB } from '../Gameboard';
+import { actions } from '../../actions';
 
 const PyramidHomeScreen = styled.div`
 	height: 100%;
@@ -117,317 +119,305 @@ const Container = styled.div`
 	width: 100%;
 `;
 
-export class Pyramid extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			display: 'board',
-			currentQuestion: {
-				category: '',
-				words: [],
-				index: 0,
+export default function Pyramid(props) {
+	let StoreContext;
+	if (props.window === 'controlPanel') {
+		StoreContext = StoreContextCP;
+	} else if (props.window === 'gameboard') {
+		StoreContext = StoreContextGB;
+	}
+
+	const { state, dispatch, playSound } = useContext(StoreContext);
+
+	let localAudioPlayer = useRef();
+	let localAudioPlayer2 = useRef();
+
+	const setLocalAudioPlayer = () => {
+		const player = localAudioPlayer.current.paused
+			? localAudioPlayer.current
+			: localAudioPlayer2.current.paused
+			? localAudioPlayer2.current
+			: localAudioPlayer.current;
+		return player;
+	};
+
+	useEffect(() => {
+		dispatch({
+			type: actions.INIT_GAME,
+			payload: {
+				display: 'board',
+				currentQuestion: {
+					category: '',
+					words: [],
+					index: 0,
+				},
+				currentAnswer: '',
+				streak: 0,
+				activeTeam: 0,
+				board: versions[state.currentGame.version].content,
+				correctCounter: 0,
+				timer: {
+					time: null,
+					running: false,
+					tickSound: 'soundfx/beep.mp3',
+				},
+				score: {
+					type: 'team',
+					scoreBoard: [0, 0],
+				},
 			},
-			streakTracker: 0,
-			activeTeam: 0,
-			board: versions[this.props.version].content,
-			correctCounter: 0,
-		};
-		localStorage.setItem(
-			'board',
-			JSON.stringify(versions[this.props.version].content)
-		);
-		localStorage.setItem(
-			'currentQuestion',
-			JSON.stringify(this.state.currentQuestion)
-		);
-		localStorage.setItem(
-			'correctCounter',
-			JSON.stringify(this.state.correctCounter)
-		);
-		localStorage.setItem('activeTeam', JSON.stringify(this.state.activeTeam));
-		localStorage.setItem('display', 'board');
-		this.props.setScoreType('team', 2);
-	}
-
-	componentDidMount() {
-		window.addEventListener('storage', this.localStorageUpdated);
-	}
-
-	componentWillUnmount() {
-		window.removeEventListener('storage', this.localStorageUpdated);
-	}
-
-	componentDidUpdate(prevProps) {
-		if (this.props.timer === 0) {
-			this.setDisplay('roundOver');
-			this.props.killTimer();
-			this.props.playSound('sfx', 'soundfx/jeopardytimeup.mp3');
-		} else if (this.props.timer > 0 && prevProps.timer !== this.props.timer) {
-			this.props.playSound('sfx', 'soundfx/beep.mp3');
-		}
-	}
-
-	localStorageUpdated = () => {
-		this.setState({
-			display: localStorage.getItem('display'),
-			currentQuestion: JSON.parse(localStorage.getItem('currentQuestion')),
-			correctCounter: JSON.parse(localStorage.getItem('correctCounter')),
-			board: JSON.parse(localStorage.getItem('board')),
-			activeTeam: JSON.parse(localStorage.getItem('activeTeam')),
-			streakTracker: JSON.parse(localStorage.getItem('streakTracker')),
 		});
-	};
+	}, [dispatch, state.currentGame.version]);
 
-	setCategoryCompleted = (categoryIndex) => {
-		const board = this.state.board;
-		board[categoryIndex].completed = true;
-		localStorage.setItem('board', JSON.stringify(board));
-	};
-
-	setDisplay = (displaySetting) => {
-		localStorage.setItem('display', displaySetting);
-	};
-
-	setActiveTeam = (team) => {
-		localStorage.setItem('activeTeam', JSON.stringify(team));
-		this.localStorageUpdated();
-	};
-
-	setCurrentQuestion = (question) => {
-		localStorage.setItem('currentQuestion', JSON.stringify(question));
-	};
-
-	setCorrectCounter = (count = 0) => {
-		localStorage.setItem('correctCounter', JSON.stringify(count));
-	};
-
-	incStreakTracker = () => {
-		localStorage.setItem(
-			'streakTracker',
-			JSON.stringify(this.state.streakTracker + 1)
-		);
-	};
-
-	resetStreakTracker = () => {
-		localStorage.setItem('streakTracker', JSON.stringify(0));
-	};
-
-	checkStreak = () => {
-		const streak = JSON.parse(localStorage.getItem('streakTracker'));
-		if (streak === 10) {
-			this.addBonusTime(5);
-			this.playSoundLocal('soundfx/ohyeah.wav');
-		} else if (streak === 15) {
-			this.addBonusTime(10);
-			this.playSoundLocal('soundfx/ohyeah.wav');
+	useEffect(() => {
+		if (state.gameController.timer.time === 0) {
+			playSound('sfx', 'soundfx/buzzer.mp3');
+			dispatch({ type: actions.KILL_TIMER });
+			dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: 'roundOver' });
 		}
+	}, [state.gameController.timer.time, playSound, dispatch]);
+
+	const setCategoryCompleted = (categoryIndex) => {
+		const board = state.gameController.board;
+		board[categoryIndex].completed = true;
+		dispatch({ type: actions.SET_BOARD, payload: board });
 	};
 
-	addBonusTime = (seconds) => {
-		const remTime = this.props.timer + seconds;
-		this.props.setTimer(remTime);
+	const changeGameDisplay = (display) => {
+		dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: display });
 	};
 
-	clickHandlerCategory = (question, index) => {
-		if (this.state.activeTeam !== 0) {
-			this.setCategoryCompleted(index);
-			this.setDisplay('question');
-			this.setCurrentQuestion({
+	const setActiveTeam = (team) => {
+		dispatch({ type: actions.SET_ACTIVE_TEAM, payload: team });
+	};
+
+	const setCurrentQuestion = (question) => {
+		dispatch({ type: actions.SET_QUESTION, payload: question });
+	};
+
+	const setCorrectCounter = (count = 0) => {
+		dispatch({ type: actions.SET_CORRECT_COUNTER, payload: count });
+	};
+
+	const incrementStreak = () => {
+		dispatch({ type: actions.INCREMENT_STREAK });
+	};
+
+	const resetStreak = () => {
+		dispatch({ type: actions.RESET_STREAK });
+	};
+
+	const addBonusTime = (seconds) => {
+		dispatch({
+			type: actions.SET_TIMER,
+			payload: state.gameController.timer.time + seconds,
+		});
+		dispatch({ type: actions.RUN_TIMER });
+		playSoundLocal('sfx', 'soundfx/ohyeah.wav');
+	};
+
+	const getVolume = (type) => {
+		return type === 'sfx'
+			? (state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
+			: (state.audio.volume.master / 100) * (state.audio.volume.music / 100);
+	};
+
+	const playSoundLocal = (type, file) => {
+		const player = setLocalAudioPlayer();
+		player.src = file;
+		player.volume = getVolume(type);
+		player.play().catch((err) => console.log(err));
+	};
+
+	const clickHandlerCategory = (question, index) => {
+		if (state.gameController.activeTeam !== 0) {
+			setCategoryCompleted(index);
+			changeGameDisplay('question');
+			setCurrentQuestion({
 				category: question.category,
 				words: question.words,
 				index: 0,
 			});
-			this.setCorrectCounter();
-			this.resetStreakTracker();
-			this.props.setTimer(20);
-			this.props.runTimer();
-			this.localStorageUpdated();
+			setCorrectCounter();
+			resetStreak();
+			dispatch({ type: actions.SET_TIMER, payload: 20 });
+			dispatch({ type: actions.RUN_TIMER });
 		} else {
 			alert('Please select active team');
 		}
 	};
 
-	checkIfRoundOver = () => {
+	const checkIfRoundOver = () => {
 		if (
-			this.state.currentQuestion.index ===
-			this.state.currentQuestion.words.length - 1
+			state.gameController.currentQuestion.index ===
+			state.gameController.currentQuestion.words.length - 1
 		) {
-			this.setDisplay('roundOver');
-			this.setCurrentQuestion({
+			changeGameDisplay('roundOver');
+			setCurrentQuestion({
 				category: '',
 				words: [],
 				index: 0,
 			});
-			this.props.killTimer();
-			this.localStorageUpdated();
+			dispatch({ type: actions.KILL_TIMER });
 			return true;
 		} else return false;
 	};
 
-	nextQuestion = () => {
-		if (!this.checkIfRoundOver()) {
-			this.setCurrentQuestion({
-				category: this.state.currentQuestion.category,
-				words: this.state.currentQuestion.words,
-				index: this.state.currentQuestion.index + 1,
+	const nextQuestion = () => {
+		if (!checkIfRoundOver()) {
+			setCurrentQuestion({
+				category: state.gameController.currentQuestion.category,
+				words: state.gameController.currentQuestion.words,
+				index: state.gameController.currentQuestion.index + 1,
 			});
 		}
 	};
 
-	correctHandler = (team) => {
-		this.setCorrectCounter(this.state.correctCounter + 1);
-		this.nextQuestion();
-		this.playSoundLocal('soundfx/pyramidbell.mp3');
-		this.props.changeScore(team - 1, 1);
-		this.incStreakTracker();
-		this.checkStreak();
-		this.localStorageUpdated();
+	const correctHandler = (team) => {
+		if (state.gameController.streak === 9) {
+			addBonusTime(5);
+		} else if (state.gameController.streak === 14) {
+			addBonusTime(10);
+		} else {
+			playSoundLocal('sfx', 'soundfx/pyramidbell.mp3');
+		}
+		setCorrectCounter(state.gameController.correctCounter + 1);
+		nextQuestion();
+		dispatch({
+			type: actions.CHANGE_SCORE,
+			payload: { playerIndex: team - 1, amount: 1 },
+		});
+		incrementStreak();
 	};
 
-	incorrectHandler = () => {
-		this.nextQuestion();
-		this.playSoundLocal('soundfx/buzzer.mp3');
-		this.resetStreakTracker();
-		this.localStorageUpdated();
+	const incorrectHandler = () => {
+		nextQuestion();
+		playSoundLocal('sfx', 'soundfx/buzzer.mp3');
+		resetStreak();
 	};
 
-	returnToCategories = () => {
-		this.setDisplay('board');
-		this.localStorageUpdated();
-	};
+	// const stopSoundLocal = () => {
+	// 	const player = localAudioPlayer.current.paused
+	// 		? localAudioPlayer2.current
+	// 		: localAudioPlayer.current;
+	// 	player.pause();
+	// 	player.load();
+	// };
 
-	playSoundLocal = (file) => {
-		const player = this.refs.rapLocal.audioEl.current;
-		player.src = file;
-		player.volume = this.props.sfxVolume;
-		this.stopSoundLocal();
-		player.play();
-	};
-
-	stopSoundLocal = () => {
-		this.refs.rapLocal.audioEl.current.pause();
-		this.refs.rapLocal.audioEl.current.load();
-	};
-
-	pauseOrResumeSoundLocal = () => {
-		this.refs.rapLocal.audioEl.current.paused
-			? this.refs.rapLocal.audioEl.current.play()
-			: this.refs.rapLocal.audioEl.current.pause();
-	};
-
-	render() {
-		return (
-			<PyramidHomeScreen team={this.state.activeTeam}>
-				<Modal display={this.state.display}>
-					<ModalDiv>
-						<H1>{this.state.currentQuestion.category}</H1>
-					</ModalDiv>
-					<ModalDiv>
+	return (
+		<PyramidHomeScreen team={state.gameController.activeTeam}>
+			<Modal display={state.gameController.display}>
+				<ModalDiv>
+					<H1>{state.gameController.currentQuestion.category}</H1>
+				</ModalDiv>
+				<ModalDiv>
+					<H2>
+						{state.gameController.display === 'question'
+							? state.gameController.timer.time
+							: 'Round over'}
+					</H2>
+				</ModalDiv>
+				<ModalDiv>
+					<H2>{state.gameController.correctCounter}</H2>
+				</ModalDiv>
+				<ModalDiv>
+					{state.gameController.display === 'question' ? (
 						<H2>
-							{this.state.display === 'question'
-								? this.props.timer
-								: 'Round over'}
+							{
+								state.gameController.currentQuestion.words[
+									state.gameController.currentQuestion.index
+								]
+							}
 						</H2>
-					</ModalDiv>
-					<ModalDiv>
-						<H2>{this.state.correctCounter}</H2>
-					</ModalDiv>
-					<ModalDiv>
-						{this.state.display === 'question' ? (
-							<H2>
-								{
-									this.state.currentQuestion.words[
-										this.state.currentQuestion.index
-									]
-								}
-							</H2>
-						) : (
-							<Button onClick={this.returnToCategories}>
-								Return To Categories
-							</Button>
-						)}
-					</ModalDiv>
-					<ModalDiv
-						style={{
-							display: this.state.display === 'roundOver' && 'none',
-						}}
-					>
+					) : (
 						<Button
 							onClick={() => {
-								this.correctHandler(this.state.activeTeam);
+								changeGameDisplay('board');
 							}}
-							type='correct'
 						>
-							<H2>Correct</H2>
+							Return To Categories
 						</Button>
-						<Button onClick={this.incorrectHandler} type='incorrect'>
-							<H2>Wrong/Pass</H2>
-						</Button>
-					</ModalDiv>
-					<Container>
-						<ScoreContainer team={1}>
-							<H2>Team 1 Score</H2>
-							<H2>{this.props.score.scoreBoard[0]}</H2>
-						</ScoreContainer>
-						<ScoreContainer team={2}>
-							<H2>Team 2 Score</H2>
-							<H2>{this.props.score.scoreBoard[1]}</H2>
-						</ScoreContainer>
-					</Container>
-				</Modal>
-				<Title>TURN:</Title>
-				<TurnContainer>
-					<TeamButton
-						team={1}
-						activeTeam={this.state.activeTeam}
+					)}
+				</ModalDiv>
+				<ModalDiv
+					style={{
+						display: state.gameController.display === 'roundOver' && 'none',
+					}}
+				>
+					<Button
 						onClick={() => {
-							this.setActiveTeam(1);
+							correctHandler(state.gameController.activeTeam);
 						}}
+						type='correct'
 					>
-						<H2>Team 1</H2>
-					</TeamButton>
-					<TeamButton
-						team={2}
-						activeTeam={this.state.activeTeam}
-						onClick={() => {
-							this.setActiveTeam(2);
-						}}
-					>
-						<H2>Team 2</H2>
-					</TeamButton>
-				</TurnContainer>
-
-				<Title>Categories</Title>
+						<H2>Correct</H2>
+					</Button>
+					<Button onClick={incorrectHandler} type='incorrect'>
+						<H2>Wrong/Pass</H2>
+					</Button>
+				</ModalDiv>
 				<Container>
 					<ScoreContainer team={1}>
 						<H2>Team 1 Score</H2>
-						<H2>{this.props.score.scoreBoard[0]}</H2>
+						<H2>{state.gameController.score.scoreBoard[0]}</H2>
 					</ScoreContainer>
-					<CategoryContainer>
-						{this.state.board.map((item, index) => {
-							return (
-								<CategoryCard
-									key={index}
-									gridArea={`cat${index + 1}`}
-									done={item.completed}
-									onClick={() => {
-										this.clickHandlerCategory(item, index);
-									}}
-								>
-									<Span>{item.category}</Span>
-								</CategoryCard>
-							);
-						})}
-					</CategoryContainer>
 					<ScoreContainer team={2}>
 						<H2>Team 2 Score</H2>
-						<H2>{this.props.score.scoreBoard[1]}</H2>
+						<H2>{state.gameController.score.scoreBoard[1]}</H2>
 					</ScoreContainer>
 				</Container>
-				<ReactAudioPlayer ref={'rapLocal'} />
-			</PyramidHomeScreen>
-		);
-	}
-}
+			</Modal>
+			<Title>TURN:</Title>
+			<TurnContainer>
+				<TeamButton
+					team={1}
+					activeTeam={state.gameController.activeTeam}
+					onClick={() => {
+						setActiveTeam(1);
+					}}
+				>
+					<H2>Team 1</H2>
+				</TeamButton>
+				<TeamButton
+					team={2}
+					activeTeam={state.gameController.activeTeam}
+					onClick={() => {
+						setActiveTeam(2);
+					}}
+				>
+					<H2>Team 2</H2>
+				</TeamButton>
+			</TurnContainer>
 
-export default Pyramid;
+			<Title>Categories</Title>
+			<Container>
+				<ScoreContainer team={1}>
+					<H2>Team 1 Score</H2>
+					<H2>{state.gameController.score.scoreBoard[0]}</H2>
+				</ScoreContainer>
+				<CategoryContainer>
+					{state.gameController.board.map((item, index) => {
+						return (
+							<CategoryCard
+								key={index}
+								gridArea={`cat${index + 1}`}
+								done={item.completed}
+								onClick={() => {
+									clickHandlerCategory(item, index);
+								}}
+							>
+								<Span>{item.category}</Span>
+							</CategoryCard>
+						);
+					})}
+				</CategoryContainer>
+				<ScoreContainer team={2}>
+					<H2>Team 2 Score</H2>
+					<H2>{state.gameController.score.scoreBoard[1]}</H2>
+				</ScoreContainer>
+			</Container>
+			<audio ref={localAudioPlayer} />
+			<audio ref={localAudioPlayer2} />
+		</PyramidHomeScreen>
+	);
+}

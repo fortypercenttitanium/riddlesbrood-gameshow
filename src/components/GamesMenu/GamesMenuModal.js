@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { gamesArray } from '../Games/gamesArray';
 
@@ -66,8 +66,9 @@ const VersionSelectDiv = styled.div`
 	margin: auto;
 `;
 
-export class GamesMenuModal extends Component {
-	state = {
+export default function GamesMenuModal(props) {
+	const { state, dispatch } = props.store;
+	const [localState, setLocalState] = useState({
 		selectedVersion: {
 			Jeopardy: null,
 			'Name That Tune': null,
@@ -81,43 +82,46 @@ export class GamesMenuModal extends Component {
 			'Card Sharks': null,
 		},
 		selectedRating: '',
-	};
+	});
 
-	componentDidUpdate() {
-		console.log(gamesArray);
-	}
-
-	handleOutsideClick = () => {
-		this.props.close();
+	const handleOutsideClick = () => {
+		dispatch({ type: 'CLOSE_GAMES_MENU' });
 	};
-	handleModalClick = (e) => {
+	const handleModalClick = (e) => {
 		e.stopPropagation();
 	};
-	handleGameClick = (game) => {
-		this.props.goToVersionSelect(game);
+	const handleGameClick = (game) => {
+		const { title, logo, scoreType } = game;
+		const selectedGame = {
+			title,
+			logo,
+			scoreType,
+		};
+		dispatch({ type: 'GO_TO_VERSION_SELECT', payload: selectedGame });
 	};
 
-	openGame = () => {
-		const { title, scoreType, logo } = this.props.selectedGame;
+	const openGame = () => {
+		const { title, scoreType, logo } = state.gamesMenu.selectedGame;
 		const selectedGame = {
 			title,
 			scoreType,
 			logo,
-			version: this.state.selectedVersion[title],
+			version: localState.selectedVersion[title],
 		};
-		this.props.setGame(selectedGame);
-		this.props.close();
+		dispatch({ type: 'RESET_GAME' });
+		dispatch({ type: 'SET_GAME', payload: selectedGame });
+		dispatch({ type: 'CLOSE_GAMES_MENU' });
 	};
 
-	submitHandler = (e) => {
+	const submitHandler = (e) => {
 		e.preventDefault();
-		this.openGame();
+		openGame();
 	};
 
-	optionHandler = (e, gameTitle, versionIndex, rating) => {
+	const optionHandler = (e, gameTitle, versionIndex, rating) => {
 		document.querySelector('.versionSelectForm').reset();
 		e.target.selected = true;
-		this.setState({
+		setLocalState({
 			selectedVersion: {
 				[gameTitle]: versionIndex,
 			},
@@ -125,109 +129,109 @@ export class GamesMenuModal extends Component {
 		});
 	};
 
-	render() {
-		return (
-			<ModalContainer onClick={this.handleOutsideClick}>
-				<GamesMenuModalDiv onClick={this.handleModalClick}>
-					{this.props.timeline === 'gamesMenu' &&
-						gamesArray.map((game, index) => {
-							return (
-								<GameButton
-									key={index}
-									onClick={(e) => {
-										this.handleGameClick(game);
-									}}
-								>
-									<GameLogo src={`images/${game.logo}`} />
-								</GameButton>
-							);
-						})}
-					{this.props.timeline === 'versionSelect' && (
-						<VersionSelectContainer>
-							<form
-								className='versionSelectForm'
-								onSubmit={this.submitHandler}
-								style={{
-									display: 'flex',
-									flexDirection: 'column',
-									width: '100%',
-									margin: 'auto',
+	return (
+		<ModalContainer onClick={handleOutsideClick}>
+			<GamesMenuModalDiv onClick={handleModalClick}>
+				{state.gamesMenu.timeline === 'gamesMenu' &&
+					gamesArray.map((game, index) => {
+						return (
+							<GameButton
+								key={index}
+								onClick={() => {
+									handleGameClick(game);
 								}}
 							>
-								<div
-									style={{
-										display: 'flex',
-									}}
-								>
-									{gamesArray
-										.find(
-											(game) => game.title === this.props.selectedGame.title
-										)
-										.versions.map((version) => {
-											return version.rating;
-										})
-										.map((rating, ratingIndex) => {
-											return (
-												<VersionSelectDiv key={ratingIndex}>
-													<h1>{rating.toUpperCase()}</h1>
-													<select
-														size='10'
-														style={{
-															margin: '1rem auto',
-															width: '100%',
-														}}
-													>
-														{gamesArray
-															.find(
-																(game) =>
-																	game.title === this.props.selectedGame.title
-															)
-															.versions.map((gameVer, gameVerIndex) => {
-																return (
-																	gameVer.rating === rating && (
-																		<option
-																			key={gameVerIndex}
-																			style={{ fontSize: '1rem' }}
-																			onClick={(e) => {
-																				this.optionHandler(
-																					e,
-																					this.props.selectedGame.title,
-																					gameVerIndex,
-																					rating
-																				);
-																			}}
-																		>
-																			{gameVer.title}
-																		</option>
-																	)
-																);
-															})}
-													</select>
-												</VersionSelectDiv>
-											);
-										})}
-								</div>
+								<GameLogo src={`images/${game.logo}`} />
+							</GameButton>
+						);
+					})}
+				{state.gamesMenu.timeline === 'versionSelect' && (
+					<VersionSelectContainer>
+						<form
+							className='versionSelectForm'
+							onSubmit={submitHandler}
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								width: '100%',
+								margin: 'auto',
+							}}
+						>
+							<div
+								style={{
+									display: 'flex',
+								}}
+							>
+								{gamesArray
+									.find(
+										(game) => game.title === state.gamesMenu.selectedGame.title
+									)
+									.versions.map((version) => {
+										return version.rating;
+									})
+									.reduce((unique, item) => {
+										return unique.includes(item) ? unique : [...unique, item];
+									}, [])
+									.map((rating, ratingIndex) => {
+										return (
+											<VersionSelectDiv key={ratingIndex}>
+												<h1>{rating.toUpperCase()}</h1>
+												<select
+													size='10'
+													style={{
+														margin: '1rem auto',
+														width: '100%',
+													}}
+												>
+													{gamesArray
+														.find(
+															(game) =>
+																game.title ===
+																state.gamesMenu.selectedGame.title
+														)
+														.versions.map((gameVer, gameVerIndex) => {
+															return (
+																gameVer.rating === rating && (
+																	<option
+																		key={gameVerIndex}
+																		style={{ fontSize: '1rem' }}
+																		onClick={(e) => {
+																			optionHandler(
+																				e,
+																				state.gamesMenu.selectedGame.title,
+																				gameVerIndex,
+																				rating
+																			);
+																		}}
+																	>
+																		{gameVer.title}
+																	</option>
+																)
+															);
+														})}
+												</select>
+											</VersionSelectDiv>
+										);
+									})}
+							</div>
 
-								<button
-									style={{
-										padding: '1rem',
-										fontSize: '1rem',
-										fontWeight: 'bold',
-										margin: '1rem auto',
-									}}
-									disabled={!this.state.selectedRating}
-								>
-									Start selected{' '}
-									<strong>{this.state.selectedRating.toUpperCase()}</strong>{' '}
-									rated game
-								</button>
-							</form>
-						</VersionSelectContainer>
-					)}
-				</GamesMenuModalDiv>
-			</ModalContainer>
-		);
-	}
+							<button
+								style={{
+									padding: '1rem',
+									fontSize: '1rem',
+									fontWeight: 'bold',
+									margin: '1rem auto',
+								}}
+								disabled={!localState.selectedRating}
+							>
+								Start selected{' '}
+								<strong>{localState.selectedRating.toUpperCase()}</strong> rated
+								game
+							</button>
+						</form>
+					</VersionSelectContainer>
+				)}
+			</GamesMenuModalDiv>
+		</ModalContainer>
+	);
 }
-
-export default GamesMenuModal;

@@ -16,7 +16,7 @@ export const gamesArray = [
 	{
 		title: 'Family Feud',
 		logo: 'FamilyFeudLogo.png',
-		versions: [{ title: '', content: [] }],
+		versions: gameVersions.familyfeud,
 		scoreType: '',
 	},
 	{
@@ -63,7 +63,7 @@ export const gamesArray = [
 	},
 ];
 
-export { Jeopardy } from './Jeopardy';
-export { FamilyFeud } from './FamilyFeud';
-export { Pyramid } from './Pyramid';
-export { Wheel } from './Wheel';
+export { default as Jeopardy } from './Jeopardy';
+export { default as FamilyFeud } from './FamilyFeud';
+export { default as Pyramid } from './Pyramid';
+export { default as Wheel } from './Wheel';

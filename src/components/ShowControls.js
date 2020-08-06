@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const ShowControlsDiv = styled.div`
@@ -28,64 +28,60 @@ const Label = styled.h2`
 	user-select: none;
 `;
 
-export class ShowControls extends Component {
-	render() {
-		return (
-			<ShowControlsDiv>
-				<Button
+export default function ShowControls(props) {
+	return (
+		<ShowControlsDiv>
+			<Button
+				style={{
+					gridArea: '1 / 1 / 2 / 2',
+				}}
+			>
+				<Label>Preshow</Label>
+			</Button>
+			<Button
+				style={{
+					gridArea: '2 / 1 / 3 / 2',
+				}}
+			>
+				<Label>5 mins</Label>
+			</Button>
+			<Button
+				style={{
+					gridArea: '1 / 2 / 2 / 3',
+				}}
+			>
+				<Label>START SHOW</Label>
+			</Button>
+			<Button
+				style={{
+					gridArea: '2 / 2 / 3 / 3',
+				}}
+			>
+				<Label>END SHOW</Label>
+			</Button>
+			<Button
+				style={{
+					gridArea: '1 / 3 / 2 / 4',
+				}}
+			>
+				<Label>INTERMISSION</Label>
+			</Button>
+			<Button
+				style={{
+					gridArea: '2 / 3 / 3 / 4',
+				}}
+			>
+				<img
+					src='images/projector.png'
+					alt=''
+					onClick={props.projectorMode}
 					style={{
-						gridArea: '1 / 1 / 2 / 2',
+						height: '80px',
+						margin: 'auto',
+						userSelect: 'none',
 					}}
-				>
-					<Label>Preshow</Label>
-				</Button>
-				<Button
-					style={{
-						gridArea: '2 / 1 / 3 / 2',
-					}}
-				>
-					<Label>5 mins</Label>
-				</Button>
-				<Button
-					style={{
-						gridArea: '1 / 2 / 2 / 3',
-					}}
-				>
-					<Label>START SHOW</Label>
-				</Button>
-				<Button
-					style={{
-						gridArea: '2 / 2 / 3 / 3',
-					}}
-				>
-					<Label>END SHOW</Label>
-				</Button>
-				<Button
-					style={{
-						gridArea: '1 / 3 / 2 / 4',
-					}}
-				>
-					<Label>INTERMISSION</Label>
-				</Button>
-				<Button
-					style={{
-						gridArea: '2 / 3 / 3 / 4',
-					}}
-				>
-					<img
-						src='images/projector.png'
-						alt=''
-						onClick={this.props.projectorMode}
-						style={{
-							height: '80px',
-							margin: 'auto',
-							userSelect: 'none',
-						}}
-					/>
-				</Button>
-			</ShowControlsDiv>
-		);
-	}
+				/>
+			</Button>
+		</ShowControlsDiv>
+	);
 }
-
-export default ShowControls;

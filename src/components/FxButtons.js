@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import ReactAudioPlayer from 'react-audio-player';
+import { StoreContext } from '../App';
 
 const FxButtonsDiv = styled.div`
 	grid-area: 7 / 1 / 11 / 4;
@@ -31,8 +32,9 @@ const Text = styled.h3`
 	user-select: none;
 `;
 
-export class FxButtons extends Component {
-	clickHandler = (e) => {
+export default function FxButtons(props) {
+	const { state, dispatch } = useContext(StoreContext);
+	const clickHandler = (e) => {
 		const audio = e.currentTarget.querySelector('audio');
 		if (!audio.paused) {
 			audio.pause();
@@ -45,35 +47,33 @@ export class FxButtons extends Component {
 			audio.play();
 		}
 	};
-
-	render() {
-		return (
-			<FxButtonsDiv>
-				{this.props.buttons.map((button, index) => {
-					return (
-						<FxButton
-							key={index}
-							onClick={(e) => {
-								if (button.type === 'audio') {
-									this.clickHandler(e);
-								} else if (button.type === 'video') {
-									this.props.playVideo(button.file);
+	return (
+		<FxButtonsDiv>
+			{state.fxButtons.map((button, index) => {
+				return (
+					<FxButton
+						key={index}
+						onClick={(e) => {
+							if (button.type === 'audio') {
+								clickHandler(e);
+							} else if (button.type === 'video') {
+								dispatch({ type: 'PLAY_VIDEO', payload: button.file });
+							}
+						}}
+					>
+						<Text>{button.name}</Text>
+						{button.type === 'audio' ? (
+							<ReactAudioPlayer
+								src={`soundfx/${button.file}`}
+								volume={
+									(state.audio.volume.master / 100) *
+									(state.audio.volume.sfx / 100)
 								}
-							}}
-						>
-							<Text>{button.name}</Text>
-							{button.type === 'audio' ? (
-								<ReactAudioPlayer
-									src={`soundfx/${button.file}`}
-									volume={this.props.volume}
-								/>
-							) : null}
-						</FxButton>
-					);
-				})}
-			</FxButtonsDiv>
-		);
-	}
+							/>
+						) : null}
+					</FxButton>
+				);
+			})}
+		</FxButtonsDiv>
+	);
 }
-
-export default FxButtons;

@@ -1,71 +1,50 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import VideoPlayer from './VideoPlayer';
 import LogoScreen from './LogoScreen';
 import * as Games from './Games/gamesArray';
+import { StoreContext as StoreContextCP } from '../App';
+import { StoreContext as StoreContextGB } from './Gameboard';
 
-const { Jeopardy, FamilyFeud, Pyramid, Wheel } = Games;
-
-export class ControlScreen extends Component {
-	render() {
-		const {
-			currentGame,
-			timeline,
-			setAnswer,
-			VFX,
-			endVideo,
-			sfxVolume,
-			score,
-			changeScore,
-			timer,
-			setTimer,
-			runTimer,
-			killTimer,
-			playSound,
-			stopSound,
-			pauseOrResumeSound,
-			setScoreType,
-			window,
-		} = this.props;
-		const gameProps = {
-			setAnswer: setAnswer,
-			sfxVolume: sfxVolume,
-			score: score,
-			changeScore,
-			setScoreType: setScoreType,
-			timer: timer,
-			setTimer: setTimer,
-			runTimer: runTimer,
-			killTimer: killTimer,
-			playSound: playSound,
-			stopSound: stopSound,
-			pauseOrResumeSound: pauseOrResumeSound,
-			version: currentGame.version,
-			window: window,
-		};
-		const GameComponent = currentGame.title;
-		const components = {
-			Jeopardy: <Jeopardy {...gameProps} />,
-			'Family Feud': <FamilyFeud {...gameProps} />,
-			'$25,000 Pyramid': <Pyramid {...gameProps} />,
-			'Wheel Of Fortune': <Wheel {...gameProps} />,
-		};
-
-		return (
-			<div
-				style={{
-					height: '100%',
-					width: '100%',
-					textAlign: 'center',
-					border: '1px solid black',
-					position: 'relative',
-				}}
-			>
-				{timeline === 'app-open' ? <LogoScreen /> : null}
-				{timeline === 'in-game' ? components[GameComponent] : null}
-				{VFX.playing && <VideoPlayer file={VFX.file} onEnded={endVideo} />}
-			</div>
-		);
+export default function ControlScreen(props) {
+	let StoreContext;
+	if (props.window === 'controlPanel') {
+		StoreContext = StoreContextCP;
+	} else if (props.window === 'gameboard') {
+		StoreContext = StoreContextGB;
 	}
-}
+	const { state, dispatch } = useContext(StoreContext);
 
-export default ControlScreen;
+	const { currentGame, timeline, VFX } = state;
+
+	const { Jeopardy, FamilyFeud, Pyramid, Wheel } = Games;
+	const components = {
+		Jeopardy: <Jeopardy window={props.window} />,
+		'Family Feud': <FamilyFeud window={props.window} />,
+		'$25,000 Pyramid': <Pyramid window={props.window} />,
+		'Wheel Of Fortune': <Wheel window={props.window} />,
+	};
+
+	return (
+		<div
+			style={{
+				height: '100%',
+				width: '100%',
+				textAlign: 'center',
+				border: '1px solid black',
+				position: 'relative',
+			}}
+		>
+			{timeline === 'app-open' ? <LogoScreen /> : null}
+			{timeline === 'in-game' ? components[currentGame.title] : null}
+			{VFX.playing && (
+				<VideoPlayer
+					window={props.window}
+					file={VFX.file}
+					onEnded={() => {
+						dispatch({ type: 'END_VIDEO' });
+					}}
+				/>
+			)}
+		</div>
+	);
+}

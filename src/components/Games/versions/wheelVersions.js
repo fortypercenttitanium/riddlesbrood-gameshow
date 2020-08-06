@@ -6,17 +6,17 @@ export const wheelVersions = [
 			{
 				category: 'Thing',
 				puzzle: 'CLAM CHOWDER',
-				completed: false,
+				solved: false,
 			},
 			{
 				category: 'Person',
 				puzzle: 'FRANK SINATRA',
-				completed: false,
+				solved: false,
 			},
 			{
 				category: 'Fictional Character',
 				puzzle: 'MOTHER GOOSE',
-				completed: false,
+				solved: false,
 			},
 		],
 	},
@@ -27,17 +27,17 @@ export const wheelVersions = [
 			{
 				category: 'Phrase',
 				puzzle: 'THROW IN THE TOWEL',
-				completed: false,
+				solved: false,
 			},
 			{
 				category: 'Person',
 				puzzle: 'PABLO PICASSO',
-				completed: false,
+				solved: false,
 			},
 			{
 				category: 'Thing',
 				puzzle: 'VINTAGE WINE',
-				completed: false,
+				solved: false,
 			},
 		],
 	},
@@ -48,17 +48,17 @@ export const wheelVersions = [
 			{
 				category: 'Phrase',
 				puzzle: 'OPPOSITES ATTRACT',
-				completed: false,
+				solved: false,
 			},
 			{
 				category: 'Title',
 				puzzle: 'VOYAGE TO THE BOTTOM OF THE SEA',
-				completed: false,
+				solved: false,
 			},
 			{
 				category: 'Landmark',
 				puzzle: 'GOLDEN GATE BRIDGE',
-				completed: false,
+				solved: false,
 			},
 		],
 	},

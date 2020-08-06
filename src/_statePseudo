@@ -1,0 +1,12 @@
+States that need to be passed around
+1. Game timeline
+2. Score
+3. Current Game
+4. Audio
+5. VFX
+6. Current Answer
+7. Timer
+8. FX buttons
+
+Game level controller
+  initial state based on game type

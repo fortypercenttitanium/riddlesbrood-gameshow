@@ -1,6 +1,11 @@
-import React, { Component } from 'react';
+import React, { useContext, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { wheel as versions } from './versions/gameVersions';
+import { StoreContext as StoreContextCP } from '../../App';
+import { StoreContext as StoreContextGB } from '../Gameboard';
+import { actions } from '../../actions';
+
+const { ipcRenderer } = window.require('electron');
 
 const WheelContainer = styled.div`
 	height: 100%;
@@ -15,7 +20,7 @@ const Board = styled.div`
 	margin: 10% auto 0;
 	height: 50%;
 	width: 80%;
-	display: ${(props) => (props.display === 'board' ? 'grid' : 'none')};
+	display: grid;
 	grid-template: repeat(4, 1fr) / repeat(14, 1fr);
 	grid-gap: 2px;
 `;
@@ -84,9 +89,7 @@ const ReturnButton = styled.div`
 		background: white;
 	}
 	display: ${(props) =>
-		props.display === 'board' &&
-		props.complete &&
-		props.screen === 'controlPanel'
+		props.display === 'board' && props.screen === 'controlPanel'
 			? 'flex'
 			: 'none'};
 `;
@@ -125,195 +128,213 @@ const CategoryDisplay = styled.div`
 	display: ${(props) => (props.display === 'board' ? 'flex' : 'none')};
 `;
 
-export class Wheel extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			display: 'select',
-			currentQuestion: {
-				category: '',
-				puzzle: '',
-				guessedLetters: [],
-				complete: false,
-			},
-			board: versions[this.props.version].content,
-		};
-		localStorage.setItem(
-			'board',
-			JSON.stringify(versions[this.props.version].content)
-		);
-		localStorage.setItem(
-			'currentQuestion',
-			JSON.stringify(this.state.currentQuestion)
-		);
-		localStorage.setItem('display', 'select');
-		this.props.setScoreType('player', 3);
+export default function Wheel(props) {
+	let StoreContext;
+	if (props.window === 'controlPanel') {
+		StoreContext = StoreContextCP;
+	} else if (props.window === 'gameboard') {
+		StoreContext = StoreContextGB;
 	}
 
-	componentDidMount() {
-		window.addEventListener('storage', this.localStorageUpdated);
-		window.addEventListener('keypress', this.handleKeyPress);
-	}
+	const { state, dispatch } = useContext(StoreContext);
 
-	componentWillUnmount() {
-		window.removeEventListener('storage', this.localStorageUpdated);
-		window.removeEventListener('keypress', this.handleKeyPress);
-	}
-
-	localStorageUpdated = () => {
-		if (
-			this.state.currentQuestion.guessedLetters[
-				this.state.currentQuestion.guessedLetters.length - 1
-			] !==
-				JSON.parse(localStorage.getItem('currentQuestion')).guessedLetters[
-					JSON.parse(localStorage.getItem('currentQuestion')).guessedLetters
-						.length - 1
-				] &&
-			!this.checkIfPuzzleComplete()
-		) {
-			this.activateLetterCells(
-				JSON.parse(localStorage.getItem('currentQuestion')).guessedLetters[
-					JSON.parse(localStorage.getItem('currentQuestion')).guessedLetters
-						.length - 1
-				],
-				0
-			);
+	useEffect(() => {
+		if (props.window === 'gameboard') {
+			ipcRenderer.on('WHEEL_GUESS_RECEIVE', function (e, key) {
+				activateLetterCells(key.toUpperCase());
+			});
 		}
-		this.setState({
-			display: localStorage.getItem('display'),
-			currentQuestion: JSON.parse(localStorage.getItem('currentQuestion')),
-			board: JSON.parse(localStorage.getItem('board')),
+		return () => ipcRenderer.removeAllListeners('WHEEL_GUESS_RECEIVE');
+		//linter disabled because using dependencies causes multiple IPC events to fire
+		//eslint-disable-next-line
+	}, []);
+
+	let localAudioPlayer = useRef();
+	let localAudioPlayer2 = useRef();
+
+	const setLocalAudioPlayer = () => {
+		const player = localAudioPlayer.current.paused
+			? localAudioPlayer.current
+			: localAudioPlayer2.current.paused
+			? localAudioPlayer2.current
+			: localAudioPlayer.current;
+		return player;
+	};
+
+	useEffect(() => {
+		dispatch({
+			type: actions.INIT_GAME,
+			payload: {
+				display: 'select',
+				currentQuestion: {
+					category: '',
+					puzzle: '',
+					guessedLetters: [],
+					solved: false,
+				},
+				board: versions[state.currentGame.version].content,
+				currentAnswer: '',
+				timer: {
+					time: null,
+					running: false,
+					tickSound: '',
+				},
+				score: {
+					type: 'players',
+					scoreBoard: [0, 0, 0],
+				},
+			},
 		});
-		this.checkIfPuzzleComplete() && this.solvePuzzle();
+	}, [dispatch, state.currentGame.version]);
+
+	const getVolume = useCallback(
+		(type) => {
+			return type === 'sfx'
+				? (state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
+				: (state.audio.volume.master / 100) * (state.audio.volume.music / 100);
+		},
+		[state.audio.volume]
+	);
+
+	const playSoundLocal = useCallback(
+		(type, file) => {
+			const player = setLocalAudioPlayer();
+			player.src = file;
+			player.volume = getVolume(type);
+			player.play().catch((err) => console.log(err));
+		},
+		[getVolume]
+	);
+
+	const setCategorySolved = (categoryIndex) => {
+		const board = state.gameController.board;
+		board[categoryIndex].solved = true;
+		dispatch({ type: actions.SET_BOARD, payload: board });
 	};
 
-	setCategoryCompleted = (categoryIndex) => {
-		const board = this.state.board;
-		board[categoryIndex].completed = true;
-		localStorage.setItem('board', JSON.stringify(board));
+	const changeGameDisplay = (displaySetting) => {
+		dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: displaySetting });
 	};
 
-	setDisplay = (displaySetting) => {
-		localStorage.setItem('display', displaySetting);
-	};
+	const setCurrentQuestion = useCallback(
+		(question) => {
+			dispatch({ type: actions.SET_QUESTION, payload: question });
+		},
+		[dispatch]
+	);
 
-	setCurrentQuestion = (question) => {
-		localStorage.setItem('currentQuestion', JSON.stringify(question));
-	};
-
-	clickHandlerCategory = (puzzle, index) => {
-		this.setCategoryCompleted(index);
-		this.setDisplay('board');
-		this.setCurrentQuestion({
+	const clickHandlerCategory = (puzzle, index) => {
+		setCurrentQuestion({
 			category: puzzle.category,
 			puzzle: puzzle.puzzle,
 			guessedLetters: [],
-			complete: false,
+			solved: false,
 		});
-		this.props.setAnswer(puzzle.puzzle);
-		this.localStorageUpdated();
+		setCategorySolved(index);
+		dispatch({ type: actions.SET_ANSWER, payload: puzzle.puzzle });
+		changeGameDisplay('board');
 	};
 
-	guessLetter = (letter) => {
-		const upperLetter = letter.toUpperCase();
-		if (!this.state.currentQuestion.guessedLetters.includes(upperLetter)) {
-			let question = this.state.currentQuestion;
-			question.guessedLetters.push(upperLetter);
-			this.setCurrentQuestion(question);
-			this.localStorageUpdated();
-			this.activateLetterCells(
-				JSON.parse(localStorage.getItem('currentQuestion')).guessedLetters[
-					JSON.parse(localStorage.getItem('currentQuestion')).guessedLetters
-						.length - 1
-				],
-				0
-			);
-		}
-	};
-
-	activateLetterCells = (letter, index) => {
-		const spans = Array.from(document.querySelectorAll('span')).filter(
-			(span) => {
-				return span.textContent === letter;
-			}
-		);
-		if (spans.length === 0) {
-			this.props.playSound('sfx', 'soundfx/wheelbuzzer.mp3');
-		} else {
-			if (index > 0) {
-				spans[index - 1].parentNode.classList.remove('active');
-				spans[index - 1].classList.add('reveal');
-			}
-			if (index < spans.length) {
-				this.props.playSound('sfx', 'soundfx/wheelding.mp3');
-				spans[index].parentNode.classList.add('active');
-			}
-			setTimeout(() => {
-				if (index < spans.length) {
-					this.activateLetterCells(letter, index + 1);
+	const activateLetterCells = useCallback(
+		(letter, index = 0) => {
+			const spans = Array.from(document.querySelectorAll('span')).filter(
+				(span) => {
+					return span.textContent === letter;
 				}
-			}, 2000);
-		}
-	};
-
-	checkGuessedLetters = (letter) => {
-		return this.state.currentQuestion.guessedLetters.includes(letter);
-	};
-
-	handleKeyPress = (e) => {
-		if (this.state.display === 'board') {
-			if (
-				(e.charCode >= 65 && e.charCode <= 90) ||
-				(e.charCode >= 97 && e.charCode <= 122)
-			) {
-				this.guessLetter(e.key);
+			);
+			if (spans.length === 0) {
+				playSoundLocal('sfx', 'soundfx/wheelbuzzer.mp3');
+			} else {
+				if (index > 0) {
+					spans[index - 1].parentNode.classList.remove('active');
+					spans[index - 1].classList.add('reveal');
+				}
+				if (index < spans.length) {
+					playSoundLocal('sfx', 'soundfx/wheelding.mp3');
+					spans[index].parentNode.classList.add('active');
+				}
+				setTimeout(() => {
+					if (index < spans.length) {
+						activateLetterCells(letter, index + 1);
+					}
+				}, 2000);
 			}
-		}
-	};
+		},
+		[playSoundLocal]
+	);
 
-	checkIfPuzzleComplete = () => {
-		return (
-			this.state.currentQuestion.puzzle
-				.split('')
-				.filter((char) => char !== ' ')
-				.every((letter) =>
-					this.state.currentQuestion.guessedLetters.includes(letter)
-				) || this.state.currentQuestion.complete
-		);
-	};
+	const checkGuessedLetters = useCallback(
+		(letter) => {
+			return state.gameController.currentQuestion.guessedLetters.includes(
+				letter
+			);
+		},
+		[state.gameController.currentQuestion.guessedLetters]
+	);
 
-	solvePuzzle = () => {
-		if (!this.state.currentQuestion.complete) {
-			this.solveHandler();
-		}
+	const guessLetter = useCallback(
+		(letter) => {
+			if (!checkGuessedLetters(letter)) {
+				let question = state.gameController.currentQuestion;
+				question.guessedLetters.push(letter);
+				setCurrentQuestion(question);
+			}
+		},
+		[
+			checkGuessedLetters,
+			state.gameController.currentQuestion,
+			setCurrentQuestion,
+		]
+	);
+
+	const handleKeyPress = useCallback(
+		(e) => {
+			if (state.gameController.display === 'board') {
+				if (
+					e.keyCode >= 65 &&
+					e.keyCode <= 90 &&
+					!checkGuessedLetters(e.key.toUpperCase())
+				) {
+					guessLetter(e.key.toUpperCase());
+					ipcRenderer.send('WHEEL_GUESS_SEND', e.key);
+					activateLetterCells(e.key.toUpperCase());
+				}
+			}
+		},
+		[
+			state.gameController.display,
+			guessLetter,
+			checkGuessedLetters,
+			activateLetterCells,
+		]
+	);
+
+	useEffect(() => {
+		window.addEventListener('keydown', handleKeyPress);
+		return () => window.removeEventListener('keydown', handleKeyPress);
+	}, [handleKeyPress]);
+
+	const solvePuzzle = () => {
+		const question = state.gameController.currentQuestion;
+		question.solved = true;
+		dispatch({ type: actions.SET_QUESTION, payload: question });
 		document.querySelectorAll('span').forEach((span) => {
 			span.classList.add('reveal');
 		});
 	};
 
-	solveHandler = () => {
-		const solvedQuestion = this.state.currentQuestion;
-		solvedQuestion.complete = true;
-		localStorage.setItem('currentQuestion', JSON.stringify(solvedQuestion));
-		this.localStorageUpdated();
+	const returnHandler = () => {
+		setCurrentQuestion({
+			category: '',
+			puzzle: '',
+			guessedLetters: [],
+			solved: false,
+		});
+		changeGameDisplay('select');
 	};
 
-	returnHandler = () => {
-		localStorage.setItem(
-			'currentQuestion',
-			JSON.stringify({
-				category: '',
-				puzzle: '',
-				guessedLetters: [],
-				complete: false,
-			})
-		);
-		localStorage.setItem('display', 'select');
-		this.localStorageUpdated();
-	};
-
-	render() {
-		let puzzle = this.state.currentQuestion.puzzle;
+	const renderPuzzle = () => {
+		let puzzle = state.gameController.currentQuestion.puzzle;
 		// the four rows to be rendered on the game board
 		let rows = [[], [], [], []];
 		// split answer into array of words
@@ -382,27 +403,32 @@ export class Wheel extends Component {
 			}
 			return row;
 		});
+		return rowsRender;
+	};
 
-		return (
-			<WheelContainer>
-				<Title display={this.state.display}>Please select puzzle:</Title>
-				<CategoryContainer display={this.state.display}>
-					{this.state.board.map((item, index) => {
-						return (
-							<CategoryCard
-								done={item.completed}
-								key={index}
-								onClick={() => {
-									this.clickHandlerCategory(item, index);
-								}}
-							>
-								{item.category}
-							</CategoryCard>
-						);
-					})}
-				</CategoryContainer>
-				<Board display={this.state.display}>
-					{rowsRender.map((row) => {
+	return (
+		<WheelContainer>
+			<Title display={state.gameController.display}>
+				Please select puzzle:
+			</Title>
+			<CategoryContainer display={state.gameController.display}>
+				{state.gameController.board.map((item, index) => {
+					return (
+						<CategoryCard
+							done={item.solved}
+							key={index}
+							onClick={() => {
+								clickHandlerCategory(item, index);
+							}}
+						>
+							{item.category}
+						</CategoryCard>
+					);
+				})}
+			</CategoryContainer>
+			{state.gameController.display === 'board' && (
+				<Board>
+					{renderPuzzle().map((row) => {
 						return row.map((letter, index) => {
 							if (letter === ' ') {
 								return <UnusedCell key={index} />;
@@ -416,27 +442,28 @@ export class Wheel extends Component {
 						});
 					})}
 				</Board>
-				<CategoryDisplay display={this.state.display}>
-					<H2>{this.state.currentQuestion.category}</H2>
-				</CategoryDisplay>
+			)}
+			<CategoryDisplay display={state.gameController.display}>
+				<H2>{state.gameController.currentQuestion.category}</H2>
+			</CategoryDisplay>
+			{state.gameController.currentQuestion.solved && (
 				<ReturnButton
-					complete={this.state.currentQuestion.complete}
-					screen={this.props.window}
-					display={this.state.display}
-					onClick={this.returnHandler}
+					screen={props.window}
+					display={state.gameController.display}
+					onClick={returnHandler}
 				>
 					<H2>Select New Puzzle</H2>
 				</ReturnButton>
-				<SolvePuzzle
-					display={this.state.display}
-					screen={this.props.window}
-					onClick={this.solveHandler}
-				>
-					<H2>Solve puzzle</H2>
-				</SolvePuzzle>
-			</WheelContainer>
-		);
-	}
+			)}
+			<SolvePuzzle
+				display={state.gameController.display}
+				screen={props.window}
+				onClick={solvePuzzle}
+			>
+				<H2>Solve puzzle</H2>
+			</SolvePuzzle>
+			<audio ref={localAudioPlayer} />
+			<audio ref={localAudioPlayer2} />
+		</WheelContainer>
+	);
 }
-
-export default Wheel;

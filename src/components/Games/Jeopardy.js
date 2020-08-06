@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { jeopardy as versions } from './versions/gameVersions';
-import VideoPlayer from '../VideoPlayer';
+import { StoreContext as StoreContextCP } from '../../App';
+import { StoreContext as StoreContextGB } from '../Gameboard';
+import { actions } from '../../actions';
 
 const JeopardyContainer = styled.div`
 	height: 100%;
@@ -64,9 +66,17 @@ const StyledSpan = styled.span`
 	margin: auto;
 `;
 
-export class Jeopardy extends Component {
-	state = {
-		// set display to 'board', 'question', or 'answer'
+export default function Jeopardy(props) {
+	let StoreContext;
+	if (props.window === 'controlPanel') {
+		StoreContext = StoreContextCP;
+	} else if (props.window === 'gameboard') {
+		StoreContext = StoreContextGB;
+	}
+
+	const { state, dispatch, playSound } = useContext(StoreContext);
+
+	const initGame = {
 		display: 'board',
 		currentQuestion: {
 			value: null,
@@ -76,182 +86,132 @@ export class Jeopardy extends Component {
 			completed: false,
 			dailyDouble: false,
 		},
-		board: [],
+		board: versions[state.currentGame.version].content,
+		currentAnswer: '',
+		gameTimeline: 'board',
+		timer: {
+			time: null,
+			running: false,
+			tickSound: false,
+		},
+		score: {
+			type: 'player',
+			scoreBoard: [0, 0, 0],
+		},
 	};
 
-	componentDidMount() {
-		localStorage.setItem(
-			'board',
-			JSON.stringify(versions[this.props.version].content)
-		);
-		localStorage.setItem(
-			'currentQuestion',
-			JSON.stringify(this.state.currentQuestion)
-		);
-		localStorage.setItem('display', 'board');
-		this.props.setScoreType('player', 3);
-		this.localStorageUpdated();
-		window.addEventListener('storage', this.localStorageUpdated);
-	}
+	useEffect(() => {
+		dispatch({ type: actions.INIT_GAME, payload: initGame });
+		//eslint-disable-next-line
+	}, []);
 
-	componentWillUnmount() {
-		window.removeEventListener('storage', this.localStorageUpdated);
-	}
-
-	componentDidUpdate() {
-		if (this.props.timer === 0) {
-			this.props.killTimer();
-			this.props.playSound('sfx', 'soundfx/jeopardytimeup.mp3');
-			localStorage.setItem('display', 'answer');
+	useEffect(() => {
+		if (state.gameController.timer.time === 0) {
+			playSound('sfx', 'soundfx/jeopardytimeup.mp3');
+			dispatch({ type: actions.KILL_TIMER });
+			dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: 'answer' });
 		}
-	}
+	}, [state.gameController.timer.time, playSound, dispatch]);
 
-	localStorageUpdated = () => {
-		this.setState({
-			display: localStorage.getItem('display'),
-			currentQuestion: JSON.parse(localStorage.getItem('currentQuestion')),
-			board: JSON.parse(localStorage.getItem('board')),
-		});
+	const changeGameDisplay = (display) => {
+		dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: display });
 	};
 
-	clickHandlerBoard = (question, categoryIndex, questionIndex) => {
+	const clickHandlerBoard = (question, categoryIndex, questionIndex) => {
 		if (!question.completed) {
 			if (!question.dailyDouble) {
-				this.props.setAnswer(question.answer);
-				this.props.setTimer(3);
-				this.props.runTimer();
+				dispatch({ type: actions.SET_ANSWER, payload: question.answer });
+				dispatch({ type: actions.SET_TIMER, payload: 13 });
+				dispatch({ type: actions.RUN_TIMER });
 			} else {
-				this.props.playSound('sfx', 'soundfx/dailydoublesound.mp3');
+				playSound('sfx', 'soundfx/dailydoublesound.mp3');
 			}
-			const board = [...this.state.board];
-			let completedQuestionCategory = board[categoryIndex];
-			completedQuestionCategory.questions[questionIndex].completed = true;
-			board[categoryIndex] = completedQuestionCategory;
-			localStorage.setItem('currentQuestion', JSON.stringify(question));
-			localStorage.setItem(
-				'display',
-				question.dailyDouble ? 'daily-double' : 'question'
-			);
-			localStorage.setItem('board', JSON.stringify(board));
-			this.localStorageUpdated();
+			const board = [...state.gameController.board];
+			board[categoryIndex].questions[questionIndex].completed = true;
+			dispatch({ type: actions.SET_QUESTION, payload: question });
+			dispatch({ type: actions.SET_BOARD, payload: board });
+			changeGameDisplay(question.dailyDouble ? 'daily-double' : 'question');
+			if (question.type === 'video' && !question.dailyDouble) {
+				dispatch({
+					type: actions.PLAY_VIDEO,
+					payload: `/jeopardy/${question.question}`,
+				});
+			}
 		}
 	};
 
-	clickHandlerModal = () => {
-		if (this.state.display === 'daily-double') {
-			this.props.setAnswer(this.state.currentQuestion.answer);
-			this.props.setTimer(13);
-			this.props.runTimer();
-			localStorage.setItem('display', 'question');
-			this.localStorageUpdated();
-		} else if (this.state.display === 'question') {
-			this.props.killTimer();
-			localStorage.setItem('display', 'answer');
-			this.localStorageUpdated();
+	const clickHandlerModal = () => {
+		if (state.gameController.display === 'daily-double') {
+			dispatch({
+				type: actions.SET_ANSWER,
+				payload: state.gameController.currentQuestion.answer,
+			});
+			dispatch({ type: actions.SET_TIMER, payload: 13 });
+			dispatch({ type: actions.RUN_TIMER });
+			changeGameDisplay('question');
+			if (state.gameController.currentQuestion.type === 'video') {
+				dispatch({
+					type: actions.PLAY_VIDEO,
+					payload: `/jeopardy/${state.gameController.currentQuestion.question}`,
+				});
+			}
+		} else if (state.gameController.display === 'question') {
+			dispatch({ type: actions.KILL_TIMER });
+			changeGameDisplay('answer');
 		} else {
-			localStorage.setItem('display', 'board');
-			this.localStorageUpdated();
+			changeGameDisplay('board');
 		}
 	};
 
-	render() {
-		return (
-			<JeopardyContainer>
-				<Modal display={this.state.display} onClick={this.clickHandlerModal}>
-					{this.state.display === 'daily-double' && (
-						<div
-							style={{
-								height: '100%',
-								width: '100%',
-							}}
-						>
-							<img src='images/dailydouble.png' width='100%' alt='' />
-						</div>
-					)}
-					<StyledSpan questionType={this.state.currentQuestion.type}>
-						{this.state.display === 'question' &&
-						this.state.currentQuestion.type === 'text'
-							? this.state.currentQuestion.question
-							: this.state.display === 'answer'
-							? this.state.currentQuestion.answer
-							: ''}
-					</StyledSpan>
-					{this.state.currentQuestion.type === 'video' &&
-					this.state.display === 'question' ? (
-						<VideoPlayer
-							file={'/jeopardy/' + this.state.currentQuestion.question}
-						/>
-					) : null}
-				</Modal>
-				<Board>
-					{this.state.board.map((block, index) => {
-						return (
-							<CellContainer key={`category${index}`}>
-								<CatCell>
-									<StyledSpan>{block.category}</StyledSpan>
-								</CatCell>
-								<QCell
-									onClick={() => {
-										this.clickHandlerBoard(block.questions[0], index, 0);
-									}}
-								>
-									<StyledSpan
-										style={{
-											display: block.questions[0].completed ? 'none' : 'inline',
+	return (
+		<JeopardyContainer>
+			<Modal display={state.gameController.display} onClick={clickHandlerModal}>
+				{state.gameController.display === 'daily-double' && (
+					<div
+						style={{
+							height: '100%',
+							width: '100%',
+						}}
+					>
+						<img src='images/dailydouble.png' width='100%' alt='' />
+					</div>
+				)}
+				<StyledSpan questionType={state.gameController.currentQuestion.type}>
+					{state.gameController.display === 'question' &&
+					state.gameController.currentQuestion.type === 'text'
+						? state.gameController.currentQuestion.question
+						: state.gameController.display === 'answer'
+						? state.gameController.currentQuestion.answer
+						: ''}
+				</StyledSpan>
+			</Modal>
+			<Board>
+				{state.gameController.board.map((block, index) => {
+					return (
+						<CellContainer key={`category${index}`}>
+							<CatCell>
+								<StyledSpan>{block.category}</StyledSpan>
+							</CatCell>
+							{block.questions.map((question, qIndex) => {
+								return (
+									<QCell
+										key={qIndex}
+										onClick={() => {
+											clickHandlerBoard(question, index, qIndex);
 										}}
-									>{`$${block.questions[0].value}`}</StyledSpan>
-								</QCell>
-								<QCell
-									onClick={() => {
-										this.clickHandlerBoard(block.questions[1], index, 1);
-									}}
-								>
-									<StyledSpan
-										style={{
-											display: block.questions[1].completed ? 'none' : 'inline',
-										}}
-									>{`$${block.questions[1].value}`}</StyledSpan>
-								</QCell>
-								<QCell
-									onClick={() => {
-										this.clickHandlerBoard(block.questions[2], index, 2);
-									}}
-								>
-									<StyledSpan
-										style={{
-											display: block.questions[2].completed ? 'none' : 'inline',
-										}}
-									>{`$${block.questions[2].value}`}</StyledSpan>
-								</QCell>
-								<QCell
-									onClick={() => {
-										this.clickHandlerBoard(block.questions[3], index, 3);
-									}}
-								>
-									<StyledSpan
-										style={{
-											display: block.questions[3].completed ? 'none' : 'inline',
-										}}
-									>{`$${block.questions[3].value}`}</StyledSpan>
-								</QCell>
-								<QCell
-									onClick={() => {
-										this.clickHandlerBoard(block.questions[4], index, 4);
-									}}
-								>
-									<StyledSpan
-										style={{
-											display: block.questions[4].completed ? 'none' : 'inline',
-										}}
-									>{`$${block.questions[4].value}`}</StyledSpan>
-								</QCell>
-							</CellContainer>
-						);
-					})}
-				</Board>
-			</JeopardyContainer>
-		);
-	}
+									>
+										<StyledSpan
+											style={{
+												display: question.completed ? 'none' : 'inline',
+											}}
+										>{`$${question.value}`}</StyledSpan>
+									</QCell>
+								);
+							})}
+						</CellContainer>
+					);
+				})}
+			</Board>
+		</JeopardyContainer>
+	);
 }
-
-export default Jeopardy;

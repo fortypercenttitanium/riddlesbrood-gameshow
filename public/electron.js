@@ -77,6 +77,14 @@ function createWindow() {
 		}
 	});
 
+	ipcMain.on('UPDATE_STATE', (event, state) => {
+		gameWindow.webContents.send('SYNC_STATE', state);
+	});
+
+	ipcMain.on('WHEEL_GUESS_SEND', (e, key) => {
+		gameWindow.webContents.send('WHEEL_GUESS_RECEIVE', key);
+	});
+
 	// Dev Tools
 	mainWindow.webContents.openDevTools();
 
@@ -87,6 +95,10 @@ function createWindow() {
 	);
 
 	gameWindow.webContents.executeJavaScript("location.assign('#/gameboard');");
+
+	gameWindow.on('focus', () => {
+		mainWindow.focus();
+	});
 
 	gameWindow.on('close', (e) => {
 		if (mainWindow) {

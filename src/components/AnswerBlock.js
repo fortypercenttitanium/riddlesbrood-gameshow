@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { StoreContext } from '../App';
 
 const AnswerBlockDiv = styled.div`
 	grid-area: 7 / 4 / 8 / 11;
@@ -30,20 +31,17 @@ const AnswerText = styled.h1`
 	font-size: ${(props) => (props.length >= 20 ? '2rem' : '4rem')};
 `;
 
-export class AnswerBlock extends Component {
-	render() {
-		return (
-			<AnswerBlockDiv>
-				<TimerDiv>
-					<h3>Timer:</h3>
-					<Timer>{this.props.timer}</Timer>
-				</TimerDiv>
-				<AnswerText length={this.props.answer.length}>
-					{this.props.answer}
-				</AnswerText>
-			</AnswerBlockDiv>
-		);
-	}
+export default function AnswerBlock() {
+	const { state } = useContext(StoreContext);
+	const { time } = state.gameController.timer;
+	let answer = state.gameController.currentAnswer;
+	return (
+		<AnswerBlockDiv>
+			<TimerDiv>
+				<h3>Timer:</h3>
+				<Timer>{time}</Timer>
+			</TimerDiv>
+			<AnswerText length={answer.length}>{answer}</AnswerText>
+		</AnswerBlockDiv>
+	);
 }
-
-export default AnswerBlock;

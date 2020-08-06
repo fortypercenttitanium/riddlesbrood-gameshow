@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const GameLogoDiv = styled.div`
@@ -8,23 +8,19 @@ const GameLogoDiv = styled.div`
 	text-align: center;
 `;
 
-export class GameLogo extends Component {
-	render() {
-		const { logo } = this.props;
-		return (
-			<GameLogoDiv>
-				<img
-					src={logo ? `images/${logo}` : 'images/RB Logo.jpg'}
-					alt=''
-					style={{
-						height: '120px',
-						maxWidth: '100%',
-						margin: 'auto',
-					}}
-				/>
-			</GameLogoDiv>
-		);
-	}
+export default function GameLogo(props) {
+	const { logo } = props;
+	return (
+		<GameLogoDiv>
+			<img
+				src={logo ? `images/${logo}` : 'images/RB Logo.jpg'}
+				alt=''
+				style={{
+					height: '120px',
+					maxWidth: '100%',
+					margin: 'auto',
+				}}
+			/>
+		</GameLogoDiv>
+	);
 }
-
-export default GameLogo;

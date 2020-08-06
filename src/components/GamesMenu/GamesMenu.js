@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const GamesMenuDiv = styled.div`
@@ -20,17 +20,14 @@ const Title = styled.h1`
 	font-size: 1.8rem;
 `;
 
-export class GamesMenu extends Component {
-	clickHandler = () => {
-		this.props.toggleGamesMenu();
-	};
-	render() {
-		return (
-			<GamesMenuDiv onClick={this.clickHandler}>
-				<Title>Games Menu</Title>
-			</GamesMenuDiv>
-		);
-	}
+export default function GamesMenu(props) {
+	return (
+		<GamesMenuDiv
+			onClick={() => {
+				props.open();
+			}}
+		>
+			<Title>Games Menu</Title>
+		</GamesMenuDiv>
+	);
 }
-
-export default GamesMenu;

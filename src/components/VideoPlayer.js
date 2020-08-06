@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { StoreContext as StoreContextCP } from '../App';
+import { StoreContext as StoreContextGB } from './Gameboard';
 
 const VideoContainer = styled.div`
 	width: 100%;
@@ -13,22 +15,27 @@ const VideoContainer = styled.div`
 	right: 0;
 `;
 
-export class VideoPlayer extends Component {
-	render() {
-		return (
-			<VideoContainer>
-				<video
-					width='100%'
-					src={'videos/' + this.props.file}
-					type='video/mp4'
-					autoPlay
-					onEnded={this.props.onEnded}
-				>
-					<p>Unsupported video type</p>
-				</video>
-			</VideoContainer>
-		);
+export default function VideoPlayer(props) {
+	let StoreContext;
+	if (props.window === 'controlPanel') {
+		StoreContext = StoreContextCP;
+	} else if (props.window === 'gameboard') {
+		StoreContext = StoreContextGB;
 	}
+	const { state, dispatch } = useContext(StoreContext);
+	return (
+		<VideoContainer>
+			<video
+				width='100%'
+				src={'videos/' + state.VFX.file}
+				type='video/mp4'
+				autoPlay
+				onEnded={() => {
+					dispatch({ type: 'END_VIDEO' });
+				}}
+			>
+				<p>Unsupported video type</p>
+			</video>
+		</VideoContainer>
+	);
 }
-
-export default VideoPlayer;

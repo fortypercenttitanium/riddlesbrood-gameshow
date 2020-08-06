@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import ScoreCard from './ScoreCard';
+import { StoreContext } from '../../App';
 
 const ScoreBoardDiv = styled.div`
 	display: flex;
@@ -10,25 +11,22 @@ const ScoreBoardDiv = styled.div`
 	margin: auto;
 `;
 
-export class ScoreBoard extends Component {
-	render() {
-		const { score, changeScore } = this.props;
-		return (
-			<ScoreBoardDiv>
-				{score.scoreBoard.map((number, index) => {
-					return (
-						<ScoreCard
-							name={`${score.type === 'team' ? 'Team' : 'Player'} ${index + 1}`}
-							key={index}
-							index={index}
-							score={number}
-							changeScore={changeScore}
-						/>
-					);
-				})}
-			</ScoreBoardDiv>
-		);
-	}
-}
+export default function ScoreBoard() {
+	const { state } = useContext(StoreContext);
+	const { score } = state.gameController;
 
-export default ScoreBoard;
+	return (
+		<ScoreBoardDiv>
+			{score.scoreBoard.map((number, index) => {
+				return (
+					<ScoreCard
+						name={`${score.type === 'team' ? 'Team' : 'Player'} ${index + 1}`}
+						key={index}
+						index={index}
+						score={number}
+					/>
+				);
+			})}
+		</ScoreBoardDiv>
+	);
+}
