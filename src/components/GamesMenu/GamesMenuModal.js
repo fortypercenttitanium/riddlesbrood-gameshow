@@ -10,7 +10,7 @@ const ModalContainer = styled.div`
 	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: 2;
+	z-index: 6;
 `;
 
 const GamesMenuModalDiv = styled.div`
@@ -27,7 +27,7 @@ const GamesMenuModalDiv = styled.div`
 	text-align: center;
 	background: #e2e0cb;
 	border: 1px solid black;
-	z-index: 3;
+	z-index: 5;
 `;
 
 const GameButton = styled.div`

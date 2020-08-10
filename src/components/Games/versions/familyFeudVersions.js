@@ -54,7 +54,7 @@ export const familyFeudVersions = [
 		title: '9 answers',
 		rating: 'pg13',
 		content: {
-			prompt: "something you haven't done since high school gym class.",
+			prompt: "Something you haven't done since high school gym class.",
 			answers: [
 				{ answer: 'Run a mile', revealed: false },
 				{ answer: 'Dodgeball', revealed: false },

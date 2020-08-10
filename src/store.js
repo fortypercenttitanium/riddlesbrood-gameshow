@@ -52,11 +52,6 @@ export const initialState = {
 			file: null,
 			type: null,
 		},
-		{
-			name: null,
-			file: null,
-			type: null,
-		},
 	],
 	timeline: 'app-open',
 	currentGame: {
@@ -282,6 +277,22 @@ export const reducer = (state, action) => {
 				gameController: {
 					...state.gameController,
 					streak: 0,
+				},
+			};
+		case 'SET_WRONG_TRACKER':
+			return {
+				...state,
+				gameController: {
+					...state.gameController,
+					wrongTracker: action.payload,
+				},
+			};
+		case 'SET_FAMILY_FEUD_XS':
+			return {
+				...state,
+				gameController: {
+					...state.gameController,
+					wrongModal: action.payload,
 				},
 			};
 		default:

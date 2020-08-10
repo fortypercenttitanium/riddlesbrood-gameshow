@@ -13,6 +13,7 @@ import GamesMenuModal from './components/GamesMenu/GamesMenuModal';
 import { initialState, reducer } from './store';
 import { actions } from './actions';
 import { useInterval } from './customHooks/useInterval';
+import * as versions from './components/Games/versions/gameVersions';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -68,6 +69,10 @@ export function App(props) {
 		return player;
 	};
 
+	const toggleDevTools = () => {
+		ipcRenderer.send('TOGGLE_DEV_TOOLS');
+	};
+
 	const projectorMode = () => {
 		ipcRenderer.send('REQUEST_PROJECTOR_MODE');
 	};
@@ -102,6 +107,14 @@ export function App(props) {
 		stopSound,
 	};
 
+	// dev to work on game
+	// useEffect(() => {
+	// 	dispatch({
+	// 		type: 'SET_GAME',
+	// 		payload: { title: 'Family Feud', logo: 'FamilyFeudLogo.png', version: 4 },
+	// 	});
+	// }, []);
+
 	return (
 		<StyledApp>
 			<StoreContext.Provider value={store}>
@@ -114,7 +127,7 @@ export function App(props) {
 				<GameLogo logo={state.currentGame.logo} />
 				<VolumeControls />
 				<ShowControls projectorMode={projectorMode} />
-				<FxButtons />
+				<FxButtons toggleDevTools={toggleDevTools} />
 				<ControlScreenContainer>
 					<ControlScreen window='controlPanel' />
 				</ControlScreenContainer>

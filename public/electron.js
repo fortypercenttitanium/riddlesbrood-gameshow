@@ -86,7 +86,10 @@ function createWindow() {
 	});
 
 	// Dev Tools
-	mainWindow.webContents.openDevTools();
+	ipcMain.on('TOGGLE_DEV_TOOLS', () => {
+		mainWindow.webContents.toggleDevTools();
+		gameWindow.webContents.toggleDevTools();
+	});
 
 	gameWindow.loadURL(
 		isDev
@@ -105,9 +108,6 @@ function createWindow() {
 			e.preventDefault();
 		}
 	});
-
-	// Dev Tools
-	gameWindow.webContents.openDevTools();
 }
 
 app.on('ready', createWindow);

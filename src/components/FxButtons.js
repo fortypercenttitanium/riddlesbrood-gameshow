@@ -74,6 +74,11 @@ export default function FxButtons(props) {
 					</FxButton>
 				);
 			})}
+			{state.fxButtons.length < 9 && (
+				<FxButton onClick={props.toggleDevTools}>
+					<Text>Dev Tools</Text>
+				</FxButton>
+			)}
 		</FxButtonsDiv>
 	);
 }
