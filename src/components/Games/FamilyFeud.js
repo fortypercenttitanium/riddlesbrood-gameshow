@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { familyfeud as versions } from './versions/gameVersions';
+import { familyFeud as versions } from './versions/gameVersions';
 import { StoreContext as StoreContextCP } from '../../App';
 import { StoreContext as StoreContextGB } from '../Gameboard';
 import { actions } from '../../actions';
@@ -24,10 +24,10 @@ const GameBoard = styled.div`
 	text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
 	border: 5px solid #003c7b;
 	text-align: center;
-	border-radius: 50%;
-	width: 90%;
-	height: 90%;
-	margin: 3%;
+	border-radius: 5%;
+	width: 98%;
+	height: 98%;
+	margin: auto;
 	background: url('images/backgrounds/ffbackground.svg') #0c4779;
 	background-repeat: repeat;
 	background-position: center center;
@@ -36,23 +36,24 @@ const GameBoard = styled.div`
 
 const TopContainer = styled.div`
 	display: flex;
-	width: 100%;
+	width: 97%;
 	height: 40%;
 	top: 0;
 	left: 0;
 	right: 0;
-	margin: 0 auto;
+	margin: 2% auto 0;
 `;
 
 const ScoreContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	height: calc(100% - 40px);
-	width: 25%;
+	height: calc(100% - 60px);
+	width: 22%;
 	margin: auto;
 	background: rgb(230, 230, 230);
 	color: ${(props) => (props.team === 1 ? 'red' : 'blue')};
 	box-shadow: inset 0 1px 24px 1px rgba(0, 0, 0, 0.48);
+	border-radius: 5%;
 	padding: 20px;
 	border: 2px solid white;
 	text-align: center;
@@ -60,8 +61,8 @@ const ScoreContainer = styled.div`
 
 const PromptContainer = styled.div`
 	display: flex;
-	width: 50%;
-	height: calc(100% - 40px);
+	width: 45%;
+	height: calc(100% - 80px);
 	margin: auto;
 	text-align: center;
 	font-size: 30px;
@@ -103,6 +104,7 @@ const H1 = styled(H2)`
 `;
 const FlippableH3 = styled.h3`
 	margin: auto;
+	font-size: ${(props) => (props.window === 'controlPanel' ? '2rem' : '3rem')};
 	opacity: ${(props) => (props.revealed ? '1' : '0.4')};
 	transform: ${(props) =>
 		props.revealed ? 'rotateX(-180deg)' : 'rotateX(0deg)'};
@@ -119,7 +121,7 @@ const Span = styled.span`
 `;
 
 const AnswerGrid = styled.div`
-	margin: 5% auto;
+	margin: auto;
 	width: 90%;
 	display: grid;
 	grid-template-rows: ${(props) => props.rowTemplate};
@@ -129,7 +131,8 @@ const AnswerGrid = styled.div`
 
 const AnswerContainer = styled.div`
 	border: 2px solid #003c7b;
-	height: ${(props) => (props.window === 'controlPanel' ? '2rem' : '3rem')};
+	height: ${(props) => (props.window === 'controlPanel' ? '3rem' : '4rem')};
+	margin: 1%;
 	display: flex;
 	cursor: pointer;
 	transform-style: preserve-3d;
@@ -150,7 +153,9 @@ const AnswerContainer = styled.div`
 			: 'perspective(200px) rotateX(180deg)'};
 	transition: 0.5s;
 	&:hover {
-		background: rgba(130, 130, 130, 0.7);
+		> h3 {
+			opacity: 1;
+		}
 	}
 `;
 
@@ -233,19 +238,14 @@ export default function FamilyFeud(props) {
 				},
 				wrongModal: {
 					display: false,
+					team: '',
 					array: [],
 				},
 			},
 		});
 	}, [dispatch, state.currentGame.version]);
 
-	const {
-		board,
-		score,
-		display,
-		wrongTracker,
-		wrongModal,
-	} = state.gameController;
+	const { board, display, wrongTracker, wrongModal } = state.gameController;
 
 	const revealAnswer = (answerIndex) => {
 		const board = state.gameController.board;
@@ -278,25 +278,26 @@ export default function FamilyFeud(props) {
 	};
 
 	const incorrectHandler = (team) => {
-		playSoundLocal('sfx', 'soundfx/ffbuzzer.wav');
-		const tracker = state.gameController.wrongTracker;
-		const arr = [];
-		for (let n = 1; n <= tracker[team] + 1; n++) {
-			arr.push(true);
-		}
-		dispatch({
-			type: actions.SET_FAMILY_FEUD_XS,
-			payload: { display: true, array: arr },
-		});
-		console.log(wrongTracker);
-		setTimeout(() => {
+		if (state.gameController.wrongTracker[team] < 3) {
+			playSoundLocal('sfx', 'soundfx/ffbuzzer.wav');
+			const tracker = state.gameController.wrongTracker;
+			const arr = [];
+			for (let n = 1; n <= tracker[team] + 1; n++) {
+				arr.push(true);
+			}
 			dispatch({
 				type: actions.SET_FAMILY_FEUD_XS,
-				payload: { display: false, array: [] },
+				payload: { display: true, team: team, array: arr },
 			});
-			tracker[team] = tracker[team] + 1;
-			dispatch({ type: actions.SET_WRONG_TRACKER, payload: tracker });
-		}, 1500);
+			setTimeout(() => {
+				dispatch({
+					type: actions.SET_FAMILY_FEUD_XS,
+					payload: { display: false, team: '', array: [] },
+				});
+				tracker[team] = tracker[team] + 1;
+				dispatch({ type: actions.SET_WRONG_TRACKER, payload: tracker });
+			}, 1500);
+		}
 	};
 
 	// const stopSoundLocal = () => {
@@ -322,7 +323,13 @@ export default function FamilyFeud(props) {
 									style={{
 										width: props.window === 'controlPanel' ? '85%' : '100%',
 									}}
-									src='images/ffWrongActive.png'
+									src={
+										wrongModal.team === 'team1'
+											? 'images/ff-wrong-red.png'
+											: wrongModal.team === 'team2'
+											? 'images/ff-wrong-blue.png'
+											: null
+									}
 									alt=''
 								/>
 							</div>
@@ -333,8 +340,7 @@ export default function FamilyFeud(props) {
 			<GameBoard>
 				<TopContainer>
 					<ScoreContainer team={1}>
-						<H2>Team 1 Score</H2>
-						<H1>{score.scoreBoard[0]}</H1>
+						<H2>Team 1</H2>
 						<XContainer
 							onClick={() => {
 								incorrectHandler('team1');
@@ -343,24 +349,30 @@ export default function FamilyFeud(props) {
 							<WrongImg
 								src={
 									wrongTracker.team1 > 0
-										? 'images/ffwrongActive.png'
-										: 'images/ffwrongInactive.png'
+										? 'images/ff-wrong-red.png'
+										: props.window === 'controlPanel'
+										? 'images/ff-wrong-grey.png'
+										: null
 								}
 								window={props.window}
 							/>
 							<WrongImg
 								src={
 									wrongTracker.team1 > 1
-										? 'images/ffwrongActive.png'
-										: 'images/ffwrongInactive.png'
+										? 'images/ff-wrong-red.png'
+										: props.window === 'controlPanel'
+										? 'images/ff-wrong-grey.png'
+										: null
 								}
 								window={props.window}
 							/>
 							<WrongImg
 								src={
 									wrongTracker.team1 > 2
-										? 'images/ffwrongActive.png'
-										: 'images/ffwrongInactive.png'
+										? 'images/ff-wrong-red.png'
+										: props.window === 'controlPanel'
+										? 'images/ff-wrong-grey.png'
+										: null
 								}
 								window={props.window}
 							/>
@@ -370,8 +382,7 @@ export default function FamilyFeud(props) {
 						<Span window={props.window}>{board.prompt}</Span>
 					</PromptContainer>
 					<ScoreContainer team={2}>
-						<H2>Team 2 Score</H2>
-						<H1>{score.scoreBoard[1]}</H1>
+						<H2>Team 2</H2>
 						<XContainer
 							onClick={() => {
 								incorrectHandler('team2');
@@ -380,24 +391,30 @@ export default function FamilyFeud(props) {
 							<WrongImg
 								src={
 									wrongTracker.team2 > 0
-										? 'images/ffwrongActive.png'
-										: 'images/ffwrongInactive.png'
+										? 'images/ff-wrong-blue.png'
+										: props.window === 'controlPanel'
+										? 'images/ff-wrong-grey.png'
+										: null
 								}
 								window={props.window}
 							/>
 							<WrongImg
 								src={
 									wrongTracker.team2 > 1
-										? 'images/ffwrongActive.png'
-										: 'images/ffwrongInactive.png'
+										? 'images/ff-wrong-blue.png'
+										: props.window === 'controlPanel'
+										? 'images/ff-wrong-grey.png'
+										: null
 								}
 								window={props.window}
 							/>
 							<WrongImg
 								src={
 									wrongTracker.team2 > 2
-										? 'images/ffwrongActive.png'
-										: 'images/ffwrongInactive.png'
+										? 'images/ff-wrong-blue.png'
+										: props.window === 'controlPanel'
+										? 'images/ff-wrong-grey.png'
+										: null
 								}
 								window={props.window}
 							/>
@@ -412,12 +429,13 @@ export default function FamilyFeud(props) {
 							return (
 								<AnswerContainer
 									key={wordIndex}
+									window={props.window}
 									onClick={() => {
 										correctHandler(wordIndex);
 									}}
 									side={word.revealed ? 'back' : 'front'}
 								>
-									<FlippableH3 revealed={word.revealed}>
+									<FlippableH3 window={props.window} revealed={word.revealed}>
 										{word.answer.toUpperCase()}
 									</FlippableH3>
 								</AnswerContainer>
@@ -428,10 +446,11 @@ export default function FamilyFeud(props) {
 							return (
 								<AnswerContainer
 									key={wordIndex}
+									window={props.window}
 									side={word.revealed ? 'back' : 'front'}
 								>
 									{word.revealed ? (
-										<FlippableH3 revealed={word.revealed}>
+										<FlippableH3 window={props.window} revealed={word.revealed}>
 											{word.answer.toUpperCase()}
 										</FlippableH3>
 									) : (

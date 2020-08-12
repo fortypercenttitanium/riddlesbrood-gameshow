@@ -175,7 +175,9 @@ export default function GamesMenuModal(props) {
 									.map((rating, ratingIndex) => {
 										return (
 											<VersionSelectDiv key={ratingIndex}>
-												<h1>{rating.toUpperCase()}</h1>
+												<h1>
+													{rating !== 'kids' && 'Rated'} {rating.toUpperCase()}
+												</h1>
 												<select
 													size='10'
 													style={{

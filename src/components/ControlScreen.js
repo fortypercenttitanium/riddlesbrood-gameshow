@@ -16,12 +16,13 @@ export default function ControlScreen(props) {
 
 	const { currentGame, timeline, VFX } = state;
 
-	const { Jeopardy, FamilyFeud, Pyramid, Wheel } = Games;
+	const { Jeopardy, FamilyFeud, Pyramid, Wheel, NameThatTune } = Games;
 	const components = {
 		Jeopardy: <Jeopardy window={props.window} />,
 		'Family Feud': <FamilyFeud window={props.window} />,
 		'$25,000 Pyramid': <Pyramid window={props.window} />,
 		'Wheel Of Fortune': <Wheel window={props.window} />,
+		'Name That Tune': <NameThatTune window={props.window} />,
 	};
 
 	return (

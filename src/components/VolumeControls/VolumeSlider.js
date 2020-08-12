@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
@@ -15,6 +15,15 @@ const useStyles = makeStyles({
 		userSelect: 'none',
 	},
 });
+
+const MyVolumeSlider = withStyles({
+	root: {
+		color: '#ddd',
+	},
+	valueLabel: {
+		color: '#777',
+	},
+})(Slider);
 
 export default function VolumeSlider(props) {
 	const { state, dispatch } = useContext(StoreContext);
@@ -35,7 +44,8 @@ export default function VolumeSlider(props) {
 					<VolumeDown />
 				</Grid>
 				<Grid item xs>
-					<Slider
+					<MyVolumeSlider
+						className={classes.white}
 						value={state.audio.volume[type]}
 						valueLabelDisplay='auto'
 						onChange={handleChange}

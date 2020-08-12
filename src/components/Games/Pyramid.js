@@ -17,8 +17,41 @@ const PyramidHomeScreen = styled.div`
 `;
 
 const Title = styled.h1`
-	margin: 3% auto;
+	flex: 1;
+	margin: 1% auto;
 	padding: 1rem;
+`;
+
+const TurnContainer = styled.div`
+	display: flex;
+	flex: 1;
+	width: 100%;
+	margin: auto;
+`;
+
+const Container = styled.div`
+	display: flex;
+	flex-grow: 5;
+	flex-direction: row;
+	width: 100%;
+`;
+
+const ModalContainer = styled(Container)`
+	flex-grow: 1;
+`;
+
+const VerticalStack = styled.div`
+	display: flex;
+	flex-direction: column;
+	margin: auto;
+`;
+
+const ScoreContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	margin: auto;
+	background: rgb(230, 230, 230);
+	color: ${(props) => (props.team === 1 ? 'red' : 'blue')};
 `;
 
 const CategoryContainer = styled.div`
@@ -26,26 +59,28 @@ const CategoryContainer = styled.div`
 	grid-template-areas:
 		'cat1 cat2'
 		'cat3 cat4';
-	width: 30%;
+	grid-gap: 5px;
+	width: 40%;
 	margin: auto;
 `;
 
 const CategoryCard = styled.div`
+	background-size: cover;
+	height: 80px;
+	background-image: url('images/pyramid-box.png');
 	grid-area: ${(props) => props.gridArea};
-	padding: 1rem;
-	margin: 1%;
 	text-align: center;
 	display: ${(props) => (props.done ? 'none' : 'flex')};
-	border: 1px solid red;
 	cursor: pointer;
 	&:hover {
-		background: pink;
+		color: white;
 	}
 `;
 
 const Span = styled.span`
-	margin: 0 auto;
+	margin: auto;
 	font-size: 1rem;
+	font-weight: bold;
 `;
 
 const Modal = styled.div`
@@ -68,20 +103,24 @@ const Button = styled.div`
 			: props.type === 'incorrect'
 			? 'rgb(167, 68, 57)'
 			: '#000'};
-	padding: 1rem;
+	padding: 1rem 0;
+	width: 20%;
 	margin: auto;
 	font-weight: bold;
+	&:hover {
+		opacity: 0.8;
+	}
 `;
 
 const ModalDiv = styled.div`
-	height: 15%;
-	margin: 0;
+	margin: auto;
 	padding: 0;
+	flex: 1;
 	display: flex;
 `;
 
 const H1 = styled.h1`
-	margin: 0 auto;
+	margin: auto;
 	font-size: 2rem;
 `;
 
@@ -96,27 +135,12 @@ const TeamButton = styled.div`
 	border: ${(props) => (props.team === 1 ? '3px solid red' : '3px solid blue')};
 	color: white;
 	padding: 1rem;
-	margin: 0 auto;
+	margin: auto;
+	cursor: pointer;
 	border-color: ${(props) => props.activeTeam === props.team && 'white'};
-`;
-
-const TurnContainer = styled.div`
-	display: flex;
-	width: 50%;
-	margin: 0 auto;
-`;
-
-const ScoreContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	margin: auto auto 0;
-	background: rgb(230, 230, 230);
-	color: ${(props) => (props.team === 1 ? 'red' : 'blue')};
-`;
-const Container = styled.div`
-	display: flex;
-	flex-direction: row;
-	width: 100%;
+	&:hover {
+		border-color: rgba(255, 255, 255, 0.8);
+	}
 `;
 
 export default function Pyramid(props) {
@@ -310,65 +334,71 @@ export default function Pyramid(props) {
 				<ModalDiv>
 					<H1>{state.gameController.currentQuestion.category}</H1>
 				</ModalDiv>
-				<ModalDiv>
-					<H2>
-						{state.gameController.display === 'question'
-							? state.gameController.timer.time
-							: 'Round over'}
-					</H2>
-				</ModalDiv>
-				<ModalDiv>
-					<H2>{state.gameController.correctCounter}</H2>
-				</ModalDiv>
-				<ModalDiv>
-					{state.gameController.display === 'question' ? (
-						<H2>
-							{
-								state.gameController.currentQuestion.words[
-									state.gameController.currentQuestion.index
-								]
-							}
-						</H2>
-					) : (
-						<Button
-							onClick={() => {
-								changeGameDisplay('board');
-							}}
-						>
-							Return To Categories
-						</Button>
-					)}
-				</ModalDiv>
-				<ModalDiv
-					style={{
-						display: state.gameController.display === 'roundOver' && 'none',
-					}}
-				>
-					<Button
-						onClick={() => {
-							correctHandler(state.gameController.activeTeam);
-						}}
-						type='correct'
-					>
-						<H2>Correct</H2>
-					</Button>
-					<Button onClick={incorrectHandler} type='incorrect'>
-						<H2>Wrong/Pass</H2>
-					</Button>
-				</ModalDiv>
-				<Container>
+				<ModalContainer>
 					<ScoreContainer team={1}>
 						<H2>Team 1 Score</H2>
 						<H2>{state.gameController.score.scoreBoard[0]}</H2>
 					</ScoreContainer>
+					<VerticalStack>
+						<ModalDiv>
+							<H2>Timer:</H2>
+							<H2>
+								{state.gameController.display === 'question'
+									? state.gameController.timer.time
+									: 'Round over'}
+							</H2>
+						</ModalDiv>
+						<ModalDiv>
+							<H2>POINTS SCORED: {state.gameController.correctCounter}</H2>
+						</ModalDiv>
+					</VerticalStack>
 					<ScoreContainer team={2}>
 						<H2>Team 2 Score</H2>
 						<H2>{state.gameController.score.scoreBoard[1]}</H2>
 					</ScoreContainer>
-				</Container>
+				</ModalContainer>
+
+				<ModalContainer>
+					{state.gameController.display === 'question' ? (
+						<ModalContainer>
+							<Button
+								onClick={() => {
+									correctHandler(state.gameController.activeTeam);
+								}}
+								type='correct'
+							>
+								<H2>Correct</H2>
+							</Button>
+							<H2>
+								{
+									state.gameController.currentQuestion.words[
+										state.gameController.currentQuestion.index
+									]
+								}
+							</H2>
+							<Button onClick={incorrectHandler} type='incorrect'>
+								<H2>Wrong/Pass</H2>
+							</Button>
+						</ModalContainer>
+					) : (
+						<ModalContainer>
+							<Button
+								onClick={() => {
+									changeGameDisplay('board');
+								}}
+							>
+								Return To Categories
+							</Button>
+						</ModalContainer>
+					)}
+				</ModalContainer>
 			</Modal>
 			<Title>TURN:</Title>
 			<TurnContainer>
+				<ScoreContainer team={1}>
+					<H2>Team 1 Score</H2>
+					<H2>{state.gameController.score.scoreBoard[0]}</H2>
+				</ScoreContainer>
 				<TeamButton
 					team={1}
 					activeTeam={state.gameController.activeTeam}
@@ -387,14 +417,14 @@ export default function Pyramid(props) {
 				>
 					<H2>Team 2</H2>
 				</TeamButton>
+				<ScoreContainer team={2}>
+					<H2>Team 2 Score</H2>
+					<H2>{state.gameController.score.scoreBoard[1]}</H2>
+				</ScoreContainer>
 			</TurnContainer>
 
 			<Title>Categories</Title>
 			<Container>
-				<ScoreContainer team={1}>
-					<H2>Team 1 Score</H2>
-					<H2>{state.gameController.score.scoreBoard[0]}</H2>
-				</ScoreContainer>
 				<CategoryContainer>
 					{state.gameController.board.map((item, index) => {
 						return (
@@ -411,10 +441,6 @@ export default function Pyramid(props) {
 						);
 					})}
 				</CategoryContainer>
-				<ScoreContainer team={2}>
-					<H2>Team 2 Score</H2>
-					<H2>{state.gameController.score.scoreBoard[1]}</H2>
-				</ScoreContainer>
 			</Container>
 			<audio ref={localAudioPlayer} />
 			<audio ref={localAudioPlayer2} />

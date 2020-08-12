@@ -3,9 +3,10 @@ import styled from 'styled-components';
 
 const ShowControlsDiv = styled.div`
 	grid-area: 4 / 1 / 7 / 4;
+	grid-gap: 5px;
 	display: grid;
 	height: 98%;
-	width: 98%;
+	width: 100%;
 	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: repeat(2, 1fr);
 	margin: auto;
@@ -17,8 +18,13 @@ const Button = styled.div`
 	background: #e49090;
 	text-align: center;
 	cursor: pointer;
+	border-radius: 3px;
+	box-shadow: 2px 2px 2px rgba(40, 40, 40, 0.5);
 	&:active {
 		transform: scale(0.95);
+	}
+	&:hover {
+		border-color: white;
 	}
 `;
 

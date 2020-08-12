@@ -1,17 +1,20 @@
 import React from 'react';
 import VolumeSlider from './VolumeSlider';
+import styled from 'styled-components';
+
+const VolumeControlsDiv = styled.div`
+	grid-area: 2 / 1 / 4 / 4;
+	border: '1px solid black';
+	color: #eef98b;
+	background: linear-gradient(90deg, #333, #555);
+`;
 
 export default function VolumeControls() {
 	return (
-		<div
-			style={{
-				gridArea: '2 / 1 / 4 / 4',
-				border: '1px solid black',
-			}}
-		>
+		<VolumeControlsDiv>
 			<VolumeSlider label='Master volume' type='master' />
 			<VolumeSlider label='Music volume' type='music' />
 			<VolumeSlider label='Sound FX volume' type='sfx' />
-		</div>
+		</VolumeControlsDiv>
 	);
 }
