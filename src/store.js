@@ -295,6 +295,14 @@ export const reducer = (state, action) => {
 					wrongModal: action.payload,
 				},
 			};
+		case 'SET_ANSWER_REVEALED':
+			return {
+				...state,
+				gameController: {
+					...state.gameController,
+					answerRevealed: action.payload,
+				},
+			};
 		default:
 			return state;
 	}

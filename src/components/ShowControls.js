@@ -6,16 +6,23 @@ const ShowControlsDiv = styled.div`
 	grid-gap: 5px;
 	display: grid;
 	height: 98%;
-	width: 100%;
+	width: 99%;
 	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: repeat(2, 1fr);
-	margin: auto;
+	margin: 2px 2px;
 `;
 
 const Button = styled.div`
 	display: flex;
 	border: 1px solid black;
-	background: #e49090;
+	background: rgb(254, 147, 147);
+	background: radial-gradient(
+		circle,
+		rgba(254, 147, 147, 1) 0%,
+		rgba(237, 127, 127, 1) 31%,
+		rgba(219, 113, 113, 1) 56%,
+		rgba(200, 96, 96, 1) 100%
+	);
 	text-align: center;
 	cursor: pointer;
 	border-radius: 3px;

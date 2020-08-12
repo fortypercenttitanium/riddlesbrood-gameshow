@@ -115,17 +115,17 @@ export function App(props) {
 		stopSound,
 	};
 
-	// dev to work on game
-	// useEffect(() => {
-	// 	dispatch({
-	// 		type: 'SET_GAME',
-	// 		payload: {
-	// 			title: 'Name That Tune',
-	// 			logo: 'NameThatTuneLogo.png',
-	// 			version: 0,
-	// 		},
-	// 	});
-	// }, []);
+	//	dev to work on game
+	useEffect(() => {
+		dispatch({
+			type: 'SET_GAME',
+			payload: {
+				title: 'Name That Tune',
+				logo: 'NameThatTuneLogo.png',
+				version: 0,
+			},
+		});
+	}, []);
 
 	return (
 		<StyledApp>
