@@ -4,6 +4,7 @@ import { nameThatTune as versions } from './versions/gameVersions';
 import { StoreContext as StoreContextCP } from '../../App';
 import { StoreContext as StoreContextGB } from '../Gameboard';
 import { actions } from '../../actions';
+import ReactAudioPlayer from 'react-audio-player';
 
 const TuneHomeScreen = styled.div`
 	display: flex;
@@ -17,11 +18,10 @@ const TuneHomeScreen = styled.div`
 `;
 
 const TitleContainer = styled.div`
-	display: ${(props) => (props.show ? 'flex' : 'none')};
-	height: 40%;
-	width: 75%;
-	flex-direction: column;
-	margin: 2% auto;
+	display: block;
+	height: 30%;
+	width: 85%;
+	margin: 1% auto auto;
 `;
 
 const H1 = styled.h1`
@@ -29,8 +29,17 @@ const H1 = styled.h1`
 	font-size: 3rem;
 `;
 
+const Title = styled(H1)`
+	display: ${(props) => (props.show ? 'block' : 'none')};
+	font-size: ${(props) => props.window === 'controlPanel' && '2.4rem'};
+`;
+
 const H2 = styled.h2`
 	font-size: 2rem;
+`;
+
+const Artist = styled(H2)`
+	display: ${(props) => (props.show ? 'block' : 'none')};
 `;
 
 const ScoreH1 = styled(H1)`
@@ -77,7 +86,7 @@ const AudioImg = styled.img`
 const Controls = styled.div`
 	display: flex;
 	border-radius: 5px;
-	margin: 2% auto;
+	margin: auto;
 	width: 75%;
 `;
 
@@ -155,17 +164,8 @@ export default function FamilyFeud(props) {
 
 	const { state, dispatch } = useContext(StoreContext);
 
-	let localAudioPlayer = useRef();
-	let localAudioPlayer2 = useRef();
-	//  use if you need 2 players
-	// const setLocalAudioPlayer = () => {
-	// 	const player = localAudioPlayer.current.paused
-	// 		? localAudioPlayer.current
-	// 		: localAudioPlayer2.current.paused
-	// 		? localAudioPlayer2.current
-	// 		: localAudioPlayer.current;
-	// 	return player;
-	// };
+	let audio1 = useRef();
+	let audio2 = useRef();
 
 	useEffect(() => {
 		dispatch({
@@ -174,8 +174,8 @@ export default function FamilyFeud(props) {
 				display: 'board',
 				currentQuestion: versions[state.currentGame.version].content[0],
 				currentAnswer: `${
-					versions[state.currentGame.version].content[0].artist
-				} - ${versions[state.currentGame.version].content[0].title}`,
+					versions[state.currentGame.version].content[0].title
+				} - ${versions[state.currentGame.version].content[0].artist}`,
 				board: versions[state.currentGame.version].content,
 				timer: {
 					time: null,
@@ -193,46 +193,52 @@ export default function FamilyFeud(props) {
 
 	const { board, display, currentQuestion, score } = state.gameController;
 
-	const getVolume = (type) => {
-		return type === 'sfx'
-			? (state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
-			: (state.audio.volume.master / 100) * (state.audio.volume.music / 100);
-	};
-
 	const playPauseHandler = () => {
-		const player = localAudioPlayer.current;
+		const musicPlayer = audio1.current.audioEl.current;
 		const currentQuestionCopy = currentQuestion;
-		if (!currentQuestion.isPlaying && player.currentTime < 1) {
+		if (!currentQuestion.isPlaying && musicPlayer.currentTime < 1) {
 			currentQuestionCopy.isPlaying = true;
 			dispatch({ type: actions.SET_QUESTION, payload: currentQuestionCopy });
-			player.src = `soundfx/namethattune/${currentQuestion.file}`;
-			player.volume = getVolume('music');
-			player.play().catch((err) => console.log(err));
+			musicPlayer.src = `soundfx/namethattune/${currentQuestion.file}`;
+			musicPlayer.play().catch((err) => console.log(err));
 		} else if (currentQuestion.isPlaying) {
-			player.pause();
+			musicPlayer.pause();
 			currentQuestionCopy.isPlaying = false;
 			dispatch({ type: actions.SET_QUESTION, payload: currentQuestionCopy });
 		} else {
 			currentQuestionCopy.isPlaying = true;
 			dispatch({ type: actions.SET_QUESTION, payload: currentQuestionCopy });
-			player.play();
+			musicPlayer.play();
 		}
 	};
 
 	const rewindHandler = () => {
-		const player = localAudioPlayer.current;
+		const musicPlayer = audio1.current.audioEl.current;
 		const currentQuestionCopy = currentQuestion;
 		currentQuestionCopy.isPlaying = false;
 		dispatch({ type: actions.SET_QUESTION, payload: currentQuestionCopy });
-		player.load();
+		musicPlayer.load();
 	};
 
 	const toggleReveal = (setting = !state.gameController.answerRevealed) => {
-		dispatch({ type: actions.SET_ANSWER_REVEALED, payload: true });
+		dispatch({ type: actions.SET_ANSWER_REVEALED, payload: setting });
 	};
 
 	const nextSong = () => {
-		toggleReveal(false);
+		const musicPlayer = audio1.current.audioEl.current;
+		const nextQuestionIndex = board.indexOf(currentQuestion) + 1;
+		if (nextQuestionIndex <= board.length - 1) {
+			musicPlayer.load();
+			toggleReveal(false);
+			dispatch({
+				type: actions.SET_QUESTION,
+				payload: board[nextQuestionIndex],
+			});
+			dispatch({
+				type: actions.SET_ANSWER,
+				payload: `${board[nextQuestionIndex].title} - ${board[nextQuestionIndex].artist}`,
+			});
+		}
 	};
 
 	if (display === '') {
@@ -241,13 +247,24 @@ export default function FamilyFeud(props) {
 
 	return (
 		<TuneHomeScreen>
-			<TitleContainer
-				show={Boolean(
-					state.gameController.answerRevealed || props.window === 'controlPanel'
-				)}
-			>
-				<H1>{currentQuestion.title}</H1>
-				<H2>{currentQuestion.artist}</H2>
+			<TitleContainer>
+				<Title
+					show={Boolean(
+						state.gameController.answerRevealed ||
+							props.window === 'controlPanel'
+					)}
+					window={props.window}
+				>
+					{currentQuestion.title}
+				</Title>
+				<Artist
+					show={Boolean(
+						state.gameController.answerRevealed ||
+							props.window === 'controlPanel'
+					)}
+				>
+					{currentQuestion.artist}
+				</Artist>
 			</TitleContainer>
 			<PlayerContainer>
 				<AudioImg
@@ -267,7 +284,7 @@ export default function FamilyFeud(props) {
 			</PlayerContainer>
 			{props.window === 'controlPanel' && (
 				<Controls>
-					<Button onClick={toggleReveal}>
+					<Button onClick={() => toggleReveal()}>
 						<H3>
 							{state.gameController.answerRevealed ? 'Unreveal' : 'Reveal'}
 						</H3>
@@ -296,8 +313,18 @@ export default function FamilyFeud(props) {
 					})}
 				</ScoreBoardDiv>
 			)}
-			<audio ref={localAudioPlayer} />
-			<audio ref={localAudioPlayer2} />
+			<ReactAudioPlayer
+				ref={audio1}
+				volume={
+					(state.audio.volume.master / 100) * (state.audio.volume.music / 100)
+				}
+			/>
+			<ReactAudioPlayer
+				ref={audio2}
+				volume={
+					(state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
+				}
+			/>
 		</TuneHomeScreen>
 	);
 }
