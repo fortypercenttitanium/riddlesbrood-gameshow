@@ -5,6 +5,7 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const isDev = require('electron-is-dev');
 const { ipcMain, dialog } = require('electron');
+const iconPath = path.join(__dirname, 'media', 'images', 'favicon.png');
 
 let mainWindow;
 let gameWindow;
@@ -19,6 +20,7 @@ function createWindow() {
 		webPreferences: {
 			nodeIntegration: true,
 		},
+		icon: iconPath,
 	});
 	gameWindow = new BrowserWindow({
 		width: 1200,
@@ -32,6 +34,7 @@ function createWindow() {
 		fullscreen: Boolean(projectorDisplay),
 		title: 'Gameboard',
 		show: true,
+		icon: iconPath,
 	});
 
 	gameWindow.on('maximize', (e) => {
@@ -85,6 +88,18 @@ function createWindow() {
 		gameWindow.webContents.send('WHEEL_GUESS_RECEIVE', key);
 	});
 
+	ipcMain.on('SCORE_TYPE_QUERY', () => {
+		electron.dialog
+			.showMessageBox(mainWindow, {
+				type: 'question',
+				buttons: ['Teams', 'Individuals'],
+				defaultId: 1,
+				title: 'Select score mode',
+				message: 'Please select a scoring mode:',
+			})
+			.then((res) => mainWindow.webContents.send('SCORE_TYPE_RESPONSE', res));
+	});
+
 	// Dev Tools
 	ipcMain.on('TOGGLE_DEV_TOOLS', () => {
 		mainWindow.webContents.toggleDevTools();
@@ -108,6 +123,44 @@ function createWindow() {
 			e.preventDefault();
 		}
 	});
+
+	ipcMain.on('FX_BUTTON_SELECT', (e, index) => {
+		electron.dialog
+			.showOpenDialog(mainWindow, {
+				title: 'Select FX file',
+				properties: ['openFile'],
+				defaultPath: path.join(__dirname, '/fx_buttons'),
+				filters: [
+					{
+						name: 'Supported Audio/Video',
+						extensions: ['mp4', 'mp3', 'wav'],
+					},
+				],
+			})
+			.then((res) => {
+				const file = res.filePaths[0];
+				if (res.cancelled) {
+					return;
+				} else if (path.basename(path.dirname(file)) !== 'fx_buttons') {
+					electron.dialog.showErrorBox(
+						'Wrong directory',
+						'Please select a file within the "fx_buttons" directory.'
+					);
+					return;
+				} else {
+					const fileType = path.parse(file).ext === 'mp4' ? 'video' : 'audio';
+					const fileName = path.parse(file).name;
+					const fileNameAndExt = path.parse(file).base;
+					mainWindow.webContents.send('FX_BUTTON_RECEIVE', {
+						index,
+						name: fileName,
+						file: fileNameAndExt,
+						type: fileType,
+					});
+				}
+			})
+			.catch((rej) => console.log(rej));
+	});
 }
 
 app.on('ready', createWindow);
@@ -118,8 +171,8 @@ app.on('window-all-closed', () => {
 	}
 });
 
-app.on('activate', () => {
-	if (mainWindow === null) {
-		createWindow();
-	}
-});
+// app.on('activate', () => {
+// 	if (mainWindow === null) {
+// 		createWindow();
+// 	}
+// });

@@ -84,6 +84,11 @@ export const initialState = {
 
 export const reducer = (state, action) => {
 	switch (action.type) {
+		case 'CHANGE_FX_BUTTONS':
+			return {
+				...state,
+				fxButtons: action.payload,
+			};
 		case 'CHANGE_VOLUME':
 			return {
 				...state,
@@ -103,6 +108,14 @@ export const reducer = (state, action) => {
 				gameController: {
 					...state.gameController,
 					score: score,
+				},
+			};
+		case 'SET_SCORE':
+			return {
+				...state,
+				gameController: {
+					...state.gameController,
+					score: action.payload,
 				},
 			};
 		case 'SET_QUESTION':
@@ -152,6 +165,17 @@ export const reducer = (state, action) => {
 					timer: {
 						...state.gameController.timer,
 						running: true,
+					},
+				},
+			};
+		case 'PAUSE_TIMER':
+			return {
+				...state,
+				gameController: {
+					...state.gameController,
+					timer: {
+						...state.gameController.timer,
+						running: false,
 					},
 				},
 			};
@@ -301,6 +325,14 @@ export const reducer = (state, action) => {
 				gameController: {
 					...state.gameController,
 					answerRevealed: action.payload,
+				},
+			};
+		case 'SET_BLOCKS':
+			return {
+				...state,
+				gameController: {
+					...state.gameController,
+					blocks: action.payload,
 				},
 			};
 		default:
