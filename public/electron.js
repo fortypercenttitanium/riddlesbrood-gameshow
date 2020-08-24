@@ -69,7 +69,7 @@ function createWindow() {
 				y: projectorDisplay.bounds.y + 50,
 			});
 			gameWindow.maximize();
-			if (!isDev) {
+			if (true) {
 				dialog.showMessageBox(mainWindow, {
 					type: 'info',
 					title: 'Success',
@@ -77,10 +77,12 @@ function createWindow() {
 				});
 			}
 		} else {
-			dialog.showErrorBox(
-				'Error',
-				'Projector not found. Please plug in projector and try again.'
-			);
+			dialog.showMessageBox(mainWindow, {
+				type: 'error',
+				title: 'Projector error',
+				message: 'Projector not found.',
+				detail: 'Please plug in projector and try again.',
+			});
 		}
 	});
 
