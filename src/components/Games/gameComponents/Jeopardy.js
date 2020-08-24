@@ -138,6 +138,7 @@ export default function Jeopardy(props) {
 				dispatch({ type: actions.SET_ANSWER, payload: question.answer });
 				dispatch({ type: actions.SET_TIMER, payload: 13 });
 				dispatch({ type: actions.RUN_TIMER });
+				playSound('media/soundfx/open.wav');
 			} else {
 				playSound('media/soundfx/dailydoublesound.mp3');
 			}
@@ -164,6 +165,7 @@ export default function Jeopardy(props) {
 			dispatch({ type: actions.SET_TIMER, payload: 13 });
 			dispatch({ type: actions.RUN_TIMER });
 			changeGameDisplay('question');
+			playSound('media/soundfx/open.wav');
 			if (state.gameController.currentQuestion.type === 'video') {
 				dispatch({
 					type: actions.PLAY_VIDEO,
