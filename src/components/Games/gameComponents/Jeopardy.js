@@ -97,7 +97,7 @@ export default function Jeopardy(props) {
 		},
 		score: {
 			type: 'player',
-			scoreBoard: [0, 0, 0],
+			scoreBoard: [0, 0, 0, 0],
 		},
 	};
 

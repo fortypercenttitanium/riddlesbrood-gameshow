@@ -4,11 +4,14 @@ import { StoreContext } from '../../../App';
 
 const ScoreCardDiv = styled.div`
 	display: flex;
+	position: relative;
 	flex-direction: column;
 	flex-basis: 200px;
 	background: ${(props) =>
 		props.index === 0
 			? 'rgb(255,140,140)'
+			: props.index === 1 && props.altColor
+			? 'rgb(140,146,255)'
 			: props.index === 1
 			? 'rgb(255,254,140)'
 			: props.index === 2
@@ -19,6 +22,8 @@ const ScoreCardDiv = styled.div`
 	background: ${(props) =>
 		props.index === 0
 			? 'linear-gradient(149deg, rgba(255, 140, 140, 0.7959558823529411) 0%,rgba(255, 94, 94, 0.804359243697479) 31%,	rgba(255, 63, 63, 0.8015581232492998) 56%, rgba(242, 30, 30, 0.804359243697479) 100%)'
+			: props.index === 1 && props.altColor
+			? 'linear-gradient(149deg, rgba(140,146,255,0.7959558823529411) 0%, rgba(94,100,255,0.804359243697479) 31%, rgba(63,67,255,0.8015581232492998) 56%, rgba(40,30,242,0.804359243697479) 100%)'
 			: props.index === 1
 			? 'linear-gradient(149deg, rgba(255,254,140,0.7959558823529411) 0%, rgba(255,253,94,0.804359243697479) 31%, rgba(255,250,63,0.8015581232492998) 56%, rgba(242,236,30,0.804359243697479) 100%)'
 			: props.index === 2
@@ -33,7 +38,6 @@ const ScoreCardDiv = styled.div`
 	box-shadow: 3px 3px 3px grey;
 	margin: 5px 20px;
 `;
-
 const WinnerButton = styled.div`
 	padding: 1.5rem;
 	border-top: 1px solid black;
@@ -66,11 +70,21 @@ const H1 = styled.h1`
 
 const H2 = styled(H1)`
 	font-size: 30px;
+	margin-top: 35px;
 `;
 
 const H3 = styled(H1)`
 	font-size: 20px;
 	font-weight: bold;
+`;
+
+const AddRemoveButton = styled.img`
+	position: absolute;
+	top: 10px;
+	right: 0;
+	left: 0;
+	margin: auto;
+	height: 20px;
 `;
 
 export default function ScoreCard(props) {
@@ -88,9 +102,15 @@ export default function ScoreCard(props) {
 			payload: { playerIndex: props.index, amount },
 		});
 	};
+
 	return (
-		<ScoreCardDiv index={props.index}>
+		<ScoreCardDiv index={props.index} altColor={props.alt}>
 			<H2>{props.name}</H2>
+			<AddRemoveButton
+				onClick={() => props.toggleCardActive(props.index)}
+				src='media/images/icons/minus.svg'
+				alt=''
+			/>
 			<div
 				style={{
 					display: 'flex',

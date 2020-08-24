@@ -69,7 +69,7 @@ function createWindow() {
 				y: projectorDisplay.bounds.y + 50,
 			});
 			gameWindow.maximize();
-			if (true) {
+			if (!isDev) {
 				dialog.showMessageBox(mainWindow, {
 					type: 'info',
 					title: 'Success',

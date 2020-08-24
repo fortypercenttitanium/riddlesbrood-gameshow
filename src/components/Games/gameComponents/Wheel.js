@@ -191,7 +191,7 @@ export default function Wheel(props) {
 				},
 				score: {
 					type: 'players',
-					scoreBoard: [0, 0, 0],
+					scoreBoard: [0, null, null, 0],
 				},
 			},
 		});
