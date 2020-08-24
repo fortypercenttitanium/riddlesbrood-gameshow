@@ -197,7 +197,7 @@ export default function Wheel(props) {
 		});
 	}, [dispatch, state.currentGame.version]);
 
-	const playSound = (type = 'sfx', file) => {
+	const playSound = (file, type = 'sfx') => {
 		const player =
 			type === 'sfx'
 				? sfxPlayer.current.audioEl.current
@@ -244,14 +244,14 @@ export default function Wheel(props) {
 			}
 		);
 		if (spans.length === 0) {
-			playSound('sfx', 'media/soundfx/wheelbuzzer.mp3');
+			playSound('media/soundfx/wheelbuzzer.mp3');
 		} else {
 			if (index > 0) {
 				spans[index - 1].parentNode.classList.remove('active');
 				spans[index - 1].classList.add('reveal');
 			}
 			if (index < spans.length) {
-				playSound('sfx', 'media/soundfx/wheelding.mp3');
+				playSound('media/soundfx/wheelding.mp3');
 				spans[index].parentNode.classList.add('active');
 			}
 			setTimeout(() => {

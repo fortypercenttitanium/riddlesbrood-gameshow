@@ -11,12 +11,15 @@ const ScoreBoardDiv = styled.div`
 	margin: auto;
 `;
 
-export default function ScoreBoard() {
+export default function ScoreBoard(props) {
 	const { state } = useContext(StoreContext);
 	const { score } = state.gameController;
 
 	return (
 		<ScoreBoardDiv>
+			<button onClick={() => props.playSound('media/soundfx/beep.mp3')}>
+				Click
+			</button>
 			{score.scoreBoard.map((number, index) => {
 				return (
 					<ScoreCard
@@ -24,6 +27,7 @@ export default function ScoreBoard() {
 						key={index}
 						index={index}
 						score={number}
+						playSound={props.playSound}
 					/>
 				);
 			})}

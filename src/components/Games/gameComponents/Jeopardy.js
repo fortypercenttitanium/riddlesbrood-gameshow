@@ -104,7 +104,7 @@ export default function Jeopardy(props) {
 	let musicPlayer = useRef();
 	let sfxPlayer = useRef();
 
-	const playSound = (type = 'sfx', file) => {
+	const playSound = (file, type = 'sfx') => {
 		const player =
 			type === 'sfx'
 				? sfxPlayer.current.audioEl.current
@@ -122,7 +122,7 @@ export default function Jeopardy(props) {
 
 	useEffect(() => {
 		if (state.gameController.timer.time === 0) {
-			playSound('sfx', 'media/soundfx/jeopardytimeup.mp3');
+			playSound('media/soundfx/jeopardytimeup.mp3');
 			dispatch({ type: actions.KILL_TIMER });
 			dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: 'answer' });
 		}
@@ -139,7 +139,7 @@ export default function Jeopardy(props) {
 				dispatch({ type: actions.SET_TIMER, payload: 13 });
 				dispatch({ type: actions.RUN_TIMER });
 			} else {
-				playSound('sfx', 'media/soundfx/dailydoublesound.mp3');
+				playSound('media/soundfx/dailydoublesound.mp3');
 			}
 			const board = [...state.gameController.board];
 			board[categoryIndex].questions[questionIndex].completed = true;

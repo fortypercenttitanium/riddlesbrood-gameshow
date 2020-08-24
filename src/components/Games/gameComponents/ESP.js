@@ -196,7 +196,7 @@ export default function ESP(props) {
 
 	const { board, display, currentQuestion, score } = state.gameController;
 
-	// const playSound = (type = 'sfx', file) => {
+	// const playSound = (file, type = 'sfx') => {
 	// 	const player =
 	// 		type === 'sfx'
 	// 			? sfxPlayer.current.audioEl.current

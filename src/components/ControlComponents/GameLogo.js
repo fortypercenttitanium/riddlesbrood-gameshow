@@ -22,7 +22,7 @@ export default function GameLogo(props) {
 		<GameLogoDiv>
 			<LogoImg
 				src={
-					logo ? `media/images/logos/${logo}` : 'media/images/logo/RB Logo.jpg'
+					logo ? `media/images/logos/${logo}` : 'media/images/logos/RB Logo.jpg'
 				}
 				alt=''
 			/>

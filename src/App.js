@@ -77,7 +77,7 @@ export function App(props) {
 		() => {
 			dispatch({ type: actions.TICK_TIMER });
 			if (state.gameController.timer.tickSound) {
-				playSound('sfx', state.gameController.timer.tickSound);
+				playSound(state.gameController.timer.tickSound);
 			}
 		},
 		state.gameController.timer.running ? 1000 : null
@@ -98,7 +98,8 @@ export function App(props) {
 		ipcRenderer.send('FX_BUTTON_SELECT', index);
 	};
 
-	const playSound = (type = 'sfx', file) => {
+	const playSound = (file, type = 'sfx') => {
+		console.log(true);
 		const player =
 			type === 'sfx'
 				? sfxPlayer.current.audioEl.current
@@ -151,7 +152,7 @@ export function App(props) {
 					<ControlScreen window='controlPanel' />
 				</ControlScreenContainer>
 				<AnswerBlock />
-				<Scoreboard />
+				<Scoreboard playSound={playSound} />
 				<ReactAudioPlayer
 					ref={musicPlayer}
 					volume={

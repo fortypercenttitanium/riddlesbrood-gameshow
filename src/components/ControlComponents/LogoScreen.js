@@ -12,7 +12,7 @@ export default function LogoScreen() {
 	return (
 		<LogoScreenDiv>
 			<img
-				src='media/images/logo/RB Logo.jpg'
+				src='media/images/logos/RB Logo.jpg'
 				alt=''
 				style={{ margin: 'auto' }}
 			/>

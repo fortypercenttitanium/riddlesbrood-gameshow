@@ -241,7 +241,7 @@ export const reducer = (state, action) => {
 			return {
 				...state,
 				timeline: 'app-open',
-				currentGame: {},
+				currentGame: initialState.currentGame,
 				gameController: initialState.gameController,
 			};
 		case 'SET_GAME':

@@ -241,7 +241,7 @@ export default function FamilyFeud(props) {
 		dispatch({ type: actions.SET_BOARD, payload: board });
 	};
 
-	const playSound = (type = 'sfx', file) => {
+	const playSound = (file, type = 'sfx') => {
 		const player =
 			type === 'sfx'
 				? sfxPlayer.current.audioEl.current
@@ -254,14 +254,14 @@ export default function FamilyFeud(props) {
 
 	const correctHandler = (answerIndex) => {
 		if (!board.answers[answerIndex].revealed) {
-			playSound('sfx', 'media/soundfx/ffding.mp3');
+			playSound('media/soundfx/ffding.mp3');
 			revealAnswer(answerIndex);
 		}
 	};
 
 	const incorrectHandler = (team) => {
 		if (state.gameController.wrongTracker[team] < 3) {
-			playSound('sfx', 'media/soundfx/ffbuzzer.wav');
+			playSound('media/soundfx/ffbuzzer.wav');
 			const tracker = state.gameController.wrongTracker;
 			const arr = [];
 			for (let n = 1; n <= tracker[team] + 1; n++) {

@@ -236,7 +236,7 @@ export default function WhatTheHellIsIt(props) {
 		blocks,
 	} = state.gameController;
 
-	// const playSound = (type = 'sfx', file) => {
+	// const playSound = (file, type = 'sfx') => {
 	// 	const player =
 	// 		type === 'sfx'
 	// 			? sfxPlayer.current.audioEl.current

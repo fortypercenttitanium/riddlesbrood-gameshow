@@ -188,7 +188,7 @@ export default function Pyramid(props) {
 
 	useEffect(() => {
 		if (state.gameController.timer.time === 0) {
-			playSound('sfx', 'media/soundfx/buzzer.mp3');
+			playSound('media/soundfx/buzzer.mp3');
 			dispatch({ type: actions.KILL_TIMER });
 			dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: 'roundOver' });
 		}
@@ -230,10 +230,10 @@ export default function Pyramid(props) {
 			payload: state.gameController.timer.time + seconds,
 		});
 		dispatch({ type: actions.RUN_TIMER });
-		playSound('sfx', 'media/soundfx/ohyeah.wav');
+		playSound('media/soundfx/ohyeah.wav');
 	};
 
-	const playSound = (type = 'sfx', file) => {
+	const playSound = (file, type = 'sfx') => {
 		const player =
 			type === 'sfx'
 				? sfxPlayer.current.audioEl.current
@@ -294,7 +294,7 @@ export default function Pyramid(props) {
 		} else if (state.gameController.streak === 14) {
 			addBonusTime(10);
 		} else {
-			playSound('sfx', 'media/soundfx/pyramidbell.mp3');
+			playSound('media/soundfx/pyramidbell.mp3');
 		}
 		setCorrectCounter(state.gameController.correctCounter + 1);
 		nextQuestion();
@@ -307,7 +307,7 @@ export default function Pyramid(props) {
 
 	const incorrectHandler = () => {
 		nextQuestion();
-		playSound('sfx', 'media/soundfx/buzzer.mp3');
+		playSound('media/soundfx/buzzer.mp3');
 		resetStreak();
 	};
 

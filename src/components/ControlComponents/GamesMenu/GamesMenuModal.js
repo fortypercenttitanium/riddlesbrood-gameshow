@@ -111,6 +111,7 @@ export default function GamesMenuModal(props) {
 			dispatch({ type: 'SET_GAME', payload: selectedGame });
 			dispatch({ type: 'CLOSE_GAMES_MENU' });
 		} else {
+			dispatch({ type: 'RESET_GAME' });
 			dispatch({ type: 'GO_TO_VERSION_SELECT', payload: selectedGame });
 		}
 	};
@@ -123,9 +124,8 @@ export default function GamesMenuModal(props) {
 			logo,
 			version: localState.selectedVersion[title],
 		};
-		dispatch({ type: 'RESET_GAME' });
-		dispatch({ type: 'SET_GAME', payload: selectedGame });
 		dispatch({ type: 'CLOSE_GAMES_MENU' });
+		dispatch({ type: 'SET_GAME', payload: selectedGame });
 	};
 
 	const submitHandler = (e) => {
