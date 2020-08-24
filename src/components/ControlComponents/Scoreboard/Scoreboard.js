@@ -6,7 +6,7 @@ import { StoreContext } from '../../../App';
 const ScoreBoardDiv = styled.div`
 	display: flex;
 	grid-area: 8 / 4 / 11 / 11;
-	width: 1050px;
+	width: 912px;
 	height: 95%;
 	margin: auto;
 `;

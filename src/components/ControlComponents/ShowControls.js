@@ -37,7 +37,7 @@ const Button = styled.div`
 
 const Label = styled.h2`
 	margin: auto;
-	font-size: 20px;
+	font-size: 22px;
 	user-select: none;
 `;
 
@@ -77,7 +77,7 @@ export default function ShowControls(props) {
 					gridArea: '1 / 3 / 2 / 4',
 				}}
 			>
-				<Label>INTERMISSION</Label>
+				<Label>INTER MISSION</Label>
 			</Button>
 			<Button
 				style={{

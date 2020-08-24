@@ -5,7 +5,7 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const isDev = require('electron-is-dev');
 const { ipcMain, dialog } = require('electron');
-const iconPath = path.join(__dirname, 'media', 'images', 'favicon.png');
+const iconPath = path.join(__dirname, 'media', 'images', 'icon.png');
 
 let mainWindow;
 let gameWindow;
@@ -13,15 +13,19 @@ let projectorDisplay;
 const electronScreen = electron.screen;
 
 function createWindow() {
+	// let factor = electronScreen.getPrimaryDisplay().scaleFactor;
 	mainWindow = new BrowserWindow({
-		width: 1620,
-		height: 1080,
-		title: 'Control Panel',
+		width: 1353,
+		height: 902,
+		title: 'Riddlesbrood Gameshow - Control Panel',
 		webPreferences: {
 			nodeIntegration: true,
 		},
 		icon: iconPath,
 	});
+
+	mainWindow.setMenuBarVisibility(false);
+
 	gameWindow = new BrowserWindow({
 		width: 1200,
 		height: 900,
@@ -66,7 +70,7 @@ function createWindow() {
 			});
 			gameWindow.maximize();
 			if (!isDev) {
-				dialog.showMessageBox({
+				dialog.showMessageBox(mainWindow, {
 					type: 'info',
 					title: 'Success',
 					message: 'Projector connection successful!',

@@ -5,7 +5,7 @@ import { StoreContext } from '../../../App';
 const ScoreCardDiv = styled.div`
 	display: flex;
 	flex-direction: column;
-	flex-basis: 240px;
+	flex-basis: 200px;
 	background: ${(props) =>
 		props.index === 0
 			? 'rgb(255,140,140)'
@@ -31,11 +31,11 @@ const ScoreCardDiv = styled.div`
 	border: 1px solid black;
 	border-radius: 10px;
 	box-shadow: 3px 3px 3px grey;
-	margin: 5px 30px;
+	margin: 5px 20px;
 `;
 
 const WinnerButton = styled.div`
-	padding: 2rem;
+	padding: 1.5rem;
 	border-top: 1px solid black;
 	text-align: center;
 	cursor: pointer;
@@ -90,7 +90,7 @@ export default function ScoreCard(props) {
 			<div
 				style={{
 					display: 'flex',
-					margin: 'auto 0',
+					marginBottom: '20px',
 				}}
 			>
 				<ArrowImg

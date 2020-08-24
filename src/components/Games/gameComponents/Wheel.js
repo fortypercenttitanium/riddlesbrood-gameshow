@@ -41,7 +41,7 @@ const CategoryContainer = styled.div`
 `;
 
 const CategoryCard = styled.div`
-	display: flex;
+	display: ${(props) => (props.done ? 'none' : 'flex')};
 	width: 200px;
 	margin: auto;
 	text-align: center;
@@ -94,10 +94,11 @@ const Span = styled.span`
 const ReturnButton = styled.div`
 	padding: 1.4rem;
 	position: absolute;
-	bottom: 20px;
+	bottom: 40px;
 	left: 0;
 	right: 0;
 	width: 30%;
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 	text-align: center;
 	margin: auto;
 	background: lightblue;
@@ -123,8 +124,9 @@ const SolvePuzzle = styled.div`
 			? 'flex'
 			: 'none'};
 	position: absolute;
-	top: 20px;
-	padding: 1.5rem;
+	top: 15px;
+	padding: 1.2rem;
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 	left: 0;
 	right: 0;
 	width: 25%;

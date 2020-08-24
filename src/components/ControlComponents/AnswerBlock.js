@@ -5,7 +5,7 @@ import { StoreContext } from '../../App';
 const AnswerBlockDiv = styled.div`
 	grid-area: 7 / 4 / 8 / 11;
 	height: 100%;
-	width: 1050px;
+	width: 912px;
 	background: url(media/images/answerblock.png);
 	background-size: contain;
 	margin: auto;
@@ -28,7 +28,7 @@ const Timer = styled.h2`
 
 const AnswerText = styled.h1`
 	margin: auto;
-	font-size: ${(props) => (props.length >= 20 ? '2rem' : '4rem')};
+	font-size: ${(props) => (props.length >= 18 ? '1.7rem' : '4rem')};
 `;
 
 export default function AnswerBlock() {

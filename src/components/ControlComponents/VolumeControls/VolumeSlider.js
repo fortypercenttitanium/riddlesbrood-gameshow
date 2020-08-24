@@ -10,6 +10,7 @@ import { StoreContext } from '../../../App';
 const useStyles = makeStyles({
 	root: {
 		width: '80%',
+		height: '30%',
 		textAlign: 'center',
 		margin: 'auto',
 		userSelect: 'none',
@@ -19,6 +20,7 @@ const useStyles = makeStyles({
 const MyVolumeSlider = withStyles({
 	root: {
 		color: '#ddd',
+		margin: 'auto',
 	},
 	valueLabel: {
 		color: '#777',
@@ -36,7 +38,11 @@ export default function VolumeSlider(props) {
 
 	return (
 		<div className={classes.root}>
-			<Typography id='continuous-slider' gutterBottom>
+			<Typography
+				id='continuous-slider'
+				style={{ fontSize: '14px', margin: '3px auto auto' }}
+				gutterBottom
+			>
 				{label}
 			</Typography>
 			<Grid container spacing={2}>

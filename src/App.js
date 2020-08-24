@@ -36,8 +36,8 @@ const StyledApp = styled.div`
 `;
 
 const ControlScreenContainer = styled.div`
-	width: 1050px;
-	height: 590px;
+	width: 912px;
+	height: 513px;
 	grid-area: 1 / 4 / 7 / 11;
 	margin: auto;
 `;
@@ -142,7 +142,7 @@ export function App(props) {
 						store.dispatch({ type: 'OPEN_GAMES_MENU' });
 					}}
 				/>
-				{state.gamesMenu.open && <GamesMenuModal store={store} />}
+				{state.gamesMenu.open && <GamesMenuModal />}
 				<GameLogo logo={state.currentGame.logo} />
 				<VolumeControls />
 				<ShowControls projectorMode={projectorMode} />

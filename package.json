@@ -8,7 +8,10 @@
 	"build": {
 		"appId": "riddlesbrood.gameshow",
 		"productName": "Riddlesbrood Gameshow",
-		"copyright": "Copyright 2020 ${Riddlesbrood Theatre Company}"
+		"copyright": "Copyright 2020 Riddlesbrood Theatre Company",
+		"win": {
+			"icon": "./public/media/images/icon.png"
+		}
 	},
 	"homepage": "./",
 	"dependencies": {

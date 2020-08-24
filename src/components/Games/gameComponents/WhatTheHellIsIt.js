@@ -19,9 +19,9 @@ const WhatHomeScreen = styled.div`
 
 const TitleContainer = styled.div`
 	display: block;
-	height: 10%;
+	height: 12%;
 	width: 85%;
-	margin: 1% auto auto;
+	margin: auto;
 `;
 
 const H1 = styled.h1`
@@ -86,7 +86,7 @@ const H3 = styled(H1)`
 	font-size: 1.6rem;
 	color: #ddd;
 	margin: auto;
-	padding: 2rem;
+	padding: 1rem;
 	text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 `;
 

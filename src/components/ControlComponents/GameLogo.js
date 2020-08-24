@@ -21,7 +21,9 @@ export default function GameLogo(props) {
 	return (
 		<GameLogoDiv>
 			<LogoImg
-				src={logo ? `media/images/${logo}` : 'media/images/RB Logo.jpg'}
+				src={
+					logo ? `media/images/logos/${logo}` : 'media/images/logo/RB Logo.jpg'
+				}
 				alt=''
 			/>
 		</GameLogoDiv>

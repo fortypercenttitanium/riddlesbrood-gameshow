@@ -11,7 +11,11 @@ const LogoScreenDiv = styled.div`
 export default function LogoScreen() {
 	return (
 		<LogoScreenDiv>
-			<img src='media/images/RB Logo.jpg' alt='' style={{ margin: 'auto' }} />
+			<img
+				src='media/images/logo/RB Logo.jpg'
+				alt=''
+				style={{ margin: 'auto' }}
+			/>
 		</LogoScreenDiv>
 	);
 }

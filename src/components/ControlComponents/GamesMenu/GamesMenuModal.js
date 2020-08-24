@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { StoreContext } from '../../../App';
 import { gamesArray } from '../../Games/gameComponents/gamesArray';
 
 const ModalContainer = styled.div`
 	display: flex;
 	height: 100%;
 	width: 100%;
-	background: rgba(0, 0, 0, 0.5);
+	background: rgba(111, 111, 111, 0.5);
+	backdrop-filter: blur(2px);
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -17,15 +19,22 @@ const GamesMenuModalDiv = styled.div`
 	position: absolute;
 	display: flex;
 	flex-wrap: wrap;
-	width: 70%;
-	max-height: 85%;
+	width: 80%;
+	height: 90%;
 	margin: auto;
 	left: 0;
 	right: 0;
 	top: 0;
 	bottom: 0;
 	text-align: center;
-	background: #e2e0cb;
+	background: rgb(111, 111, 111);
+	background: radial-gradient(
+		circle,
+		rgba(111, 111, 111, 1) 0%,
+		rgba(91, 91, 91, 1) 31%,
+		rgba(74, 74, 74, 1) 56%,
+		rgba(68, 68, 68, 1) 100%
+	);
 	border: 1px solid black;
 	z-index: 5;
 `;
@@ -67,7 +76,7 @@ const VersionSelectDiv = styled.div`
 `;
 
 export default function GamesMenuModal(props) {
-	const { state, dispatch } = props.store;
+	const { state, dispatch } = useContext(StoreContext);
 	const [localState, setLocalState] = useState({
 		selectedVersion: {
 			Jeopardy: null,
@@ -147,7 +156,7 @@ export default function GamesMenuModal(props) {
 									handleGameClick(game);
 								}}
 							>
-								<GameLogo src={`media/images/${game.logo}`} />
+								<GameLogo src={`media/images/logos/${game.logo}`} />
 							</GameButton>
 						);
 					})}
@@ -181,7 +190,12 @@ export default function GamesMenuModal(props) {
 									.map((rating, ratingIndex) => {
 										return (
 											<VersionSelectDiv key={ratingIndex}>
-												<h1>
+												<h1
+													style={{
+														color: '#ddd',
+														textShadow: '2px 2px 2px black',
+													}}
+												>
 													{rating !== 'kids' && 'Rated'} {rating.toUpperCase()}
 												</h1>
 												<select
@@ -202,7 +216,7 @@ export default function GamesMenuModal(props) {
 																gameVer.rating === rating && (
 																	<option
 																		key={gameVerIndex}
-																		style={{ fontSize: '1rem' }}
+																		style={{ fontSize: '1.5rem' }}
 																		onClick={(e) => {
 																			optionHandler(
 																				e,
@@ -225,10 +239,13 @@ export default function GamesMenuModal(props) {
 
 							<button
 								style={{
-									padding: '1rem',
-									fontSize: '1rem',
+									padding: '1.5rem',
+									fontSize: '1.4rem',
 									fontWeight: 'bold',
 									margin: '1rem auto',
+									cursor: 'pointer',
+									boxShadow: '2px 2px 2px black',
+									border: '1px solid black',
 								}}
 								disabled={!localState.selectedRating}
 							>

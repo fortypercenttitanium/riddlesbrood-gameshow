@@ -11,7 +11,7 @@ const PyramidHomeScreen = styled.div`
 	width: 100%;
 	display: flex;
 	background-color: ${(props) =>
-		props.team === 0 ? '#999' : props.team === 1 ? '#FF9999' : '#9999FF'};
+		props.team === 0 ? '#999' : props.team === 1 ? '#710e0e' : '#0e1871'};
 	flex-direction: column;
 	text-align: center;
 	position: relative;
@@ -21,6 +21,7 @@ const Title = styled.h1`
 	flex: 1;
 	margin: 1% auto;
 	padding: 1rem;
+	color: #ddd;
 `;
 
 const TurnContainer = styled.div`
@@ -351,14 +352,16 @@ export default function Pyramid(props) {
 				<ModalContainer>
 					{state.gameController.display === 'question' ? (
 						<ModalContainer>
-							<Button
-								onClick={() => {
-									correctHandler(state.gameController.activeTeam);
-								}}
-								type='correct'
-							>
-								<H2>Correct</H2>
-							</Button>
+							{props.window === 'controlPanel' && (
+								<Button
+									onClick={() => {
+										correctHandler(state.gameController.activeTeam);
+									}}
+									type='correct'
+								>
+									<H2>Correct</H2>
+								</Button>
+							)}
 							<H2>
 								{
 									state.gameController.currentQuestion.words[
@@ -366,9 +369,11 @@ export default function Pyramid(props) {
 									]
 								}
 							</H2>
-							<Button onClick={incorrectHandler} type='incorrect'>
-								<H2>Wrong/Pass</H2>
-							</Button>
+							{props.window === 'controlPanel' && (
+								<Button onClick={incorrectHandler} type='incorrect'>
+									<H2>Wrong/Pass</H2>
+								</Button>
+							)}
 						</ModalContainer>
 					) : (
 						<ModalContainer>

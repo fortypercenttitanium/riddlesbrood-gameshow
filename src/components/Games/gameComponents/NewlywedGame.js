@@ -57,8 +57,8 @@ const ScoreContainer = styled.div`
 
 const ScoreH1 = styled(H1)`
 	margin: auto;
-	color: #ddd;
-	text-shadow: 3px 1px 2px rgba(0, 0, 0, 1);
+	color: #222;
+	text-shadow: 3px 1px 2px rgba(0, 0, 0, 0.4);
 `;
 
 const ScoreH2 = styled(ScoreH1)`
