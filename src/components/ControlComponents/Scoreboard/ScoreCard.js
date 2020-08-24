@@ -75,9 +75,13 @@ const H3 = styled(H1)`
 
 export default function ScoreCard(props) {
 	const { dispatch } = useContext(StoreContext);
+	const { playSound } = props;
 	const handleChange = (direction, amount) => {
 		if (direction === 'down') {
 			amount = -amount;
+			playSound('media/soundfx/buzzer.mp3');
+		} else {
+			playSound('media/soundfx/pyramidbell.mp3');
 		}
 		dispatch({
 			type: 'CHANGE_SCORE',

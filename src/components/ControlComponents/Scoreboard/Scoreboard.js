@@ -11,7 +11,7 @@ const ScoreBoardDiv = styled.div`
 	margin: auto;
 `;
 
-export default function ScoreBoard() {
+export default function ScoreBoard(props) {
 	const { state } = useContext(StoreContext);
 	const { score } = state.gameController;
 
@@ -24,6 +24,7 @@ export default function ScoreBoard() {
 						key={index}
 						index={index}
 						score={number}
+						playSound={props.playSound}
 					/>
 				);
 			})}
