@@ -69,6 +69,7 @@ const AddRemoveButton = styled.img`
 	left: 0;
 	margin: auto;
 	height: 20px;
+	cursor: pointer;
 `;
 
 export default function ScoreCard(props) {

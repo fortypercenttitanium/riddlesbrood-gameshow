@@ -42,10 +42,6 @@ const Title = styled(H1)`
 	text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.7);
 `;
 
-const H2 = styled.h2`
-	font-size: 2rem;
-`;
-
 const ScoreContainer = styled.div`
 	margin: auto;
 	display: flex;
@@ -256,14 +252,16 @@ export default function CouplesConundrum(props) {
 			{props.window === 'gameboard' && (
 				<ScoreBoardDiv>
 					{score.scoreBoard.map((scoreNum, scoreIndex) => {
-						return (
-							<ScoreCardDiv key={scoreIndex} index={scoreIndex}>
-								<ScoreContainer>
-									<ScoreH2>Team {scoreIndex + 1}</ScoreH2>
-									<ScoreH1>{scoreNum}</ScoreH1>
-								</ScoreContainer>
-							</ScoreCardDiv>
-						);
+						if (scoreNum !== null) {
+							return (
+								<ScoreCardDiv key={scoreIndex} index={scoreIndex}>
+									<ScoreContainer>
+										<ScoreH2>Team {scoreIndex + 1}</ScoreH2>
+										<ScoreH1>{scoreNum}</ScoreH1>
+									</ScoreContainer>
+								</ScoreCardDiv>
+							);
+						} else return null;
 					})}
 				</ScoreBoardDiv>
 			)}

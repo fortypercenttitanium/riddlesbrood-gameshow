@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import ReactAudioPlayer from 'react-audio-player';
 import { StoreContext } from '../../App';
+import { actions } from '../../actions';
 
 const FxButtonsDiv = styled.div`
 	grid-area: 7 / 1 / 11 / 4;
@@ -45,7 +46,7 @@ const Text = styled.h3`
 
 export default function FxButtons(props) {
 	const { state, dispatch } = useContext(StoreContext);
-	const clickHandler = (e) => {
+	const clickHandlerAudio = (e) => {
 		const audio = e.currentTarget.querySelector('audio');
 		if (!audio.paused) {
 			audio.pause();
@@ -57,6 +58,15 @@ export default function FxButtons(props) {
 			audio.load();
 			audio.play();
 		}
+	};
+
+	const clickHandlerVideo = (button) => {
+		state.VFX.playing
+			? dispatch({ type: actions.END_VIDEO })
+			: dispatch({
+					type: actions.PLAY_VIDEO,
+					payload: `fx_buttons/${button.file}`,
+			  });
 	};
 
 	const contextHandler = (index) => {
@@ -72,12 +82,9 @@ export default function FxButtons(props) {
 						onContextMenu={() => contextHandler(index)}
 						onClick={(e) => {
 							if (button.type === 'audio') {
-								clickHandler(e);
+								clickHandlerAudio(e);
 							} else if (button.type === 'video') {
-								dispatch({
-									type: 'PLAY_VIDEO',
-									payload: `fx_buttons/${button.file}`,
-								});
+								clickHandlerVideo(button);
 							}
 						}}
 					>

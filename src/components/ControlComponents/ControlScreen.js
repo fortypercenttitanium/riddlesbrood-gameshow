@@ -12,7 +12,7 @@ export default function ControlScreen(props) {
 	} else if (props.window === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
-	const { state, dispatch } = useContext(StoreContext);
+	const { state } = useContext(StoreContext);
 
 	const { currentGame, timeline, VFX } = state;
 
@@ -53,15 +53,7 @@ export default function ControlScreen(props) {
 		>
 			{timeline === 'app-open' ? <LogoScreen /> : null}
 			{timeline === 'in-game' ? components[currentGame.title] : null}
-			{VFX.playing && (
-				<VideoPlayer
-					window={props.window}
-					file={VFX.file}
-					onEnded={() => {
-						dispatch({ type: 'END_VIDEO' });
-					}}
-				/>
-			)}
+			{VFX.playing && <VideoPlayer window={props.window} file={VFX.file} />}
 		</div>
 	);
 }

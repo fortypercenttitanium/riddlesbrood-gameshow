@@ -50,7 +50,7 @@ const GameImg = styled.img`
 const BlocksDiv = styled.div`
 	display: grid;
 	grid-template: repeat(4, 1fr) / repeat(4, 1fr);
-	grid-gap: 2px;
+	grid-gap: 4px;
 	position: absolute;
 	height: 100%;
 	width: 100%;
@@ -68,8 +68,18 @@ const Block = styled.div`
 	transition: ${(props) => (props.revealed ? '3s ease-in' : 'none')};
 `;
 
-const H2 = styled.h2`
-	font-size: 2rem;
+const Veil = styled.div`
+	position: absolute;
+	display: flex;
+	height: 100%;
+	width: 100%;
+	background: #222;
+	z-index: 2;
+`;
+
+const VeilImg = styled.img`
+	position: relative;
+	width: 100%;
 `;
 
 const ScoreH1 = styled(H1)`
@@ -201,7 +211,7 @@ export default function WhatTheHellIsIt(props) {
 					tickSound: '',
 				},
 				score: {
-					type: 'players',
+					type: 'player',
 					scoreBoard: [0, 0, 0, 0],
 				},
 				answerRevealed: false,
@@ -314,14 +324,14 @@ export default function WhatTheHellIsIt(props) {
 		(level) => {
 			// order in which the blocks will be removed
 			const removalOrder = [
-				[14, 7],
-				[12, 6],
+				[7, 14],
+				[11, 12],
 				[0, 2],
-				[10, 9],
+				[3, 8],
 				[13, 15],
 				[1, 4],
-				[11, 8],
-				[3, 5],
+				[5, 10],
+				[6, 9],
 			];
 			// find the index of the level we are at
 			const removal = removalOrder[level - 1];
@@ -385,6 +395,13 @@ export default function WhatTheHellIsIt(props) {
 				</Title>
 			</TitleContainer>
 			<PictureDiv>
+				{timer.time < 24 &&
+					!timer.running &&
+					!state.gameController.answerRevealed && (
+						<Veil>
+							<VeilImg src='media/images/whatthehellisit/veil.png' />
+						</Veil>
+					)}
 				<GameImg src={`media/images/whatthehellisit/${currentQuestion.file}`} />
 				<BlocksDiv>
 					{blocks.map((block, blockIndex) =>
@@ -422,7 +439,9 @@ export default function WhatTheHellIsIt(props) {
 					{score.scoreBoard.map((scoreNum, scoreIndex) => {
 						return (
 							<ScoreCardDiv key={scoreIndex} index={scoreIndex}>
-								<ScoreH2>Player {scoreIndex + 1}</ScoreH2>
+								<ScoreH2>
+									{score.type === 'player' ? 'Player' : 'Team'} {scoreIndex + 1}
+								</ScoreH2>
 								<div
 									style={{
 										display: 'flex',

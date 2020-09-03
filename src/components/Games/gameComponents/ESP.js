@@ -43,10 +43,6 @@ const Title = styled(H1)`
 	text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.7);
 `;
 
-const H2 = styled.h2`
-	font-size: 2rem;
-`;
-
 const ScoreH1 = styled(H1)`
 	margin: auto;
 	color: #ddd;
@@ -255,21 +251,24 @@ export default function ESP(props) {
 			{props.window === 'gameboard' && (
 				<ScoreBoardDiv>
 					{score.scoreBoard.map((scoreNum, scoreIndex) => {
-						return (
-							<ScoreCardDiv key={scoreIndex} index={scoreIndex}>
-								<ScoreH2>
-									{score.type === 'player' ? 'Player' : 'Team'} {scoreIndex + 1}
-								</ScoreH2>
-								<div
-									style={{
-										display: 'flex',
-										margin: 'auto 0',
-									}}
-								>
-									<ScoreH1>{scoreNum}</ScoreH1>
-								</div>
-							</ScoreCardDiv>
-						);
+						if (scoreNum !== null) {
+							return (
+								<ScoreCardDiv key={scoreIndex} index={scoreIndex}>
+									<ScoreH2>
+										{score.type === 'player' ? 'Player' : 'Team'}{' '}
+										{scoreIndex + 1}
+									</ScoreH2>
+									<div
+										style={{
+											display: 'flex',
+											margin: 'auto 0',
+										}}
+									>
+										<ScoreH1>{scoreNum}</ScoreH1>
+									</div>
+								</ScoreCardDiv>
+							);
+						} else return null;
 					})}
 				</ScoreBoardDiv>
 			)}

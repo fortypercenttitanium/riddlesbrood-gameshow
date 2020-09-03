@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from '../../../App';
+import { actions } from '../../../actions';
 
 const ScoreCardDiv = styled.div`
 	display: flex;
@@ -85,6 +86,7 @@ const AddRemoveButton = styled.img`
 	left: 0;
 	margin: auto;
 	height: 20px;
+	cursor: pointer;
 `;
 
 export default function ScoreCard(props) {
@@ -103,9 +105,13 @@ export default function ScoreCard(props) {
 		});
 	};
 
+	const handleContext = () => {
+		dispatch({ type: actions.TOGGLE_SCORE_TYPE });
+	};
+
 	return (
 		<ScoreCardDiv index={props.index} altColor={props.alt}>
-			<H2>{props.name}</H2>
+			<H2 onContextMenu={handleContext}>{props.name}</H2>
 			<AddRemoveButton
 				onClick={() => props.toggleCardActive(props.index)}
 				src='media/images/icons/minus.svg'

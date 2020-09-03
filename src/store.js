@@ -118,6 +118,18 @@ export const reducer = (state, action) => {
 					score: action.payload,
 				},
 			};
+		case 'TOGGLE_SCORE_TYPE':
+			return {
+				...state,
+				gameController: {
+					...state.gameController,
+					score: {
+						...state.gameController.score,
+						type:
+							state.gameController.score.type === 'team' ? 'player' : 'team',
+					},
+				},
+			};
 		case 'SET_QUESTION':
 			return {
 				...state,
