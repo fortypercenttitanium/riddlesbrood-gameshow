@@ -5,7 +5,7 @@ import { StoreContext as StoreContextCP } from '../../../App';
 import { StoreContext as StoreContextGB } from '../../../Gameboard';
 import { actions } from '../../../actions';
 import ReactAudioPlayer from 'react-audio-player';
-const { ipcRenderer } = window.require('electron');
+// const { ipcRenderer } = window.require('electron');
 
 const ESPHomeScreen = styled.div`
 	display: flex;
@@ -145,29 +145,29 @@ export default function ESP(props) {
 	let musicPlayer = useRef();
 	let sfxPlayer = useRef();
 
-	useEffect(() => {
-		if (props.window === 'controlPanel') {
-			ipcRenderer.send('SCORE_TYPE_QUERY');
-			ipcRenderer.on('SCORE_TYPE_RESPONSE', (e, res) => {
-				let scoreSet;
-				if (res.response === 0) {
-					scoreSet = {
-						scoreBoard: [0, 0],
-						type: 'team',
-					};
-				} else if (res.response === 1) {
-					scoreSet = {
-						scoreBoard: [0, 0, 0, 0],
-						type: 'player',
-					};
-				} else {
-					throw new Error((err) => console.error(err));
-				}
-				dispatch({ type: actions.SET_SCORE, payload: scoreSet });
-			});
-			return () => ipcRenderer.removeAllListeners('SCORE_TYPE_RESPONSE');
-		}
-	}, [props.window, dispatch]);
+	// useEffect(() => {
+	// 	if (props.window === 'controlPanel') {
+	// 		ipcRenderer.send('SCORE_TYPE_QUERY');
+	// 		ipcRenderer.on('SCORE_TYPE_RESPONSE', (e, res) => {
+	// 			let scoreSet;
+	// 			if (res.response === 0) {
+	// 				scoreSet = {
+	// 					scoreBoard: [0, 0],
+	// 					type: 'team',
+	// 				};
+	// 			} else if (res.response === 1) {
+	// 				scoreSet = {
+	// 					scoreBoard: [0, 0, 0, 0],
+	// 					type: 'player',
+	// 				};
+	// 			} else {
+	// 				throw new Error((err) => console.error(err));
+	// 			}
+	// 			dispatch({ type: actions.SET_SCORE, payload: scoreSet });
+	// 		});
+	// 		return () => ipcRenderer.removeAllListeners('SCORE_TYPE_RESPONSE');
+	// 	}
+	// }, [props.window, dispatch]);
 
 	useEffect(() => {
 		dispatch({

@@ -1,7 +1,7 @@
 {
 	"main": "public/electron.js",
 	"name": "riddlesbrood-gameshow",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Gameshow presentation app for Riddlesbrood Theatre Company",
 	"author": "ayWebDev",
 	"private": true,

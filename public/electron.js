@@ -94,17 +94,17 @@ function createWindow() {
 		gameWindow.webContents.send('WHEEL_GUESS_RECEIVE', key);
 	});
 
-	ipcMain.on('SCORE_TYPE_QUERY', () => {
-		electron.dialog
-			.showMessageBox(mainWindow, {
-				type: 'question',
-				buttons: ['Teams', 'Individuals'],
-				defaultId: 1,
-				title: 'Select score mode',
-				message: 'Please select a scoring mode:',
-			})
-			.then((res) => mainWindow.webContents.send('SCORE_TYPE_RESPONSE', res));
-	});
+	// ipcMain.on('SCORE_TYPE_QUERY', () => {
+	// 	electron.dialog
+	// 		.showMessageBox(mainWindow, {
+	// 			type: 'question',
+	// 			buttons: ['Teams', 'Individuals'],
+	// 			defaultId: 1,
+	// 			title: 'Select score mode',
+	// 			message: 'Please select a scoring mode:',
+	// 		})
+	// 		.then((res) => mainWindow.webContents.send('SCORE_TYPE_RESPONSE', res));
+	// });
 
 	// Dev Tools
 	ipcMain.on('TOGGLE_DEV_TOOLS', () => {

@@ -49,7 +49,7 @@ const ScoreContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	height: calc(100% - 60px);
-	width: 22%;
+	width: 25%;
 	margin: auto;
 	background: rgb(230, 230, 230);
 	color: ${(props) => (props.team === 1 ? 'red' : 'blue')};
@@ -62,11 +62,10 @@ const ScoreContainer = styled.div`
 
 const PromptContainer = styled.div`
 	display: flex;
-	width: 45%;
+	width: 40%;
 	height: calc(100% - 80px);
 	margin: auto;
 	text-align: center;
-	font-size: 30px;
 	color: #003c7b;
 	text-shadow: initial;
 	text-align: center;
@@ -78,19 +77,19 @@ const PromptContainer = styled.div`
 
 const XContainer = styled.div`
 	display: flex;
-	height: 40%;
+	height: 50%;
 	width: 100%;
 	margin: auto;
 	cursor: pointer;
-	border: 2px solid transparent;
-	&:hover {
-		border-color: red;
-	}
 `;
 
 const WrongImg = styled.img`
 	height: 100%;
 	margin: auto;
+	border: 2px solid transparent;
+	&:hover {
+		border-color: red;
+	}
 `;
 
 const H2 = styled.h2`
@@ -111,9 +110,9 @@ const Span = styled.span`
 	margin: auto;
 	padding: 3%;
 	font-size: ${(props) =>
-		props.window === 'controlPanel' ? '1.5rem' : '2.5rem'};
+		props.window === 'controlPanel' ? '1.2rem' : '2.5rem'};
 	line-height: ${(props) =>
-		props.window === 'controlPanel' ? '2.6rem' : '3.6rem'};
+		props.window === 'controlPanel' ? '2rem' : '3.6rem'};
 	color: #003c7b;
 `;
 
@@ -221,8 +220,8 @@ export default function FamilyFeud(props) {
 					scoreBoard: [0, 0],
 				},
 				wrongTracker: {
-					team1: 0,
-					team2: 0,
+					team1: [false, false, false],
+					team2: [false, false, false],
 				},
 				wrongModal: {
 					display: false,
@@ -259,26 +258,24 @@ export default function FamilyFeud(props) {
 		}
 	};
 
-	const incorrectHandler = (team) => {
-		if (state.gameController.wrongTracker[team] < 3) {
+	const incorrectHandler = (team, isWrong, index) => {
+		const tracker = JSON.parse(JSON.stringify(wrongTracker));
+		tracker[`team${team}`][index] = !isWrong;
+		if (!isWrong) {
 			playSound('media/soundfx/ffbuzzer.wav');
-			const tracker = state.gameController.wrongTracker;
-			const arr = [];
-			for (let n = 1; n <= tracker[team] + 1; n++) {
-				arr.push(true);
-			}
 			dispatch({
 				type: actions.SET_FAMILY_FEUD_XS,
-				payload: { display: true, team: team, array: arr },
+				payload: { display: true, team: team, array: tracker[`team${team}`] },
 			});
 			setTimeout(() => {
 				dispatch({
 					type: actions.SET_FAMILY_FEUD_XS,
 					payload: { display: false, team: '', array: [] },
 				});
-				tracker[team] = tracker[team] + 1;
 				dispatch({ type: actions.SET_WRONG_TRACKER, payload: tracker });
 			}, 1500);
+		} else {
+			dispatch({ type: actions.SET_WRONG_TRACKER, payload: tracker });
 		}
 	};
 
@@ -299,23 +296,23 @@ export default function FamilyFeud(props) {
 			{wrongModal.display && (
 				<XModal window={props.window}>
 					{wrongModal.array.map((x, wrongModalIndex) => {
-						return (
+						return x === true ? (
 							<div key={wrongModalIndex} style={{ margin: 'auto' }}>
 								<img
 									style={{
 										width: props.window === 'controlPanel' ? '85%' : '100%',
 									}}
 									src={
-										wrongModal.team === 'team1'
+										wrongModal.team === 1
 											? 'media/images/ff-wrong-red.png'
-											: wrongModal.team === 'team2'
+											: wrongModal.team === 2
 											? 'media/images/ff-wrong-blue.png'
 											: null
 									}
 									alt=''
 								/>
 							</div>
-						);
+						) : null;
 					})}
 				</XModal>
 			)}
@@ -323,41 +320,25 @@ export default function FamilyFeud(props) {
 				<TopContainer>
 					<ScoreContainer team={1}>
 						<H2>Team 1</H2>
-						<XContainer
-							onClick={() => {
-								incorrectHandler('team1');
-							}}
-						>
-							<WrongImg
-								src={
-									wrongTracker.team1 > 0
-										? 'media/images/ff-wrong-red.png'
-										: props.window === 'controlPanel'
-										? 'media/images/ff-wrong-grey.png'
-										: null
-								}
-								window={props.window}
-							/>
-							<WrongImg
-								src={
-									wrongTracker.team1 > 1
-										? 'media/images/ff-wrong-red.png'
-										: props.window === 'controlPanel'
-										? 'media/images/ff-wrong-grey.png'
-										: null
-								}
-								window={props.window}
-							/>
-							<WrongImg
-								src={
-									wrongTracker.team1 > 2
-										? 'media/images/ff-wrong-red.png'
-										: props.window === 'controlPanel'
-										? 'media/images/ff-wrong-grey.png'
-										: null
-								}
-								window={props.window}
-							/>
+						<XContainer>
+							{wrongTracker.team1.map((isWrong, index) => {
+								return (
+									<WrongImg
+										key={index}
+										src={
+											isWrong
+												? 'media/images/ff-wrong-red.png'
+												: props.window === 'controlPanel'
+												? 'media/images/ff-wrong-grey.png'
+												: null
+										}
+										window={props.window}
+										onClick={() => {
+											incorrectHandler(1, isWrong, index);
+										}}
+									/>
+								);
+							})}
 						</XContainer>
 					</ScoreContainer>
 					<PromptContainer>
@@ -365,41 +346,25 @@ export default function FamilyFeud(props) {
 					</PromptContainer>
 					<ScoreContainer team={2}>
 						<H2>Team 2</H2>
-						<XContainer
-							onClick={() => {
-								incorrectHandler('team2');
-							}}
-						>
-							<WrongImg
-								src={
-									wrongTracker.team2 > 0
-										? 'media/images/ff-wrong-blue.png'
-										: props.window === 'controlPanel'
-										? 'media/images/ff-wrong-grey.png'
-										: null
-								}
-								window={props.window}
-							/>
-							<WrongImg
-								src={
-									wrongTracker.team2 > 1
-										? 'media/images/ff-wrong-blue.png'
-										: props.window === 'controlPanel'
-										? 'media/images/ff-wrong-grey.png'
-										: null
-								}
-								window={props.window}
-							/>
-							<WrongImg
-								src={
-									wrongTracker.team2 > 2
-										? 'media/images/ff-wrong-blue.png'
-										: props.window === 'controlPanel'
-										? 'media/images/ff-wrong-grey.png'
-										: null
-								}
-								window={props.window}
-							/>
+						<XContainer>
+							{wrongTracker.team2.map((isWrong, index) => {
+								return (
+									<WrongImg
+										key={index}
+										src={
+											isWrong
+												? 'media/images/ff-wrong-blue.png'
+												: props.window === 'controlPanel'
+												? 'media/images/ff-wrong-grey.png'
+												: null
+										}
+										window={props.window}
+										onClick={() => {
+											incorrectHandler(2, isWrong, index);
+										}}
+									/>
+								);
+							})}
 						</XContainer>
 					</ScoreContainer>{' '}
 				</TopContainer>

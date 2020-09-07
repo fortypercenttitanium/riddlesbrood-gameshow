@@ -91,6 +91,10 @@ const Span = styled.span`
 	font-size: 3rem;
 `;
 
+const LetterSpan = styled.span`
+	margin: 0 10px;
+`;
+
 const ReturnButton = styled.div`
 	padding: 1.4rem;
 	position: absolute;
@@ -138,6 +142,13 @@ const SolvePuzzle = styled.div`
 	}
 `;
 
+const GuessedLettersDisplay = styled.div`
+	display: flex;
+	margin: 0 5%;
+	font-size: 1.5rem;
+	font-weight: bold;
+`;
+
 const CategoryDisplay = styled.div`
 	margin: 2rem auto;
 	padding: 1rem 0;
@@ -178,7 +189,7 @@ export default function Wheel(props) {
 				display: 'select',
 				currentQuestion: {
 					category: '',
-					puzzle: '',
+					puzzle: ' ',
 					guessedLetters: [],
 					solved: false,
 				},
@@ -410,27 +421,34 @@ export default function Wheel(props) {
 		return rowsRender;
 	};
 
+	if (!state.gameController.currentQuestion.puzzle) {
+		return <div />;
+	}
+
 	return (
 		<WheelContainer>
 			<Title display={state.gameController.display}>
 				Please select puzzle:
 			</Title>
-			<CategoryContainer display={state.gameController.display}>
-				{state.gameController.board.map((item, index) => {
-					return (
-						<CategoryCard
-							done={item.solved}
-							key={index}
-							onClick={() => {
-								clickHandlerCategory(item, index);
-							}}
-						>
-							<h3 style={{ margin: 'auto' }}>{item.category}</h3>
-						</CategoryCard>
-					);
-				})}
-			</CategoryContainer>
-			{state.gameController.display === 'board' && (
+			{props.window === 'controlPanel' && (
+				<CategoryContainer display={state.gameController.display}>
+					{state.gameController.board.map((item, index) => {
+						return (
+							<CategoryCard
+								done={item.solved}
+								key={index}
+								onClick={() => {
+									clickHandlerCategory(item, index);
+								}}
+							>
+								<h3 style={{ margin: 'auto' }}>{item.puzzle}</h3>
+							</CategoryCard>
+						);
+					})}
+				</CategoryContainer>
+			)}
+			{(state.gameController.display === 'board' ||
+				props.window === 'gameboard') && (
 				<Board>
 					{renderPuzzle().map((row) => {
 						return row.map((letter, index) => {
@@ -450,15 +468,24 @@ export default function Wheel(props) {
 			<CategoryDisplay display={state.gameController.display}>
 				<H2>{state.gameController.currentQuestion.category}</H2>
 			</CategoryDisplay>
-			{state.gameController.currentQuestion.solved && (
-				<ReturnButton
-					screen={props.window}
-					display={state.gameController.display}
-					onClick={returnHandler}
-				>
-					<H2>Select New Puzzle</H2>
-				</ReturnButton>
+			{state.gameController.display === 'board' && (
+				<GuessedLettersDisplay>
+					Guessed Letters:
+					<LetterSpan>
+						{state.gameController.currentQuestion.guessedLetters.join(', ')}
+					</LetterSpan>
+				</GuessedLettersDisplay>
 			)}
+			{state.gameController.currentQuestion.solved &&
+				props.window === 'controlPanel' && (
+					<ReturnButton
+						screen={props.window}
+						display={state.gameController.display}
+						onClick={returnHandler}
+					>
+						<H2>Select New Puzzle</H2>
+					</ReturnButton>
+				)}
 			<SolvePuzzle
 				display={state.gameController.display}
 				screen={props.window}
