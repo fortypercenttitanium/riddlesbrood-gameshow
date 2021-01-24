@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { couples as versions } from '../versions/gameVersions';
 import { StoreContext as StoreContextCP } from '../../../store/context';
 import { StoreContext as StoreContextGB } from '../../../Gameboard';
-import { actions } from '../../../actions';
+import { actions } from '../../../store/actions';
 import ReactAudioPlayer from 'react-audio-player';
 
 const CouplesHomeScreen = styled.div`

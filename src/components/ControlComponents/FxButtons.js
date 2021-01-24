@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import ReactAudioPlayer from 'react-audio-player';
 import { StoreContext } from '../../store/context';
-import { actions } from '../../actions';
+import { actions } from '../../store/actions';
 
 const FxButtonsDiv = styled.div`
 	grid-area: 7 / 1 / 11 / 4;

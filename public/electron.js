@@ -1,32 +1,18 @@
 const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-
 const path = require('path');
 const isDev = require('electron-is-dev');
-const { ipcMain, dialog } = require('electron');
+const mainWindowConfig = require('./electronHelpers/mainWindowConfig');
+const projectorMode = require('./electronHelpers/projectorMode');
+
 const iconPath = path.join(__dirname, 'media', 'images', 'icon.png');
+const { app, BrowserWindow, ipcMain } = electron;
 
 let mainWindow;
 let gameWindow;
 let projectorDisplay;
-const electronScreen = electron.screen;
 
 function createWindow() {
-	// let factor = electronScreen.getPrimaryDisplay().scaleFactor;
-	mainWindow = new BrowserWindow({
-		width: 1353,
-		height: 902,
-		title: 'Riddlesbrood Gameshow - Control Panel',
-		webPreferences: {
-			nodeIntegration: true,
-		},
-		icon: iconPath,
-	});
-
-	mainWindow.setMenuBarVisibility(false);
-
-	gameWindow = new BrowserWindow({
+	const gameWindowConfig = {
 		width: 1200,
 		height: 900,
 		webPreferences: {
@@ -35,23 +21,34 @@ function createWindow() {
 		x: projectorDisplay ? projectorDisplay.bounds.x + 50 : 0,
 		y: projectorDisplay ? projectorDisplay.bounds.y + 50 : 0,
 		frame: false,
-		fullscreen: Boolean(projectorDisplay),
+		fullscreen: !!projectorDisplay,
 		title: 'Gameboard',
 		show: true,
 		icon: iconPath,
-	});
+	};
+
+	mainWindow = new BrowserWindow(mainWindowConfig);
+	gameWindow = new BrowserWindow(gameWindowConfig);
+
+	mainWindow.setMenuBarVisibility(false);
+	gameWindow.webContents.setAudioMuted(true);
 
 	gameWindow.on('maximize', (e) => {
 		gameWindow.setFullScreen(true);
 	});
-
-	gameWindow.webContents.setAudioMuted(true);
 
 	mainWindow.loadURL(
 		isDev
 			? 'http://localhost:3000'
 			: `file://${path.join(__dirname, '../build/index.html')}`
 	);
+
+	gameWindow.loadURL(
+		isDev
+			? 'http://localhost:3000/#/gameboard'
+			: `file://${path.join(__dirname, '../build/index.html')}`
+	);
+
 	mainWindow.on('closed', () => {
 		gameWindow.close();
 		mainWindow = null;
@@ -59,34 +56,16 @@ function createWindow() {
 		app.quit();
 	});
 
-	ipcMain.on('REQUEST_PROJECTOR_MODE', (event, args) => {
-		projectorDisplay = electronScreen.getAllDisplays().find((display) => {
-			return display.bounds.x !== 0 || display.bounds.y !== 0;
+	ipcMain.on('REQUEST_PROJECTOR_MODE', () => {
+		projectorMode({
+			projectorDisplay,
+			mainWindow,
+			gameWindow,
+			isDev,
 		});
-		if (projectorDisplay !== undefined) {
-			gameWindow.setBounds({
-				x: projectorDisplay.bounds.x + 50,
-				y: projectorDisplay.bounds.y + 50,
-			});
-			gameWindow.maximize();
-			if (!isDev) {
-				dialog.showMessageBox(mainWindow, {
-					type: 'info',
-					title: 'Success',
-					message: 'Projector connection successful!',
-				});
-			}
-		} else {
-			dialog.showMessageBox(mainWindow, {
-				type: 'error',
-				title: 'Projector error',
-				message: 'Projector not found.',
-				detail: 'Please plug in projector and try again.',
-			});
-		}
 	});
 
-	ipcMain.on('UPDATE_STATE', (event, state) => {
+	ipcMain.on('UPDATE_STATE', (e, state) => {
 		gameWindow.webContents.send('SYNC_STATE', state);
 	});
 
@@ -94,29 +73,11 @@ function createWindow() {
 		gameWindow.webContents.send('WHEEL_GUESS_RECEIVE', key);
 	});
 
-	// ipcMain.on('SCORE_TYPE_QUERY', () => {
-	// 	electron.dialog
-	// 		.showMessageBox(mainWindow, {
-	// 			type: 'question',
-	// 			buttons: ['Teams', 'Individuals'],
-	// 			defaultId: 1,
-	// 			title: 'Select score mode',
-	// 			message: 'Please select a scoring mode:',
-	// 		})
-	// 		.then((res) => mainWindow.webContents.send('SCORE_TYPE_RESPONSE', res));
-	// });
-
 	// Dev Tools
 	ipcMain.on('TOGGLE_DEV_TOOLS', () => {
 		mainWindow.webContents.toggleDevTools();
 		gameWindow.webContents.toggleDevTools();
 	});
-
-	gameWindow.loadURL(
-		isDev
-			? 'http://localhost:3000/#/gameboard'
-			: `file://${path.join(__dirname, '../build/index.html')}`
-	);
 
 	gameWindow.webContents.executeJavaScript("location.assign('#/gameboard');");
 
@@ -176,9 +137,3 @@ app.on('window-all-closed', () => {
 		app.quit();
 	}
 });
-
-// app.on('activate', () => {
-// 	if (mainWindow === null) {
-// 		createWindow();
-// 	}
-// });

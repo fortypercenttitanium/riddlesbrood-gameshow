@@ -10,7 +10,7 @@ import FxButtons from './components/ControlComponents/FxButtons';
 import Scoreboard from './components/ControlComponents/Scoreboard/Scoreboard';
 import AnswerBlock from './components/ControlComponents/AnswerBlock';
 import GamesMenuModal from './components/ControlComponents/GamesMenu/GamesMenuModal';
-import { actions } from './actions';
+import { actions } from './store/actions';
 import { useInterval } from './customHooks/useInterval';
 import ReactAudioPlayer from 'react-audio-player';
 

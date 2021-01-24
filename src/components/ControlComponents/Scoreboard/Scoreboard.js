@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ScoreCard from './ScoreCard';
 import InactiveScoreCard from './InactiveScoreCard';
 import { StoreContext } from '../../../store/context';
-import { actions } from '../../../actions';
+import { actions } from '../../../store/actions';
 
 const ScoreBoardDiv = styled.div`
 	display: flex;
