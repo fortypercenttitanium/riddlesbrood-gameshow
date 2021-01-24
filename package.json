@@ -8,7 +8,7 @@
 	"build": {
 		"appId": "riddlesbrood.gameshow",
 		"productName": "Riddlesbrood Gameshow",
-		"copyright": "Copyright 2020 Riddlesbrood Theatre Company",
+		"copyright": "Copyright 2021 Riddlesbrood Theatre Company",
 		"win": {
 			"icon": "./public/media/images/icon.png"
 		}
@@ -41,7 +41,7 @@
 		"react-eject": "react-scripts eject",
 		"electron-build": "electron-builder",
 		"electron-dev": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
-		"electron-pack": "electron-builder electron-builder -c.extraMetadata.main=build/electron.js",
+		"electron-pack": "electron-builder -c.extraMetadata.main=build/electron.js",
 		"preelectron-pack": "npm run react-build"
 	},
 	"eslintConfig": {
