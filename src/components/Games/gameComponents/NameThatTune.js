@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { nameThatTune as versions } from '../versions/gameVersions';
-import { StoreContext as StoreContextCP } from '../../../App';
+import { StoreContext as StoreContextCP } from '../../../store/context';
 import { StoreContext as StoreContextGB } from '../../../Gameboard';
 import { actions } from '../../../actions';
 import ReactAudioPlayer from 'react-audio-player';

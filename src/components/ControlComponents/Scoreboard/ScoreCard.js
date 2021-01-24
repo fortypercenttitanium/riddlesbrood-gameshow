@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { StoreContext } from '../../../App';
+import { StoreContext } from '../../../store/context';
 import { actions } from '../../../actions';
 
 const ScoreCardDiv = styled.div`

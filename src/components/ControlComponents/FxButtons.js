@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import ReactAudioPlayer from 'react-audio-player';
-import { StoreContext } from '../../App';
+import { StoreContext } from '../../store/context';
 import { actions } from '../../actions';
 
 const FxButtonsDiv = styled.div`

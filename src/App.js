@@ -1,6 +1,6 @@
-import React, { useReducer, useEffect, createContext, useRef } from 'react';
-import './App.css';
+import React, { useEffect, useRef, useContext } from 'react';
 import styled from 'styled-components';
+import { StoreContext } from './store/context';
 import ControlScreen from './components/ControlComponents/ControlScreen';
 import GamesMenu from './components/ControlComponents/GamesMenu/GamesMenu';
 import ShowControls from './components/ControlComponents/ShowControls';
@@ -10,10 +10,8 @@ import FxButtons from './components/ControlComponents/FxButtons';
 import Scoreboard from './components/ControlComponents/Scoreboard/Scoreboard';
 import AnswerBlock from './components/ControlComponents/AnswerBlock';
 import GamesMenuModal from './components/ControlComponents/GamesMenu/GamesMenuModal';
-import { initialState, reducer } from './store';
 import { actions } from './actions';
 import { useInterval } from './customHooks/useInterval';
-import * as versions from './components/Games/versions/gameVersions';
 import ReactAudioPlayer from 'react-audio-player';
 
 const { ipcRenderer } = window.require('electron');
@@ -42,10 +40,8 @@ const ControlScreenContainer = styled.div`
 	margin: auto;
 `;
 
-export const StoreContext = createContext();
-
-export function App(props) {
-	const [state, dispatch] = useReducer(reducer, initialState);
+export function App() {
+	const { state, dispatch } = useContext(StoreContext);
 
 	useEffect(() => {
 		projectorMode();
@@ -118,11 +114,6 @@ export function App(props) {
 	// 	player.load();
 	// };
 
-	const store = {
-		state,
-		dispatch,
-	};
-
 	//	dev to work on game
 	// useEffect(() => {
 	// 	dispatch({
@@ -137,35 +128,33 @@ export function App(props) {
 
 	return (
 		<StyledApp>
-			<StoreContext.Provider value={store}>
-				<GamesMenu
-					open={() => {
-						store.dispatch({ type: 'OPEN_GAMES_MENU' });
-					}}
-				/>
-				{state.gamesMenu.open && <GamesMenuModal />}
-				<GameLogo logo={state.currentGame.logo} />
-				<VolumeControls />
-				<ShowControls projectorMode={projectorMode} />
-				<FxButtons toggleDevTools={toggleDevTools} changeFX={changeFX} />
-				<ControlScreenContainer>
-					<ControlScreen window='controlPanel' />
-				</ControlScreenContainer>
-				<AnswerBlock />
-				<Scoreboard playSound={playSound} />
-				<ReactAudioPlayer
-					ref={musicPlayer}
-					volume={
-						(state.audio.volume.master / 100) * (state.audio.volume.music / 100)
-					}
-				/>
-				<ReactAudioPlayer
-					ref={sfxPlayer}
-					volume={
-						(state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
-					}
-				/>
-			</StoreContext.Provider>
+			<GamesMenu
+				open={() => {
+					dispatch({ type: 'OPEN_GAMES_MENU' });
+				}}
+			/>
+			{state.gamesMenu.open && <GamesMenuModal />}
+			<GameLogo logo={state.currentGame.logo} />
+			<VolumeControls />
+			<ShowControls projectorMode={projectorMode} />
+			<FxButtons toggleDevTools={toggleDevTools} changeFX={changeFX} />
+			<ControlScreenContainer>
+				<ControlScreen window='controlPanel' />
+			</ControlScreenContainer>
+			<AnswerBlock />
+			<Scoreboard playSound={playSound} />
+			<ReactAudioPlayer
+				ref={musicPlayer}
+				volume={
+					(state.audio.volume.master / 100) * (state.audio.volume.music / 100)
+				}
+			/>
+			<ReactAudioPlayer
+				ref={sfxPlayer}
+				volume={
+					(state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
+				}
+			/>
 		</StyledApp>
 	);
 }

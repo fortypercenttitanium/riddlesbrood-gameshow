@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import VideoPlayer from './VideoPlayer';
 import LogoScreen from './LogoScreen';
 import * as Games from '../Games/gameComponents/gamesArray';
-import { StoreContext as StoreContextCP } from '../../App';
+import { StoreContext as StoreContextCP } from '../../store/context';
 import { StoreContext as StoreContextGB } from '../../Gameboard';
 
 export default function ControlScreen(props) {

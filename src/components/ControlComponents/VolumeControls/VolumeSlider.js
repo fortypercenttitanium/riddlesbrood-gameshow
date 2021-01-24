@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import VolumeDown from '@material-ui/icons/VolumeDown';
 import VolumeUp from '@material-ui/icons/VolumeUp';
-import { StoreContext } from '../../../App';
+import { StoreContext } from '../../../store/context';
 
 const useStyles = makeStyles({
 	root: {

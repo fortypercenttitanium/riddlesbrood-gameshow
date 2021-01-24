@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { StoreContext } from '../../App';
+import { StoreContext } from '../../store/context';
 
 const AnswerBlockDiv = styled.div`
 	grid-area: 7 / 4 / 8 / 11;

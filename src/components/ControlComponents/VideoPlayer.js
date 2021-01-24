@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { StoreContext as StoreContextCP } from '../../App';
+import { StoreContext as StoreContextCP } from '../../store/context';
 import { StoreContext as StoreContextGB } from '../../Gameboard';
 
 const VideoContainer = styled.div`

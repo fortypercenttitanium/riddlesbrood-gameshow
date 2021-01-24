@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import ScoreCard from './ScoreCard';
 import InactiveScoreCard from './InactiveScoreCard';
-import { StoreContext } from '../../../App';
+import { StoreContext } from '../../../store/context';
 import { actions } from '../../../actions';
 
 const ScoreBoardDiv = styled.div`

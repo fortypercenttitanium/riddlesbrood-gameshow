@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import { StoreContext } from '../../../App';
+import { StoreContext } from '../../../store/context';
 import { gamesArray } from '../../Games/gameComponents/gamesArray';
 
 const ModalContainer = styled.div`
