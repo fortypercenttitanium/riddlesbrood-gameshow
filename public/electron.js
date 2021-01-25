@@ -11,7 +11,22 @@ let mainWindow;
 let gameWindow;
 let projectorDisplay;
 
-function createWindow() {
+function createStartScreen() {
+	const startScreenConfig = { ...mainWindowConfig };
+	startScreenConfig.title = 'Riddlesbrood Gameshow App';
+	const startScreenWindow = new BrowserWindow(startScreenConfig);
+	startScreenWindow.loadURL(
+		isDev
+			? 'http://localhost:3000/'
+			: `file://${path.join(__dirname, '../build/index.html')}`
+	);
+	ipcMain.once('LAUNCH_GAME', () => {
+		createGameWindows();
+		startScreenWindow.close();
+	});
+}
+
+function createGameWindows() {
 	const gameWindowConfig = {
 		width: 1200,
 		height: 900,
@@ -39,7 +54,7 @@ function createWindow() {
 
 	mainWindow.loadURL(
 		isDev
-			? 'http://localhost:3000'
+			? 'http://localhost:3000/#/play'
 			: `file://${path.join(__dirname, '../build/index.html')}`
 	);
 
@@ -48,6 +63,11 @@ function createWindow() {
 			? 'http://localhost:3000/#/gameboard'
 			: `file://${path.join(__dirname, '../build/index.html')}`
 	);
+
+	if (!isDev) {
+		mainWindow.webContents.executeJavaScript("location.assign('#/play');");
+		gameWindow.webContents.executeJavaScript("location.assign('#/gameboard');");
+	}
 
 	mainWindow.on('closed', () => {
 		gameWindow.close();
@@ -78,8 +98,6 @@ function createWindow() {
 		mainWindow.webContents.toggleDevTools();
 		gameWindow.webContents.toggleDevTools();
 	});
-
-	gameWindow.webContents.executeJavaScript("location.assign('#/gameboard');");
 
 	gameWindow.on('focus', () => {
 		mainWindow.focus();
@@ -130,7 +148,7 @@ function createWindow() {
 	});
 }
 
-app.on('ready', createWindow);
+app.on('ready', createStartScreen);
 
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {
