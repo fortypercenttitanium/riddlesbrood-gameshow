@@ -24,6 +24,8 @@
 		"cross-env": "^7.0.2",
 		"electron-is-dev": "^1.2.0",
 		"electron-store": "^5.2.0",
+		"firebase": "^8.2.4",
+		"nanoid": "^3.1.20",
 		"react": "^16.13.1",
 		"react-audio-player": "^0.13.0",
 		"react-dom": "^16.13.1",

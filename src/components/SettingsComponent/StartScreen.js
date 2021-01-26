@@ -5,6 +5,8 @@ import EditFx from './EditFx';
 import EditSplash from './EditSplash';
 import EditGameVersions from './EditGameVersions';
 import Cloud from './Cloud';
+import FirebaseProvider from './FirebaseProvider/FirebaseContext';
+const { ipcRenderer } = window.require('electron');
 
 function StartScreen() {
 	const [timeline, setTimeline] = useState('init');
@@ -25,7 +27,16 @@ function StartScreen() {
 		) : null;
 	};
 
-	return render(timeline);
+	const devTools = () => {
+		ipcRenderer.send('TOGGLE_DEV_TOOLS');
+	};
+
+	return (
+		<FirebaseProvider>
+			{render(timeline)}
+			<button onClick={devTools}>Dev tools</button>
+		</FirebaseProvider>
+	);
 }
 
 export default StartScreen;
