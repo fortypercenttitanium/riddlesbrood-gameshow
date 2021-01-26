@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { returnToEditSelect, returnToInit } from './helpers/timelines';
 
-function EditGameVersions(props) {
-	const { setTimeline } = props;
+function EditGameVersions({ setTimeline }) {
+	const [selectedGame, setSelectedGame] = useState('');
+	const [formData, setFormData] = useState({});
 	const returnClick = () => {
 		returnToEditSelect(setTimeline);
 	};

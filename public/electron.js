@@ -4,6 +4,10 @@ const isDev = require('electron-is-dev');
 const mainWindowConfig = require('./electronHelpers/mainWindowConfig');
 const projectorMode = require('./electronHelpers/projectorMode');
 const storeAppData = require('./electronHelpers/storeAppData');
+const {
+	showMessageBox,
+	showErrorBox,
+} = require('./electronHelpers/messageBoxes');
 
 const iconPath = path.join(__dirname, 'media', 'images', 'icon.png');
 const { app, BrowserWindow, ipcMain } = electron;
@@ -30,6 +34,13 @@ function createStartScreen() {
 	});
 	ipcMain.on('STORE_APP_DATA', (e, type, filename, data) => {
 		storeAppData(type, filename, data);
+	});
+	ipcMain.on('MESSAGE_BOX', (e, payload) => {
+		showMessageBox(payload.title, payload.message);
+	});
+
+	ipcMain.on('ERROR_BOX', (e, payload) => {
+		showErrorBox(payload.title, payload.message);
 	});
 }
 
@@ -116,6 +127,7 @@ function createGameWindows() {
 		}
 	});
 
+	// TODO: rework
 	ipcMain.on('FX_BUTTON_SELECT', (e, index) => {
 		electron.dialog
 			.showOpenDialog(mainWindow, {

@@ -1,0 +1,24 @@
+const electron = require('electron');
+const { dialog } = electron;
+
+function showMessageBox(title = '', message) {
+	const messageObj = {
+		message,
+		title,
+	};
+	dialog.showMessageBox(messageObj);
+}
+
+function showErrorBox(title = '', message) {
+	let errorMessage = message;
+	if (Array.isArray(errorMessage)) {
+		console.log(true);
+		errorMessage = errorMessage.join('\n');
+	}
+	dialog.showErrorBox(title, errorMessage);
+}
+
+module.exports = {
+	showMessageBox,
+	showErrorBox,
+};

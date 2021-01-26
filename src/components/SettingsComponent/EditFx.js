@@ -2,8 +2,7 @@ import React from 'react';
 import { returnToEditSelect, returnToInit } from './helpers/timelines';
 const { ipcRenderer } = window.require('electron');
 
-function EditFx(props) {
-	const { setTimeline } = props;
+function EditFx({ setTimeline }) {
 	const returnClick = () => {
 		returnToEditSelect(setTimeline);
 	};
