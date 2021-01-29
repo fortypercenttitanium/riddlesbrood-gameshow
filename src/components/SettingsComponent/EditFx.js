@@ -1,29 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { returnToEditSelect, returnToInit } from './helpers/timelines';
 const { ipcRenderer } = window.require('electron');
 
 function EditFx({ setTimeline }) {
+	const [name, setName] = useState('');
+	const handleChangeName = (e) => {
+		setName(e.target.value);
+	};
 	const returnClick = () => {
 		returnToEditSelect(setTimeline);
 	};
 	function test() {
-		const obj = {
-			title: 'Version 1',
-			rating: 'r',
-			content: [
-				'What did he wear on the first date?',
-				"Who's the better kisser?",
-				'What is their star sign?',
-				"What's their weirded quirk?",
-				"Who said 'I love you' first?",
-			],
-		};
-		ipcRenderer.send('STORE_APP_DATA', 'game_version', 'test', obj);
+		ipcRenderer.send('NEW_FX_BUTTON', { payload: { name } });
 	}
 	return (
 		<div>
 			<h1>Edit FX</h1>
-			<button onClick={test}>TEST</button>
+			<input type='text' value={name} onChange={handleChangeName} />
+			<button onClick={test}>TEST ADD</button>
 			<button onClick={returnClick}>Return to settings menu</button>
 		</div>
 	);
