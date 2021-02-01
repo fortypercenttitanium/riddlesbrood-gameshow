@@ -10,7 +10,7 @@ import {
 	esp,
 } from '../../../../assets/game_versions/gameVersions';
 
-export default function initGame(state, game) {
+export default function initGame(state, game, initialDisplay) {
 	const games = {
 		jeopardy,
 		pyramid,
@@ -22,15 +22,15 @@ export default function initGame(state, game) {
 		couples,
 		esp,
 	};
-	return {
-		display: 'select',
+	const initState = {
+		display: initialDisplay,
 		currentQuestion: {
 			category: '',
 			puzzle: ' ',
 			guessedLetters: [],
 			solved: false,
 		},
-		board: JSON.parse(games[game][state.currentGame.version]).content,
+		board: games[game][state.currentGame.version].content,
 		currentAnswer: '',
 		timer: {
 			time: null,
@@ -39,8 +39,12 @@ export default function initGame(state, game) {
 		},
 		score: {
 			type: 'players',
-			scoreBoard: [0, null, null, 0],
+			scoreBoard: [0, 0, 0, 0],
 		},
 		gameStarted: true,
 	};
+
+	console.log(initState.board);
+
+	return JSON.parse(JSON.stringify(initState));
 }

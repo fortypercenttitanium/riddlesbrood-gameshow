@@ -10,7 +10,7 @@ import {
 	Form,
 } from './GamesMenuModalStyles';
 import { StoreContext } from '../../../store/context';
-import { gamesArray } from '../../Games/gameComponents/gamesArray';
+import { gamesArray } from '../../Games/helpers/shared/gamesArray';
 import VersionSelection from './VersionSelection';
 
 function importAll(r) {

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
 import LogoScreen from '../LogoScreen/LogoScreen';
 import { ControlScreenContainer } from './ControlScreenStyles';
-import * as Games from '../../Games/gameComponents/gamesArray';
+import * as Games from '../../Games/helpers/shared/gamesArray';
 import { StoreContext as StoreContextCP } from '../../../store/context';
 import { StoreContext as StoreContextGB } from '../../../Gameboard';
 
@@ -25,11 +25,11 @@ export default function ControlScreen({ window }) {
 		Wheel,
 		NameThatTune,
 		WhatTheHellIsIt,
-		NewlywedGame,
 		CouplesConundrum,
 		ESP,
 		CardSharks,
 	} = Games;
+
 	const components = {
 		Jeopardy: <Jeopardy window={window} />,
 		'Family Feud': <FamilyFeud window={window} />,
@@ -37,7 +37,6 @@ export default function ControlScreen({ window }) {
 		'Wheel Of Fortune': <Wheel window={window} />,
 		'Name That Tune': <NameThatTune window={window} />,
 		'What The Hell Is It?': <WhatTheHellIsIt window={window} />,
-		'Newlywed Game': <NewlywedGame window={window} />,
 		'Couples Conundrum': <CouplesConundrum window={window} />,
 		ESP: <ESP window={window} />,
 		'Card Sharks': <CardSharks />,

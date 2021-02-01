@@ -23,7 +23,7 @@ import {
 import ReactAudioPlayer from 'react-audio-player';
 
 const videos = importAll(
-	require.context('../../../assets/videos/jeopardy', true, /\.mp4$/)
+	require.context('../../../assets/videos/jeopardy', false, /\.mp4$/)
 );
 
 export default function Jeopardy({ window }) {
@@ -39,27 +39,18 @@ export default function Jeopardy({ window }) {
 	let musicPlayer = useRef();
 	let sfxPlayer = useRef();
 
-	useEffect(() => {
-		if (state.gameController.board.length) {
-			console.log(
-				'check: ',
-				state.gameController.board[0].questions[0].question
-			);
-		}
-	});
-
 	// initialize game
 	useEffect(() => {
 		if (!state.gameController.gameStarted) {
-			const newBoard = initGame(state, 'jeopardy');
-			console.log('1: ', newBoard);
+			const newBoard = initGame(state, 'jeopardy', 'board');
 			newBoard.board.forEach((category) => {
 				category.questions = category.questions.map((question) => {
 					if (question.type !== 'video') {
 						return question;
 					} else {
 						const filePath =
-							question.question.slice(0, 3) === 'app'
+							question.question.slice(0, 6) === 'app://' ||
+							Object.values(videos).includes(question.question)
 								? question.question
 								: videos[question.question];
 						question.question = filePath;
@@ -67,7 +58,6 @@ export default function Jeopardy({ window }) {
 					}
 				});
 			});
-			console.log('2: ', newBoard);
 			dispatch({ type: actions.INIT_GAME, payload: newBoard });
 		}
 	}, [dispatch, state]);
@@ -92,7 +82,6 @@ export default function Jeopardy({ window }) {
 	const clickHandlerBoard = (question, categoryIndex, questionIndex) => {
 		if (!question.completed) {
 			const board = [...state.gameController.board];
-			console.log('board: ', board);
 			board[categoryIndex].questions[questionIndex].completed = true;
 			dispatch({ type: actions.SET_QUESTION, payload: question });
 			dispatch({ type: actions.SET_ANSWER, payload: question.answer });

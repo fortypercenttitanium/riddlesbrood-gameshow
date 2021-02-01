@@ -1,4 +1,4 @@
-import * as gameVersions from '../../../assets/game_versions/gameVersions';
+import * as gameVersions from '../../../../assets/game_versions/gameVersions';
 
 export const gamesArray = [
 	{
@@ -49,17 +49,16 @@ export const gamesArray = [
 	{
 		title: 'Card Sharks',
 		logo: 'CardSharksLogo.png',
-		versions: [null],
+		versions: [],
 	},
 ];
 
-export { default as Jeopardy } from './Jeopardy';
-export { default as FamilyFeud } from './FamilyFeud';
-export { default as Pyramid } from './Pyramid';
-export { default as Wheel } from './Wheel';
-export { default as NameThatTune } from './NameThatTune';
-export { default as WhatTheHellIsIt } from './WhatTheHellIsIt';
-export { default as NewlywedGame } from './NewlywedGame';
-export { default as CouplesConundrum } from './CouplesConundrum';
-export { default as ESP } from './ESP';
-export { default as CardSharks } from './CardSharks';
+export { default as Jeopardy } from '../../gameComponents/Jeopardy';
+export { default as FamilyFeud } from '../../gameComponents/FamilyFeud';
+export { default as Pyramid } from '../../gameComponents/Pyramid';
+export { default as Wheel } from '../../gameComponents/Wheel';
+export { default as NameThatTune } from '../../gameComponents/NameThatTune';
+export { default as WhatTheHellIsIt } from '../../gameComponents/WhatTheHellIsIt';
+export { default as CouplesConundrum } from '../../gameComponents/CouplesConundrum';
+export { default as ESP } from '../../gameComponents/ESP';
+export { default as CardSharks } from '../../gameComponents/CardSharks';

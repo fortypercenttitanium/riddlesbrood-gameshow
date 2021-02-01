@@ -27,20 +27,28 @@ export default function CouplesConundrum(props) {
 	}
 
 	const { state, dispatch } = useContext(StoreContext);
+	const { gameController } = state;
+	const {
+		board,
+		display,
+		currentQuestion,
+		score,
+		gameStarted,
+	} = gameController;
 
 	let musicPlayer = useRef();
 	let sfxPlayer = useRef();
 
 	useEffect(() => {
-		if (!state.gameController.gameStarted) {
+		if (!gameStarted) {
+			const initState = initGame(state, 'couples', 'start');
+			initState.currentQuestion = initState.board[0];
 			dispatch({
 				type: actions.INIT_GAME,
-				payload: initGame(state, 'couples'),
+				payload: initState,
 			});
 		}
-	}, [dispatch, state]);
-
-	const { board, display, currentQuestion, score } = state.gameController;
+	}, [dispatch, state, gameStarted]);
 
 	const nextQuestion = () => {
 		const nextQuestionIndex = board.indexOf(currentQuestion) + 1;
