@@ -18,7 +18,7 @@ import {
 	ScoreBoardDiv,
 	ScoreCardDiv,
 } from './gameComponentStyles/whatIsItStyles';
-import initGame from '../helpers/whatIsIt/initGame';
+import initGame from '../helpers/shared/initGame';
 import { stopAllSounds } from '../helpers/shared/audioHelpers';
 import { StoreContext as StoreContextCP } from '../../../store/context';
 import { StoreContext as StoreContextGB } from '../../../Gameboard';
@@ -42,7 +42,7 @@ export default function WhatTheHellIsIt(props) {
 		if (!state.gameController.gameStarted) {
 			dispatch({
 				type: actions.INIT_GAME,
-				payload: initGame(state),
+				payload: initGame(state, 'whatTheHellIsIt'),
 			});
 		}
 	}, [dispatch, state]);

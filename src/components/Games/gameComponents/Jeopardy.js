@@ -8,12 +8,23 @@ import {
 	CatCell,
 	QCell,
 } from './gameComponentStyles/jeopardyStyles';
-import initGame from '../helpers/jeopardy/initGame';
-import playSound from '../helpers/shared/audioHelpers';
-import { StoreContext as StoreContextCP } from '../../../store/context';
-import { StoreContext as StoreContextGB } from '../../../Gameboard';
-import { actions } from '../../../store/actions';
+import {
+	questionOpenSound,
+	timeUpSound,
+	dailyDoubleSound,
+	dailyDoubleImage,
+	initGame,
+	playSound,
+	StoreContextCP,
+	StoreContextGB,
+	actions,
+	importAll,
+} from '../helpers/jeopardy/imports';
 import ReactAudioPlayer from 'react-audio-player';
+
+const videos = importAll(
+	require.context('../../../assets/videos/jeopardy', true, /\.mp4$/)
+);
 
 export default function Jeopardy({ window }) {
 	let StoreContext;
@@ -28,16 +39,43 @@ export default function Jeopardy({ window }) {
 	let musicPlayer = useRef();
 	let sfxPlayer = useRef();
 
+	useEffect(() => {
+		if (state.gameController.board.length) {
+			console.log(
+				'check: ',
+				state.gameController.board[0].questions[0].question
+			);
+		}
+	});
+
 	// initialize game
 	useEffect(() => {
-		if (!state.gameController.gameStarted)
-			dispatch({ type: actions.INIT_GAME, payload: initGame(state) });
+		if (!state.gameController.gameStarted) {
+			const newBoard = initGame(state, 'jeopardy');
+			console.log('1: ', newBoard);
+			newBoard.board.forEach((category) => {
+				category.questions = category.questions.map((question) => {
+					if (question.type !== 'video') {
+						return question;
+					} else {
+						const filePath =
+							question.question.slice(0, 3) === 'app'
+								? question.question
+								: videos[question.question];
+						question.question = filePath;
+						return question;
+					}
+				});
+			});
+			console.log('2: ', newBoard);
+			dispatch({ type: actions.INIT_GAME, payload: newBoard });
+		}
 	}, [dispatch, state]);
 
 	// time up
 	useEffect(() => {
 		if (state.gameController.timer.time === 0) {
-			playSound('media/soundfx/jeopardytimeup.mp3', 'sfx', {
+			playSound(timeUpSound, 'sfx', {
 				sfxPlayer,
 				musicPlayer,
 			});
@@ -54,13 +92,14 @@ export default function Jeopardy({ window }) {
 	const clickHandlerBoard = (question, categoryIndex, questionIndex) => {
 		if (!question.completed) {
 			const board = [...state.gameController.board];
+			console.log('board: ', board);
 			board[categoryIndex].questions[questionIndex].completed = true;
 			dispatch({ type: actions.SET_QUESTION, payload: question });
 			dispatch({ type: actions.SET_ANSWER, payload: question.answer });
 			dispatch({ type: actions.SET_BOARD, payload: board });
 			changeGameDisplay(question.dailyDouble ? 'daily-double' : 'question');
 			if (question.dailyDouble) {
-				playSound('media/soundfx/dailydoublesound.mp3', 'sfx', {
+				playSound(dailyDoubleSound, 'sfx', {
 					sfxPlayer,
 					musicPlayer,
 				});
@@ -72,20 +111,21 @@ export default function Jeopardy({ window }) {
 			} else {
 				dispatch({ type: actions.SET_TIMER, payload: 13 });
 				dispatch({ type: actions.RUN_TIMER });
-				playSound('media/soundfx/open.wav', 'sfx', { sfxPlayer, musicPlayer });
+				playSound(questionOpenSound, 'sfx', { sfxPlayer, musicPlayer });
 			}
 		}
 	};
 
 	const clickHandlerModal = () => {
 		if (state.gameController.display === 'daily-double') {
-			changeGameDisplay('question');
 			if (state.gameController.currentQuestion.type === 'video') {
+				changeGameDisplay('question');
 				dispatch({
 					type: actions.PLAY_VIDEO,
 					payload: state.gameController.currentQuestion.question,
 				});
 			} else {
+				changeGameDisplay('question');
 				playSound('media/soundfx/open.wav', 'sfx', { sfxPlayer, musicPlayer });
 				dispatch({ type: actions.SET_TIMER, payload: 13 });
 				dispatch({ type: actions.RUN_TIMER });
@@ -108,7 +148,7 @@ export default function Jeopardy({ window }) {
 							width: '100%',
 						}}
 					>
-						<img src='media/images/dailydouble.png' width='100%' alt='' />
+						<img src={dailyDoubleImage} width='100%' alt='' />
 					</div>
 				)}
 				<StyledSpan questionType={state.gameController.currentQuestion.type}>

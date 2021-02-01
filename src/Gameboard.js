@@ -1,5 +1,5 @@
 import React, { useEffect, createContext, useState } from 'react';
-import ControlScreen from './components/ControlComponents/ControlScreen';
+import ControlScreen from './components/ControlComponents/ControlScreen/ControlScreen';
 import { initialState } from './store/initialState';
 const { ipcRenderer } = window.require('electron');
 

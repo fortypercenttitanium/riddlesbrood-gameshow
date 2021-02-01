@@ -16,7 +16,7 @@ import {
 	XModal,
 } from './gameComponentStyles/familyFeudStyles';
 import playSound from '../helpers/shared/audioHelpers';
-import initGame from '../helpers/familyFeud/initGame';
+import initGame from '../helpers/shared/initGame';
 import { StoreContext as StoreContextCP } from '../../../store/context';
 import { StoreContext as StoreContextGB } from '../../../Gameboard';
 import { actions } from '../../../store/actions';

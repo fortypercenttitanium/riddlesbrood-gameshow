@@ -12,7 +12,7 @@ import {
 	ScoreBoardDiv,
 	ScoreCardDiv,
 } from './gameComponentStyles/couplesStyles';
-import initGame from '../helpers/couples/initGame';
+import initGame from '../helpers/shared/initGame';
 import { StoreContext as StoreContextCP } from '../../../store/context';
 import { StoreContext as StoreContextGB } from '../../../Gameboard';
 import { actions } from '../../../store/actions';
@@ -35,7 +35,7 @@ export default function CouplesConundrum(props) {
 		if (!state.gameController.gameStarted) {
 			dispatch({
 				type: actions.INIT_GAME,
-				payload: initGame(state),
+				payload: initGame(state, 'couples'),
 			});
 		}
 	}, [dispatch, state]);

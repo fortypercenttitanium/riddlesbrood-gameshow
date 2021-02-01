@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useContext } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from './store/context';
-import ControlScreen from './components/ControlComponents/ControlScreen';
+import ControlScreen from './components/ControlComponents/ControlScreen/ControlScreen';
 import GamesMenu from './components/ControlComponents/GamesMenu/GamesMenu';
-import ShowControls from './components/ControlComponents/ShowControls';
+import ShowControls from './components/ControlComponents/ShowControls/ShowControls';
 import VolumeControls from './components/ControlComponents/VolumeControls/VolumeControls';
-import GameLogo from './components/ControlComponents/GameLogo';
-import FxButtons from './components/ControlComponents/FxButtons';
+import GameLogo from './components/ControlComponents/GameLogo/GameLogo';
+import FxButtons from './components/ControlComponents/FxButtons/FxButtons';
 import Scoreboard from './components/ControlComponents/Scoreboard/Scoreboard';
-import AnswerBlock from './components/ControlComponents/AnswerBlock';
+import AnswerBlock from './components/ControlComponents/AnswerBlock/AnswerBlock';
 import GamesMenuModal from './components/ControlComponents/GamesMenu/GamesMenuModal';
 import { actions } from './store/actions';
 import { useInterval } from './customHooks/useInterval';
@@ -48,6 +48,10 @@ export function App() {
 	}, []);
 
 	useEffect(() => {
+		console.log(state.gameController);
+	}, [state.gameController]);
+
+	useEffect(() => {
 		ipcRenderer.on('FX_BUTTON_RECEIVE', (e, fxFile) => {
 			const { index, name, file, type } = fxFile;
 			const button = {
@@ -59,6 +63,7 @@ export function App() {
 			newButtons[index] = button;
 			dispatch({ type: actions.CHANGE_FX_BUTTONS, payload: newButtons });
 		});
+
 		return () => {
 			ipcRenderer.removeAllListeners('FX_BUTTON_RECEIVE');
 		};

@@ -1,4 +1,4 @@
-import * as gameVersions from '../versions/gameVersions';
+import * as gameVersions from '../../../assets/game_versions/gameVersions';
 
 export const gamesArray = [
 	{

@@ -1,0 +1,35 @@
+[
+	{
+		"title": "Version 1",
+		"rating": "r",
+		"content": [
+			"What did he wear on the first date?",
+			"Who's the better kisser?",
+			"What is their star sign?",
+			"What's their weirded quirk?",
+			"Who said 'I love you' first?"
+		]
+	},
+	{
+		"title": "Version 2",
+		"rating": "pg13",
+		"content": [
+			"Who is the tidiest?",
+			"Who is the better cook?",
+			"Who is most likely to deal with a spider?",
+			"What is their worst habit?",
+			"What is their pet name for you?"
+		]
+	},
+	{
+		"title": "Version 3",
+		"rating": "kids",
+		"content": [
+			"What is the thing they're most likely to end up in jail for?",
+			"What is their favourite thing about themselves?",
+			"What is their favourite pizza topping?",
+			"What is the first movie you saw together?",
+			"If they could only eat one food for the rest of their life, what would it be?"
+		]
+	}
+]

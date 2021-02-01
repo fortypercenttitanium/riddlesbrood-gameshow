@@ -75,6 +75,7 @@ export const initialState = {
 		},
 		display: '',
 		board: [],
+		gameStarted: false,
 	},
 	VFX: {
 		playing: false,

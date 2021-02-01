@@ -14,7 +14,7 @@ import {
 	ScoreBoardDiv,
 	ScoreCardDiv,
 } from './gameComponentStyles/tuneStyles';
-import initGame from '../helpers/tune/initGame';
+import initGame from '../helpers/shared/initGame';
 import { StoreContext as StoreContextCP } from '../../../store/context';
 import { StoreContext as StoreContextGB } from '../../../Gameboard';
 import { actions } from '../../../store/actions';
@@ -37,7 +37,7 @@ export default function NameThatTune(props) {
 		if (!state.gameController.gameStarted) {
 			dispatch({
 				type: actions.INIT_GAME,
-				payload: initGame(state),
+				payload: initGame(state, 'nameThatTune'),
 			});
 		}
 	}, [dispatch, state]);
