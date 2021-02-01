@@ -41,7 +41,7 @@ const Label = styled.h2`
 	user-select: none;
 `;
 
-export default function ShowControls(props) {
+export default function ShowControls({ projectorMode }) {
 	return (
 		<ShowControlsDiv>
 			<Button
@@ -87,7 +87,7 @@ export default function ShowControls(props) {
 				<img
 					src='media/images/projector.png'
 					alt=''
-					onClick={props.projectorMode}
+					onClick={projectorMode}
 					style={{
 						height: '80px',
 						margin: 'auto',

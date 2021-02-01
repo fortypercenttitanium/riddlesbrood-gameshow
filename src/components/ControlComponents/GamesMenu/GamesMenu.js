@@ -20,11 +20,11 @@ const Title = styled.h1`
 	font-size: 1.8rem;
 `;
 
-export default function GamesMenu(props) {
+export default function GamesMenu({ open }) {
 	return (
 		<GamesMenuDiv
 			onClick={() => {
-				props.open();
+				open();
 			}}
 		>
 			<Title>Games Menu</Title>

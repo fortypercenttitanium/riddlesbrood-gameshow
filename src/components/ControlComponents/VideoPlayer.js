@@ -15,14 +15,15 @@ const VideoContainer = styled.div`
 	right: 0;
 `;
 
-export default function VideoPlayer(props) {
+export default function VideoPlayer({ window }) {
 	let StoreContext;
-	if (props.window === 'controlPanel') {
+	if (window === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (props.window === 'gameboard') {
+	} else if (window === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 	const { state, dispatch } = useContext(StoreContext);
+	console.log(state.VFX);
 	return (
 		<VideoContainer>
 			<video

@@ -11,6 +11,8 @@ module.exports = async function storeAppData(type, filename, data) {
 	const extArray = data.filePaths[0].split('.');
 	const ext = type === 'fx_button' ? extArray[extArray.length - 1] : 'json';
 	const newFileName = `${filename}.${ext}`;
+
+	// format data for each type
 	if (type === 'game_version') {
 		newData = JSON.stringify(data);
 	} else {
@@ -20,11 +22,14 @@ module.exports = async function storeAppData(type, filename, data) {
 			}
 		});
 	}
+
 	if (!types.includes(type)) {
 		throw new Error(
 			"Invalid type. Type must be passed as 'fx_button' or 'game_version'"
 		);
-	} else if (!fs.existsSync(path.join(filePath, newFileName))) {
+	}
+
+	if (!fs.existsSync(path.join(filePath, newFileName))) {
 		try {
 			if (!fs.existsSync(filePath)) {
 				fs.mkdir(filePath, () => {});

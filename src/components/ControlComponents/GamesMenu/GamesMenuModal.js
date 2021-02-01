@@ -75,6 +75,16 @@ const VersionSelectDiv = styled.div`
 	margin: auto;
 `;
 
+const StartButton = styled.button`
+	padding: 1.5rem;
+	font-size: 1.4rem;
+	font-weight: bold;
+	margin: 1rem auto;
+	cursor: pointer;
+	box-shadow: 2px 2px 2px black;
+	border: 1px solid black;
+`;
+
 export default function GamesMenuModal(props) {
 	const { state, dispatch } = useContext(StoreContext);
 	const [localState, setLocalState] = useState({
@@ -237,22 +247,11 @@ export default function GamesMenuModal(props) {
 									})}
 							</div>
 
-							<button
-								style={{
-									padding: '1.5rem',
-									fontSize: '1.4rem',
-									fontWeight: 'bold',
-									margin: '1rem auto',
-									cursor: 'pointer',
-									boxShadow: '2px 2px 2px black',
-									border: '1px solid black',
-								}}
-								disabled={!localState.selectedRating}
-							>
+							<StartButton disabled={!localState.selectedRating}>
 								Start selected{' '}
 								<strong>{localState.selectedRating.toUpperCase()}</strong> rated
 								game
-							</button>
+							</StartButton>
 						</form>
 					</VersionSelectContainer>
 				)}

@@ -1,12 +1,11 @@
-
 import { initialState } from './initialState';
 
-export const reducer = (state, action) => {
-	switch (action.type) {
+export const reducer = (state, { type, payload }) => {
+	switch (type) {
 		case 'CHANGE_FX_BUTTONS':
 			return {
 				...state,
-				fxButtons: action.payload,
+				fxButtons: payload,
 			};
 		case 'CHANGE_VOLUME':
 			return {
@@ -14,14 +13,14 @@ export const reducer = (state, action) => {
 				audio: {
 					volume: {
 						...state.audio.volume,
-						[action.payload.type]: action.payload.level,
+						[payload.type]: payload.level,
 					},
 				},
 			};
 		case 'CHANGE_SCORE':
 			const score = state.gameController.score;
-			score.scoreBoard[action.payload.playerIndex] =
-				score.scoreBoard[action.payload.playerIndex] + action.payload.amount;
+			score.scoreBoard[payload.playerIndex] =
+				score.scoreBoard[payload.playerIndex] + payload.amount;
 			return {
 				...state,
 				gameController: {
@@ -34,7 +33,7 @@ export const reducer = (state, action) => {
 				...state,
 				gameController: {
 					...state.gameController,
-					score: action.payload,
+					score: payload,
 				},
 			};
 		case 'TOGGLE_SCORE_TYPE':
@@ -54,7 +53,7 @@ export const reducer = (state, action) => {
 				...state,
 				gameController: {
 					...state.gameController,
-					currentQuestion: action.payload,
+					currentQuestion: payload,
 				},
 			};
 		case 'SET_ANSWER':
@@ -62,7 +61,7 @@ export const reducer = (state, action) => {
 				...state,
 				gameController: {
 					...state.gameController,
-					currentAnswer: action.payload,
+					currentAnswer: payload,
 				},
 			};
 		case 'SET_TIMER':
@@ -72,7 +71,7 @@ export const reducer = (state, action) => {
 					...state.gameController,
 					timer: {
 						...state.gameController.timer,
-						time: action.payload,
+						time: payload,
 						running: false,
 					},
 				},
@@ -127,7 +126,7 @@ export const reducer = (state, action) => {
 				...state,
 				VFX: {
 					playing: true,
-					file: action.payload,
+					file: payload,
 				},
 			};
 		case 'END_VIDEO':
@@ -162,7 +161,7 @@ export const reducer = (state, action) => {
 			const newState = {
 				open: true,
 				timeline: 'versionSelect',
-				selectedGame: action.payload,
+				selectedGame: payload,
 			};
 			return {
 				...state,
@@ -179,19 +178,19 @@ export const reducer = (state, action) => {
 			return {
 				...state,
 				timeline: 'in-game',
-				currentGame: action.payload,
+				currentGame: payload,
 			};
 		case 'INIT_GAME':
 			return {
 				...state,
-				gameController: action.payload,
+				gameController: payload,
 			};
 		case 'CHANGE_GAME_DISPLAY':
 			return {
 				...state,
 				gameController: {
 					...state.gameController,
-					display: action.payload,
+					display: payload,
 				},
 			};
 		case 'SET_BOARD':
@@ -199,7 +198,7 @@ export const reducer = (state, action) => {
 				...state,
 				gameController: {
 					...state.gameController,
-					board: action.payload,
+					board: payload,
 				},
 			};
 		case 'SET_ACTIVE_TEAM':
@@ -207,7 +206,7 @@ export const reducer = (state, action) => {
 				...state,
 				gameController: {
 					...state.gameController,
-					activeTeam: action.payload,
+					activeTeam: payload,
 				},
 			};
 		case 'SET_CORRECT_COUNTER':
@@ -215,7 +214,7 @@ export const reducer = (state, action) => {
 				...state,
 				gameController: {
 					...state.gameController,
-					correctCounter: action.payload,
+					correctCounter: payload,
 				},
 			};
 		case 'INCREMENT_STREAK':
@@ -239,7 +238,7 @@ export const reducer = (state, action) => {
 				...state,
 				gameController: {
 					...state.gameController,
-					wrongTracker: action.payload,
+					wrongTracker: payload,
 				},
 			};
 		case 'SET_FAMILY_FEUD_XS':
@@ -247,7 +246,7 @@ export const reducer = (state, action) => {
 				...state,
 				gameController: {
 					...state.gameController,
-					wrongModal: action.payload,
+					wrongModal: payload,
 				},
 			};
 		case 'SET_ANSWER_REVEALED':
@@ -255,7 +254,7 @@ export const reducer = (state, action) => {
 				...state,
 				gameController: {
 					...state.gameController,
-					answerRevealed: action.payload,
+					answerRevealed: payload,
 				},
 			};
 		case 'SET_BLOCKS':
@@ -263,7 +262,7 @@ export const reducer = (state, action) => {
 				...state,
 				gameController: {
 					...state.gameController,
-					blocks: action.payload,
+					blocks: payload,
 				},
 			};
 		default:

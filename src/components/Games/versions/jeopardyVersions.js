@@ -1,3 +1,5 @@
+const { ipcRenderer } = window.require('electron');
+
 export const jeopardyVersions = [
 	{
 		title: 'Version 1',
@@ -9,7 +11,7 @@ export const jeopardyVersions = [
 					{
 						value: 100,
 						type: 'video',
-						question: 'jeopardyvideoquestion.mp4',
+						question: 'media/videos/jeopardy/jeopardyvideoquestion.mp4',
 						answer: 'Test Answer 1',
 						completed: false,
 						dailyDouble: true,
@@ -24,8 +26,8 @@ export const jeopardyVersions = [
 					},
 					{
 						value: 300,
-						type: 'text',
-						question: 'Test Question 3',
+						type: 'video',
+						question: 'app://custom_media/test.mp4',
 						answer: 'Test Answer 3',
 						completed: false,
 						dailyDouble: false,

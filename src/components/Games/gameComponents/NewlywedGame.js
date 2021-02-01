@@ -1,3 +1,5 @@
+// remove game
+
 import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { newlywed as versions } from '../versions/gameVersions';
@@ -192,24 +194,6 @@ export default function NewlywedGame(props) {
 	}, [dispatch, state.currentGame.version]);
 
 	const { board, display, currentQuestion, score } = state.gameController;
-
-	// const playSound = (file, type = 'sfx') => {
-	// 	const player =
-	// 		type === 'sfx'
-	// 			? sfxPlayer.current.audioEl.current
-	// 			: musicPlayer.current.audioEl.current;
-	// 	player.src = file;
-	// 	player.play().catch((err) => {
-	// 		console.log(err);
-	// 	});
-	// };
-
-	// const stopSound = () => {
-	// 	sfxPlayer.current.audioEl.current.pause();
-	// 	musicPlayer.current.audioEl.current.pause();
-	// 	sfxPlayer.current.audioEl.current.load();
-	// 	musicPlayer.current.audioEl.current.load();
-	// };
 
 	const nextQuestion = () => {
 		const nextQuestionIndex = board.indexOf(currentQuestion) + 1;

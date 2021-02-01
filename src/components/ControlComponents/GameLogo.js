@@ -16,8 +16,7 @@ const LogoImg = styled.img`
 	margin: auto;
 `;
 
-export default function GameLogo(props) {
-	const { logo } = props;
+export default function GameLogo({ logo }) {
 	return (
 		<GameLogoDiv>
 			<LogoImg

@@ -1,5 +1,6 @@
 const electron = require('electron');
 const path = require('path');
+const fs = require('fs');
 const isDev = require('electron-is-dev');
 const mainWindowConfig = require('./electronHelpers/mainWindowConfig');
 const projectorMode = require('./electronHelpers/projectorMode');
@@ -8,30 +9,52 @@ const {
 	showMessageBox,
 	showErrorBox,
 } = require('./electronHelpers/messageBoxes');
-const { dialog } = require('electron');
+const { dialog, protocol } = require('electron');
+const util = require('util');
+const readFile = util.promisify(fs.readFile);
 
 const iconPath = path.join(__dirname, 'media', 'images', 'icon.png');
 const { app, BrowserWindow, ipcMain } = electron;
 
+// window.userDataPath = app.getpath('userData');
+
+// Dev Tools
+ipcMain.on('TOGGLE_DEV_TOOLS', () => {
+	if (startScreenWindow) {
+		startScreenWindow.webContents.toggleDevTools();
+	} else {
+		mainWindow.webContents.toggleDevTools();
+		gameWindow.webContents.toggleDevTools();
+	}
+});
+
+ipcMain.handle('GET_VIDEO_FILE', async (e, file) => {
+	const fileToSend = await readFile(
+		`${app.getPath('userData')}\\custom_media\\${file}`
+	);
+	return fileToSend;
+});
+
 let mainWindow;
 let gameWindow;
+let startScreenWindow;
 let projectorDisplay;
 
 function createStartScreen() {
 	const startScreenConfig = { ...mainWindowConfig };
 	startScreenConfig.title = 'Riddlesbrood Gameshow App';
-	const startScreenWindow = new BrowserWindow(startScreenConfig);
+	startScreenWindow = new BrowserWindow(startScreenConfig);
 	startScreenWindow.loadURL(
 		isDev
 			? 'http://localhost:3000/'
 			: `file://${path.join(__dirname, '../build/index.html')}`
 	);
+	startScreenWindow.on('closed', () => {
+		startScreenWindow = null;
+	});
 	ipcMain.once('LAUNCH_GAME', () => {
 		createGameWindows();
 		startScreenWindow.close();
-	});
-	ipcMain.on('TOGGLE_DEV_TOOLS', () => {
-		startScreenWindow.webContents.toggleDevTools();
 	});
 	ipcMain.on('STORE_APP_DATA', (e, type, filename, data) => {
 		storeAppData(type, filename, data);
@@ -86,26 +109,9 @@ function createGameWindows() {
 		gameWindow.setFullScreen(true);
 	});
 
-	mainWindow.loadURL(
-		isDev
-			? 'http://localhost:3000/#/play'
-			: `file://${path.join(__dirname, '../build/index.html')}`
-	);
-
-	gameWindow.loadURL(
-		isDev
-			? 'http://localhost:3000/#/gameboard'
-			: `file://${path.join(__dirname, '../build/index.html')}`
-	);
-
-	if (!isDev) {
-		mainWindow.webContents.executeJavaScript("location.assign('#/play');");
-		gameWindow.webContents.executeJavaScript("location.assign('#/gameboard');");
-	}
-
 	mainWindow.on('closed', () => {
-		gameWindow.close();
 		mainWindow = null;
+		gameWindow.close();
 		gameWindow = null;
 		app.quit();
 	});
@@ -127,12 +133,6 @@ function createGameWindows() {
 		gameWindow.webContents.send('WHEEL_GUESS_RECEIVE', key);
 	});
 
-	// Dev Tools
-	ipcMain.on('TOGGLE_DEV_TOOLS', () => {
-		mainWindow.webContents.toggleDevTools();
-		gameWindow.webContents.toggleDevTools();
-	});
-
 	gameWindow.on('focus', () => {
 		mainWindow.focus();
 	});
@@ -142,6 +142,23 @@ function createGameWindows() {
 			e.preventDefault();
 		}
 	});
+
+	mainWindow.loadURL(
+		isDev
+			? 'http://localhost:3000/#/play'
+			: `file://${path.join(__dirname, '../build/index.html')}`
+	);
+
+	gameWindow.loadURL(
+		isDev
+			? 'http://localhost:3000/#/gameboard'
+			: `file://${path.join(__dirname, '../build/index.html')}`
+	);
+
+	if (!isDev) {
+		mainWindow.webContents.executeJavaScript("location.assign('#/play');");
+		gameWindow.webContents.executeJavaScript("location.assign('#/gameboard');");
+	}
 
 	// TODO: rework
 	ipcMain.on('FX_BUTTON_SELECT', (e, index) => {
@@ -183,7 +200,14 @@ function createGameWindows() {
 	});
 }
 
-app.on('ready', createStartScreen);
+app.on('ready', () => {
+	protocol.registerFileProtocol('app', (req, cb) => {
+		const url = req.url.substr(6);
+		const userDataPath = app.getPath('userData');
+		cb({ path: path.join(userDataPath, url) });
+	});
+	createStartScreen();
+});
 
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {

@@ -5,11 +5,11 @@ import * as Games from '../Games/gameComponents/gamesArray';
 import { StoreContext as StoreContextCP } from '../../store/context';
 import { StoreContext as StoreContextGB } from '../../Gameboard';
 
-export default function ControlScreen(props) {
+export default function ControlScreen({ window }) {
 	let StoreContext;
-	if (props.window === 'controlPanel') {
+	if (window === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (props.window === 'gameboard') {
+	} else if (window === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 	const { state } = useContext(StoreContext);
@@ -29,15 +29,15 @@ export default function ControlScreen(props) {
 		CardSharks,
 	} = Games;
 	const components = {
-		Jeopardy: <Jeopardy window={props.window} />,
-		'Family Feud': <FamilyFeud window={props.window} />,
-		'$25,000 Pyramid': <Pyramid window={props.window} />,
-		'Wheel Of Fortune': <Wheel window={props.window} />,
-		'Name That Tune': <NameThatTune window={props.window} />,
-		'What The Hell Is It?': <WhatTheHellIsIt window={props.window} />,
-		'Newlywed Game': <NewlywedGame window={props.window} />,
-		'Couples Conundrum': <CouplesConundrum window={props.window} />,
-		ESP: <ESP window={props.window} />,
+		Jeopardy: <Jeopardy window={window} />,
+		'Family Feud': <FamilyFeud window={window} />,
+		'$25,000 Pyramid': <Pyramid window={window} />,
+		'Wheel Of Fortune': <Wheel window={window} />,
+		'Name That Tune': <NameThatTune window={window} />,
+		'What The Hell Is It?': <WhatTheHellIsIt window={window} />,
+		'Newlywed Game': <NewlywedGame window={window} />,
+		'Couples Conundrum': <CouplesConundrum window={window} />,
+		ESP: <ESP window={window} />,
 		'Card Sharks': <CardSharks />,
 	};
 
@@ -53,7 +53,7 @@ export default function ControlScreen(props) {
 		>
 			{timeline === 'app-open' ? <LogoScreen /> : null}
 			{timeline === 'in-game' ? components[currentGame.title] : null}
-			{VFX.playing && <VideoPlayer window={props.window} file={VFX.file} />}
+			{VFX.playing && <VideoPlayer window={window} />}
 		</div>
 	);
 }

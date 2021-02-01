@@ -1,162 +1,29 @@
 import React, { useContext, useEffect, useRef, useCallback } from 'react';
-import styled from 'styled-components';
-import { wheel as versions } from '../versions/gameVersions';
+import {
+	WheelContainer,
+	Title,
+	CategoryContainer,
+	CategoryCard,
+	Board,
+	UnusedCell,
+	LetterCell,
+	Span,
+	CategoryDisplay,
+	H2,
+	GuessedLettersDisplay,
+	LetterSpan,
+	ReturnButton,
+	SolvePuzzle,
+} from './gameComponentStyles/wheelStyles';
+import renderPuzzle from '../helpers/wheel/renderPuzzle';
+import initGame from '../helpers/wheel/initGame';
+import playSound from '../helpers/shared/audioHelpers';
 import { StoreContext as StoreContextCP } from '../../../store/context';
 import { StoreContext as StoreContextGB } from '../../../Gameboard';
 import { actions } from '../../../store/actions';
 import ReactAudioPlayer from 'react-audio-player';
 
 const { ipcRenderer } = window.require('electron');
-
-const WheelContainer = styled.div`
-	height: 100%;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	background: lightgrey;
-	position: relative;
-`;
-
-const Board = styled.div`
-	margin: 10% auto 0;
-	height: 50%;
-	width: 80%;
-	display: grid;
-	grid-template: repeat(4, 1fr) / repeat(14, 1fr);
-	grid-gap: 2px;
-`;
-
-const Title = styled.h1`
-	display: ${(props) => (props.display === 'select' ? 'inline' : 'none')};
-	margin: 3rem auto;
-	padding: 1rem;
-`;
-
-const CategoryContainer = styled.div`
-	display: ${(props) => (props.display === 'select' ? 'flex' : 'none')};
-	flex-direction: column;
-	height: 50%;
-	width: 30%;
-	margin: auto;
-`;
-
-const CategoryCard = styled.div`
-	display: ${(props) => (props.done ? 'none' : 'flex')};
-	width: 200px;
-	margin: auto;
-	text-align: center;
-	color: white;
-	padding: 1rem;
-	border: 1px solid black;
-	background: rgb(72, 95, 145);
-	background: linear-gradient(
-		149deg,
-		rgba(72, 95, 145, 1) 0%,
-		rgba(68, 90, 136, 1) 31%,
-		rgba(57, 75, 115, 1) 56%,
-		rgba(46, 61, 92, 1) 100%
-	);
-	text-align: center;
-	cursor: pointer;
-	border-radius: 10px;
-	box-shadow: 2px 2px 2px rgba(40, 40, 40, 0.5);
-	&:active {
-		transform: scale(0.95);
-	}
-	&:hover {
-		border-color: white;
-	}
-`;
-
-const LetterCell = styled.div`
-	background: white;
-	display: flex;
-	&.active {
-		background: blue;
-	}
-`;
-
-const UnusedCell = styled.div`
-	background: darkgreen;
-`;
-
-const Span = styled.span`
-	margin: auto;
-	display: none;
-	&.reveal {
-		display: inline;
-	}
-	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif,
-		monospace;
-	font-size: 3rem;
-`;
-
-const LetterSpan = styled.span`
-	margin: 0 10px;
-`;
-
-const ReturnButton = styled.div`
-	padding: 1.4rem;
-	position: absolute;
-	bottom: 40px;
-	left: 0;
-	right: 0;
-	width: 30%;
-	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
-	text-align: center;
-	margin: auto;
-	background: lightblue;
-	cursor: pointer;
-	&:hover {
-		background: white;
-	}
-	display: ${(props) =>
-		props.display === 'board' && props.screen === 'controlPanel'
-			? 'flex'
-			: 'none'};
-`;
-
-const H2 = styled.h2`
-	margin: auto;
-	font-size: 1.5rem;
-	font-weight: bold;
-`;
-
-const SolvePuzzle = styled.div`
-	display: ${(props) =>
-		props.display === 'board' && props.screen === 'controlPanel'
-			? 'flex'
-			: 'none'};
-	position: absolute;
-	top: 15px;
-	padding: 1.2rem;
-	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
-	left: 0;
-	right: 0;
-	width: 25%;
-	margin: auto;
-	background: lightblue;
-	cursor: pointer;
-	&:hover {
-		background: white;
-	}
-`;
-
-const GuessedLettersDisplay = styled.div`
-	display: flex;
-	margin: 0 5%;
-	font-size: 1.5rem;
-	font-weight: bold;
-`;
-
-const CategoryDisplay = styled.div`
-	margin: 2rem auto;
-	padding: 1rem 0;
-	width: 100%;
-	background: linear-gradient(90deg, #444, darkblue, #444);
-	color: white;
-	display: ${(props) => (props.display === 'board' ? 'flex' : 'none')};
-`;
 
 export default function Wheel(props) {
 	let StoreContext;
@@ -175,49 +42,21 @@ export default function Wheel(props) {
 			});
 		}
 		return () => ipcRenderer.removeAllListeners('WHEEL_GUESS_RECEIVE');
-		//linter disabled because using dependencies causes multiple IPC events to fire
-		//eslint-disable-next-line
+		// linter disabled because using dependencies causes multiple IPC events to fire
+		// eslint-disable-next-line
 	}, []);
 
 	let musicPlayer = useRef();
 	let sfxPlayer = useRef();
 
 	useEffect(() => {
-		dispatch({
-			type: actions.INIT_GAME,
-			payload: {
-				display: 'select',
-				currentQuestion: {
-					category: '',
-					puzzle: ' ',
-					guessedLetters: [],
-					solved: false,
-				},
-				board: versions[state.currentGame.version].content,
-				currentAnswer: '',
-				timer: {
-					time: null,
-					running: false,
-					tickSound: '',
-				},
-				score: {
-					type: 'players',
-					scoreBoard: [0, null, null, 0],
-				},
-			},
-		});
-	}, [dispatch, state.currentGame.version]);
-
-	const playSound = (file, type = 'sfx') => {
-		const player =
-			type === 'sfx'
-				? sfxPlayer.current.audioEl.current
-				: musicPlayer.current.audioEl.current;
-		player.src = file;
-		player.play().catch((err) => {
-			console.log(err);
-		});
-	};
+		if (!state.gameController.gameStarted) {
+			dispatch({
+				type: actions.INIT_GAME,
+				payload: initGame(state),
+			});
+		}
+	}, [dispatch, state]);
 
 	const setCategorySolved = (categoryIndex) => {
 		const board = state.gameController.board;
@@ -255,14 +94,20 @@ export default function Wheel(props) {
 			}
 		);
 		if (spans.length === 0) {
-			playSound('media/soundfx/wheelbuzzer.mp3');
+			playSound('media/soundfx/wheelbuzzer.mp3', 'sfx', {
+				sfxPlayer,
+				musicPlayer,
+			});
 		} else {
 			if (index > 0) {
 				spans[index - 1].parentNode.classList.remove('active');
 				spans[index - 1].classList.add('reveal');
 			}
 			if (index < spans.length) {
-				playSound('media/soundfx/wheelding.mp3');
+				playSound('media/soundfx/wheelding.mp3', 'sfx', {
+					sfxPlayer,
+					musicPlayer,
+				});
 				spans[index].parentNode.classList.add('active');
 			}
 			setTimeout(() => {
@@ -348,79 +193,6 @@ export default function Wheel(props) {
 		changeGameDisplay('select');
 	};
 
-	const renderPuzzle = () => {
-		let puzzle = state.gameController.currentQuestion.puzzle;
-		// the four rows to be rendered on the game board
-		let rows = [[], [], [], []];
-		// split answer into array of words
-		let tempArr = puzzle.split(' ');
-		// add spaces after words except the last one
-		tempArr = tempArr.map((word) => {
-			return `${word} `;
-		});
-		// one row answer
-		if (puzzle.length <= 12) {
-			for (let word of tempArr) {
-				rows[1] = [...rows[1], ...word.split('')];
-			}
-		} else if (puzzle.length <= 26) {
-			// two row answer
-			for (let word of tempArr) {
-				// fill in rows starting at top
-				if (rows[2].length === 0 && word.length + rows[1].length <= 14) {
-					rows[1] = [...rows[1], ...word.split('')];
-				} else {
-					rows[2] = [...rows[2], ...word.split('')];
-				}
-			}
-		} else if (puzzle.length <= 38) {
-			// three row answer
-			for (let word of tempArr) {
-				// fill in rows starting at top
-				if (rows[1].length === 0 && word.length + rows[0].length <= 12) {
-					rows[0] = [...rows[0], ...word.split('')];
-				} else if (rows[2].length === 0 && word.length + rows[1].length <= 14) {
-					rows[1] = [...rows[1], ...word.split('')];
-				} else {
-					rows[2] = [...rows[2], ...word.split('')];
-				}
-			}
-		} else if (puzzle.length <= 52) {
-			// four row answer
-			for (let word of tempArr) {
-				// fill in rows starting at top
-				if (rows[1].length === 0 && word.length + rows[0].length <= 12) {
-					rows[0] = [...rows[0], ...word.split('')];
-				} else if (rows[2].length === 0 && word.length + rows[1].length <= 14) {
-					rows[1] = [...rows[1], ...word.split('')];
-				} else if (rows[3].length === 0 && word.length + rows[2].length <= 14) {
-					rows[2] = [...rows[2], ...word.split('')];
-				} else {
-					rows[3] = [...rows[3], ...word.split('')];
-				}
-			}
-		} else {
-			throw new Error('Puzzle length too long');
-		}
-		// fill in outside spaces so rows render centered on the board
-		const rowsRender = rows.map((row) => {
-			// remove whitespace after last words on line
-			if (row.length > 0) {
-				row.pop();
-			}
-			while (row.length < 14) {
-				if (row.length % 2 === 0) {
-					row.unshift(' ');
-					row.push(' ');
-				} else {
-					row.push(' ');
-				}
-			}
-			return row;
-		});
-		return rowsRender;
-	};
-
 	if (!state.gameController.currentQuestion.puzzle) {
 		return <div />;
 	}
@@ -450,7 +222,7 @@ export default function Wheel(props) {
 			{(state.gameController.display === 'board' ||
 				props.window === 'gameboard') && (
 				<Board>
-					{renderPuzzle().map((row) => {
+					{renderPuzzle(state).map((row) => {
 						return row.map((letter, index) => {
 							if (letter === ' ') {
 								return <UnusedCell key={index} />;
