@@ -17,12 +17,14 @@ import {
 	H2,
 	TeamButton,
 } from './gameComponentStyles/pyramidStyles';
-import playSound from '../helpers/shared/audioHelpers';
-import initGame from '../helpers/shared/initGame';
-import { StoreContext as StoreContextCP } from '../../../store/context';
-import { StoreContext as StoreContextGB } from '../../../Gameboard';
-import { actions } from '../../../store/actions';
-import ReactAudioPlayer from 'react-audio-player';
+import {
+	playSound,
+	initGame,
+	StoreContextCP,
+	StoreContextGB,
+	actions,
+	ReactAudioPlayer,
+} from '../helpers/pyramid/imports';
 
 export default function Pyramid(props) {
 	let StoreContext;

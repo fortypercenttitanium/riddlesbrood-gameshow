@@ -48,8 +48,8 @@ export function App() {
 	}, []);
 
 	useEffect(() => {
-		console.log(state.gameController);
-	}, [state.gameController]);
+		console.log(state);
+	}, [state]);
 
 	useEffect(() => {
 		ipcRenderer.on('FX_BUTTON_RECEIVE', (e, fxFile) => {

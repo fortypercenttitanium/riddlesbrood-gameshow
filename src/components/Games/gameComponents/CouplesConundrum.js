@@ -12,11 +12,15 @@ import {
 	ScoreBoardDiv,
 	ScoreCardDiv,
 } from './gameComponentStyles/couplesStyles';
-import initGame from '../helpers/shared/initGame';
-import { StoreContext as StoreContextCP } from '../../../store/context';
-import { StoreContext as StoreContextGB } from '../../../Gameboard';
-import { actions } from '../../../store/actions';
-import ReactAudioPlayer from 'react-audio-player';
+import {
+	initGame,
+	StoreContextCP,
+	StoreContextGB,
+	actions,
+	ReactAudioPlayer,
+	nextQuestion,
+	previousQuestion,
+} from '../helpers/couples/imports';
 
 export default function CouplesConundrum(props) {
 	let StoreContext;
@@ -41,7 +45,13 @@ export default function CouplesConundrum(props) {
 
 	useEffect(() => {
 		if (!gameStarted) {
-			const initState = initGame(state, 'couples', 'start');
+			const initState = {
+				...initGame(state, 'couples', 'board'),
+				score: {
+					type: 'team',
+					scoreBoard: [0, 0, 0, 0],
+				},
+			};
 			initState.currentQuestion = initState.board[0];
 			dispatch({
 				type: actions.INIT_GAME,
@@ -50,23 +60,12 @@ export default function CouplesConundrum(props) {
 		}
 	}, [dispatch, state, gameStarted]);
 
-	const nextQuestion = () => {
-		const nextQuestionIndex = board.indexOf(currentQuestion) + 1;
-		if (nextQuestionIndex <= board.length - 1) {
-			dispatch({
-				type: actions.SET_QUESTION,
-				payload: board[nextQuestionIndex],
-			});
-		}
+	const handleClickPrev = () => {
+		previousQuestion({ board, currentQuestion, dispatch, actions });
 	};
-	const previousQuestion = () => {
-		const prevQuestionIndex = board.indexOf(currentQuestion) - 1;
-		if (prevQuestionIndex >= 0) {
-			dispatch({
-				type: actions.SET_QUESTION,
-				payload: board[prevQuestionIndex],
-			});
-		}
+
+	const handleClickNext = () => {
+		nextQuestion({ board, currentQuestion, dispatch, actions });
 	};
 
 	if (display === '') {
@@ -80,10 +79,10 @@ export default function CouplesConundrum(props) {
 			</TitleContainer>
 			{props.window === 'controlPanel' && (
 				<Controls>
-					<Button onClick={previousQuestion}>
+					<Button onClick={handleClickPrev}>
 						<H3>Previous question</H3>
 					</Button>
-					<Button onClick={nextQuestion}>
+					<Button onClick={handleClickNext}>
 						<H3>Next question</H3>
 					</Button>
 				</Controls>

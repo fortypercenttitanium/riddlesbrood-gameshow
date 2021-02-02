@@ -15,13 +15,15 @@ import {
 	ReturnButton,
 	SolvePuzzle,
 } from './gameComponentStyles/wheelStyles';
-import renderPuzzle from '../helpers/wheel/renderPuzzle';
-import initGame from '../helpers/shared/initGame';
-import playSound from '../helpers/shared/audioHelpers';
-import { StoreContext as StoreContextCP } from '../../../store/context';
-import { StoreContext as StoreContextGB } from '../../../Gameboard';
-import { actions } from '../../../store/actions';
-import ReactAudioPlayer from 'react-audio-player';
+import {
+	renderPuzzle,
+	initGame,
+	playSound,
+	StoreContextCP,
+	StoreContextGB,
+	actions,
+	ReactAudioPlayer,
+} from '../helpers/wheel/imports';
 
 const { ipcRenderer } = window.require('electron');
 

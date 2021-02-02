@@ -10,7 +10,7 @@ import {
 	esp,
 } from '../../../../assets/game_versions/gameVersions';
 
-export default function initGame(state, game, initialDisplay) {
+export default function initGame(state, game, initialDisplay = 'init') {
 	const games = {
 		jeopardy,
 		pyramid,
@@ -43,8 +43,6 @@ export default function initGame(state, game, initialDisplay) {
 		},
 		gameStarted: true,
 	};
-
-	console.log(initState.board);
 
 	return JSON.parse(JSON.stringify(initState));
 }

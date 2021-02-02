@@ -11,17 +11,21 @@ import {
 	ScoreBoardDiv,
 	ScoreCardDiv,
 } from './gameComponentStyles/espStyles';
-import initGame from '../helpers/shared/initGame';
-import { StoreContext as StoreContextCP } from '../../../store/context';
-import { StoreContext as StoreContextGB } from '../../../Gameboard';
-import { actions } from '../../../store/actions';
-import ReactAudioPlayer from 'react-audio-player';
+import {
+	initGame,
+	StoreContextCP,
+	StoreContextGB,
+	actions,
+	ReactAudioPlayer,
+	nextPrompt,
+	previousPrompt,
+} from '../helpers/esp/imports';
 
-export default function ESP(props) {
+export default function ESP({ window }) {
 	let StoreContext;
-	if (props.window === 'controlPanel') {
+	if (window === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (props.window === 'gameboard') {
+	} else if (window === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 
@@ -32,32 +36,29 @@ export default function ESP(props) {
 
 	useEffect(() => {
 		if (!state.gameController.gameStarted) {
+			const initState = {
+				...initGame(state, 'esp', 'board'),
+				score: {
+					type: 'team',
+					scoreBoard: [0, 0],
+				},
+			};
+			initState.currentQuestion = initState.board[0];
 			dispatch({
 				type: actions.INIT_GAME,
-				payload: initGame(state, 'esp'),
+				payload: initState,
 			});
 		}
 	}, [dispatch, state]);
 
 	const { board, display, currentQuestion, score } = state.gameController;
 
-	const nextPrompt = () => {
-		const nextQuestionIndex = board.indexOf(currentQuestion) + 1;
-		if (nextQuestionIndex <= board.length - 1) {
-			dispatch({
-				type: actions.SET_QUESTION,
-				payload: board[nextQuestionIndex],
-			});
-		}
+	const handleClickNext = () => {
+		nextPrompt({ board, currentQuestion, dispatch, actions });
 	};
-	const previousPrompt = () => {
-		const prevQuestionIndex = board.indexOf(currentQuestion) - 1;
-		if (prevQuestionIndex >= 0) {
-			dispatch({
-				type: actions.SET_QUESTION,
-				payload: board[prevQuestionIndex],
-			});
-		}
+
+	const handleClickPrev = () => {
+		previousPrompt({ board, currentQuestion, dispatch, actions });
 	};
 
 	if (display === '') {
@@ -67,19 +68,19 @@ export default function ESP(props) {
 	return (
 		<ESPHomeScreen>
 			<TitleContainer>
-				<Title window={props.window}>{currentQuestion}</Title>
+				<Title window={window}>{currentQuestion}</Title>
 			</TitleContainer>
-			{props.window === 'controlPanel' && (
+			{window === 'controlPanel' && (
 				<Controls>
-					<Button onClick={previousPrompt}>
+					<Button onClick={handleClickPrev}>
 						<H3>Previous prompt</H3>
 					</Button>
-					<Button onClick={nextPrompt}>
+					<Button onClick={handleClickNext}>
 						<H3>Next prompt</H3>
 					</Button>
 				</Controls>
 			)}
-			{props.window === 'gameboard' && (
+			{window === 'gameboard' && (
 				<ScoreBoardDiv>
 					{score.scoreBoard.map((scoreNum, scoreIndex) => {
 						if (scoreNum !== null) {

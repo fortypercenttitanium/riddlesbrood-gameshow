@@ -15,12 +15,18 @@ import {
 	NumberButton,
 	XModal,
 } from './gameComponentStyles/familyFeudStyles';
-import playSound from '../helpers/shared/audioHelpers';
-import initGame from '../helpers/shared/initGame';
-import { StoreContext as StoreContextCP } from '../../../store/context';
-import { StoreContext as StoreContextGB } from '../../../Gameboard';
-import { actions } from '../../../store/actions';
-import ReactAudioPlayer from 'react-audio-player';
+import {
+	initGame,
+	StoreContextCP,
+	StoreContextGB,
+	actions,
+	ReactAudioPlayer,
+	correctHandler,
+	incorrectHandler,
+} from '../helpers/familyFeud/imports';
+import blueWrongIcon from '../../../assets/images/game_images/family_feud/ff-wrong-blue.png';
+import redWrongIcon from '../../../assets/images/game_images/family_feud/ff-wrong-red.png';
+import greyWrongIcon from '../../../assets/images/game_images/family_feud/ff-wrong-grey.png';
 
 export default function FamilyFeud(props) {
 	let StoreContext;
@@ -37,54 +43,27 @@ export default function FamilyFeud(props) {
 
 	useEffect(() => {
 		if (!state.gameController.gameStarted) {
+			const initState = {
+				...initGame(state, 'familyFeud', 'board'),
+				score: { type: 'team', scoreBoard: [0, 0] },
+				wrongTracker: {
+					team1: [false, false, false],
+					team2: [false, false, false],
+				},
+				wrongModal: {
+					display: false,
+					team: '',
+					array: [],
+				},
+			};
 			dispatch({
 				type: actions.INIT_GAME,
-				payload: initGame(state),
+				payload: initState,
 			});
 		}
 	}, [dispatch, state]);
 
 	const { board, display, wrongTracker, wrongModal } = state.gameController;
-
-	const revealAnswer = (answerIndex) => {
-		const board = state.gameController.board;
-		board.answers[answerIndex].revealed = true;
-		dispatch({ type: actions.SET_BOARD, payload: board });
-	};
-
-	const correctHandler = (answerIndex) => {
-		if (!board.answers[answerIndex].revealed) {
-			playSound('media/soundfx/ffding.mp3', 'sfx', {
-				sfxPlayer,
-				musicPlayer,
-			});
-			revealAnswer(answerIndex);
-		}
-	};
-
-	const incorrectHandler = (team, isWrong, index) => {
-		const tracker = JSON.parse(JSON.stringify(wrongTracker));
-		tracker[`team${team}`][index] = !isWrong;
-		if (!isWrong) {
-			playSound('media/soundfx/ffbuzzer.wav', 'sfx', {
-				sfxPlayer,
-				musicPlayer,
-			});
-			dispatch({
-				type: actions.SET_FAMILY_FEUD_XS,
-				payload: { display: true, team: team, array: tracker[`team${team}`] },
-			});
-			setTimeout(() => {
-				dispatch({
-					type: actions.SET_FAMILY_FEUD_XS,
-					payload: { display: false, team: '', array: [] },
-				});
-				dispatch({ type: actions.SET_WRONG_TRACKER, payload: tracker });
-			}, 1500);
-		} else {
-			dispatch({ type: actions.SET_WRONG_TRACKER, payload: tracker });
-		}
-	};
 
 	if (display === '') {
 		return <div />;
@@ -103,9 +82,9 @@ export default function FamilyFeud(props) {
 									}}
 									src={
 										wrongModal.team === 1
-											? 'media/images/ff-wrong-red.png'
+											? redWrongIcon
 											: wrongModal.team === 2
-											? 'media/images/ff-wrong-blue.png'
+											? blueWrongIcon
 											: null
 									}
 									alt=''
@@ -126,14 +105,20 @@ export default function FamilyFeud(props) {
 										key={index}
 										src={
 											isWrong
-												? 'media/images/ff-wrong-red.png'
+												? redWrongIcon
 												: props.window === 'controlPanel'
-												? 'media/images/ff-wrong-grey.png'
+												? greyWrongIcon
 												: null
 										}
 										window={props.window}
 										onClick={() => {
-											incorrectHandler(1, isWrong, index);
+											incorrectHandler(1, isWrong, index, {
+												wrongTracker,
+												sfxPlayer,
+												musicPlayer,
+												dispatch,
+												actions,
+											});
 										}}
 									/>
 								);
@@ -152,14 +137,20 @@ export default function FamilyFeud(props) {
 										key={index}
 										src={
 											isWrong
-												? 'media/images/ff-wrong-blue.png'
+												? blueWrongIcon
 												: props.window === 'controlPanel'
-												? 'media/images/ff-wrong-grey.png'
+												? greyWrongIcon
 												: null
 										}
 										window={props.window}
 										onClick={() => {
-											incorrectHandler(2, isWrong, index);
+											incorrectHandler(2, isWrong, index, {
+												wrongTracker,
+												sfxPlayer,
+												musicPlayer,
+												dispatch,
+												actions,
+											});
 										}}
 									/>
 								);
@@ -177,7 +168,14 @@ export default function FamilyFeud(props) {
 									key={wordIndex}
 									window={props.window}
 									onClick={() => {
-										correctHandler(wordIndex);
+										correctHandler(wordIndex, {
+											board,
+											sfxPlayer,
+											musicPlayer,
+											state,
+											dispatch,
+											actions,
+										});
 									}}
 									side={word.revealed ? 'back' : 'front'}
 								>

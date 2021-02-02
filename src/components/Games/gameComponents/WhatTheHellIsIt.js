@@ -18,12 +18,14 @@ import {
 	ScoreBoardDiv,
 	ScoreCardDiv,
 } from './gameComponentStyles/whatIsItStyles';
-import initGame from '../helpers/shared/initGame';
-import { stopAllSounds } from '../helpers/shared/audioHelpers';
-import { StoreContext as StoreContextCP } from '../../../store/context';
-import { StoreContext as StoreContextGB } from '../../../Gameboard';
-import { actions } from '../../../store/actions';
-import ReactAudioPlayer from 'react-audio-player';
+import {
+	initGame,
+	stopAllSounds,
+	StoreContextCP,
+	StoreContextGB,
+	actions,
+	ReactAudioPlayer,
+} from '../helpers/whatIsIt/imports';
 
 export default function WhatTheHellIsIt(props) {
 	let StoreContext;

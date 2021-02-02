@@ -19,8 +19,8 @@ import {
 	StoreContextGB,
 	actions,
 	importAll,
+	ReactAudioPlayer,
 } from '../helpers/jeopardy/imports';
-import ReactAudioPlayer from 'react-audio-player';
 
 const videos = importAll(
 	require.context('../../../assets/videos/jeopardy', false, /\.mp4$/)

@@ -8,6 +8,7 @@ import importAll from '../shared/importAll';
 import { StoreContext as StoreContextCP } from '../../../../store/context';
 import { StoreContext as StoreContextGB } from '../../../../Gameboard';
 import { actions } from '../../../../store/actions';
+import ReactAudioPlayer from 'react-audio-player';
 
 export {
 	questionOpenSound,
@@ -20,4 +21,5 @@ export {
 	StoreContextGB,
 	actions,
 	importAll,
+	ReactAudioPlayer,
 };

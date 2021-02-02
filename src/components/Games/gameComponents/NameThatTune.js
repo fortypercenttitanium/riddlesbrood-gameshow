@@ -14,11 +14,13 @@ import {
 	ScoreBoardDiv,
 	ScoreCardDiv,
 } from './gameComponentStyles/tuneStyles';
-import initGame from '../helpers/shared/initGame';
-import { StoreContext as StoreContextCP } from '../../../store/context';
-import { StoreContext as StoreContextGB } from '../../../Gameboard';
-import { actions } from '../../../store/actions';
-import ReactAudioPlayer from 'react-audio-player';
+import {
+	initGame,
+	StoreContextGB,
+	StoreContextCP,
+	actions,
+	ReactAudioPlayer,
+} from '../helpers/tune/imports';
 
 export default function NameThatTune(props) {
 	let StoreContext;
