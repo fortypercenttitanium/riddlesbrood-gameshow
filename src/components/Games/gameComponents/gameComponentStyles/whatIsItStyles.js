@@ -178,6 +178,11 @@ const ScoreCardDiv = styled.div`
 	height: 130px;
 `;
 
+const ScoreBody = styled.div`
+	display: flex;
+	margin: auto 0;
+`;
+
 export {
 	WhatHomeScreen,
 	TitleContainer,
@@ -197,4 +202,5 @@ export {
 	Button,
 	ScoreBoardDiv,
 	ScoreCardDiv,
+	ScoreBody,
 };

@@ -1,7 +1,7 @@
 export default function importAll(r) {
-	const videos = {};
+	const files = {};
 	r.keys().forEach((item) => {
-		videos[item.replace('./', '')] = r(item);
+		files[item.replace('./', '')] = r(item);
 	});
-	return videos;
+	return files;
 }

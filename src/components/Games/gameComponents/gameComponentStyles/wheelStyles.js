@@ -149,3 +149,7 @@ export const CategoryDisplay = styled.div`
 	color: white;
 	display: ${(props) => (props.display === 'board' ? 'flex' : 'none')};
 `;
+
+export const CategoryH3 = styled.h3`
+	margin: auto;
+`;

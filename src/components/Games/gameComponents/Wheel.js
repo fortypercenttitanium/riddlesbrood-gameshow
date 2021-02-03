@@ -14,31 +14,40 @@ import {
 	LetterSpan,
 	ReturnButton,
 	SolvePuzzle,
+	CategoryH3,
 } from './gameComponentStyles/wheelStyles';
 import {
 	renderPuzzle,
 	initGame,
-	playSound,
 	StoreContextCP,
 	StoreContextGB,
 	actions,
 	ReactAudioPlayer,
+	setCategorySolved,
+	clickHandlerCategory,
+	setQuestionCallback,
+	checkLettersCallback,
+	guessLetterCallback,
+	activateLetterCellsCallback,
+	keyPressCallback,
+	solvePuzzle,
+	returnHandler,
 } from '../helpers/wheel/imports';
 
 const { ipcRenderer } = window.require('electron');
 
-export default function Wheel(props) {
+export default function Wheel({ window }) {
 	let StoreContext;
-	if (props.window === 'controlPanel') {
+	if (window === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (props.window === 'gameboard') {
+	} else if (window === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 
 	const { state, dispatch } = useContext(StoreContext);
 
 	useEffect(() => {
-		if (props.window === 'gameboard') {
+		if (window === 'gameboard') {
 			ipcRenderer.on('WHEEL_GUESS_RECEIVE', function (e, key) {
 				activateLetterCells(key.toUpperCase());
 			});
@@ -53,129 +62,85 @@ export default function Wheel(props) {
 
 	useEffect(() => {
 		if (!state.gameController.gameStarted) {
+			let initState = {
+				...initGame(state, 'wheel', 'select'),
+				score: {
+					type: 'players',
+					scoreBoard: [0, null, null, 0],
+				},
+			};
 			dispatch({
 				type: actions.INIT_GAME,
-				payload: initGame(state, 'wheel'),
+				payload: initState,
 			});
 		}
 	}, [dispatch, state]);
 
-	const setCategorySolved = (categoryIndex) => {
-		const board = state.gameController.board;
-		board[categoryIndex].solved = true;
-		dispatch({ type: actions.SET_BOARD, payload: board });
-	};
-
-	const changeGameDisplay = (displaySetting) => {
-		dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: displaySetting });
-	};
-
 	const setCurrentQuestion = useCallback(
 		(question) => {
-			dispatch({ type: actions.SET_QUESTION, payload: question });
+			setQuestionCallback(question, { dispatch, actions });
 		},
 		[dispatch]
 	);
 
-	const clickHandlerCategory = (puzzle, index) => {
-		setCurrentQuestion({
-			category: puzzle.category,
-			puzzle: puzzle.puzzle,
-			guessedLetters: [],
-			solved: false,
-		});
-		setCategorySolved(index);
-		dispatch({ type: actions.SET_ANSWER, payload: puzzle.puzzle });
-		changeGameDisplay('board');
-	};
-
 	const activateLetterCells = useCallback((letter, index = 0) => {
-		const spans = Array.from(document.querySelectorAll('span')).filter(
-			(span) => {
-				return span.textContent === letter;
-			}
-		);
-		if (spans.length === 0) {
-			playSound('media/soundfx/wheelbuzzer.mp3', 'sfx', {
-				sfxPlayer,
-				musicPlayer,
-			});
-		} else {
-			if (index > 0) {
-				spans[index - 1].parentNode.classList.remove('active');
-				spans[index - 1].classList.add('reveal');
-			}
-			if (index < spans.length) {
-				playSound('media/soundfx/wheelding.mp3', 'sfx', {
-					sfxPlayer,
-					musicPlayer,
-				});
-				spans[index].parentNode.classList.add('active');
-			}
-			setTimeout(() => {
-				if (index < spans.length) {
-					activateLetterCells(letter, index + 1);
-				}
-			}, 2000);
-		}
+		activateLetterCellsCallback(letter, index, {
+			sfxPlayer,
+			musicPlayer,
+			activateLetterCells,
+		});
 	}, []);
 
 	const checkGuessedLetters = useCallback(
-		(letter) => {
-			return state.gameController.currentQuestion.guessedLetters.includes(
-				letter
-			);
-		},
-		[state.gameController.currentQuestion.guessedLetters]
+		(letter) => checkLettersCallback(letter, { state }),
+		[state]
 	);
 
 	const guessLetter = useCallback(
 		(letter) => {
-			if (!checkGuessedLetters(letter)) {
-				let question = state.gameController.currentQuestion;
-				question.guessedLetters.push(letter);
-				setCurrentQuestion(question);
-			}
+			guessLetterCallback(letter, {
+				checkGuessedLetters,
+				setCurrentQuestion,
+				state,
+			});
 		},
-		[
-			checkGuessedLetters,
-			state.gameController.currentQuestion,
-			setCurrentQuestion,
-		]
+		[checkGuessedLetters, setCurrentQuestion, state]
 	);
 
 	const handleKeyPress = useCallback(
 		(e) => {
-			if (state.gameController.display === 'board') {
-				if (
-					e.keyCode >= 65 &&
-					e.keyCode <= 90 &&
-					!checkGuessedLetters(e.key.toUpperCase())
-				) {
-					guessLetter(e.key.toUpperCase());
-					ipcRenderer.send('WHEEL_GUESS_SEND', e.key);
-					activateLetterCells(e.key.toUpperCase());
-				}
-			}
+			keyPressCallback(e, {
+				state,
+				checkGuessedLetters,
+				guessLetter,
+				ipcRenderer,
+				activateLetterCells,
+			});
 		},
-		[
-			state.gameController.display,
-			guessLetter,
-			checkGuessedLetters,
-			activateLetterCells,
-		]
+		[guessLetter, checkGuessedLetters, activateLetterCells, state]
 	);
 
-	useEffect(() => {
-		window.addEventListener('keydown', handleKeyPress);
-		return () => window.removeEventListener('keydown', handleKeyPress);
-	}, [handleKeyPress]);
-
-	const solvePuzzle = () => {
-		const question = state.gameController.currentQuestion;
-		question.solved = true;
-		dispatch({ type: actions.SET_QUESTION, payload: question });
+	const handleClickCategory = (item, index) => {
+		clickHandlerCategory(item, index, {
+			setCurrentQuestion,
+			dispatch,
+			actions,
+			state,
+		});
 	};
+
+	const handleClickReturn = () => {
+		returnHandler({ setCurrentQuestion, dispatch, actions });
+	};
+
+	const handleClickSolve = () => {
+		solvePuzzle({ state, dispatch, actions });
+	};
+
+	useEffect(() => {
+		document.addEventListener('keydown', handleKeyPress);
+		return () => document.removeEventListener('keydown', handleKeyPress);
+	}, [handleKeyPress]);
 
 	useEffect(() => {
 		if (state.gameController.currentQuestion.solved) {
@@ -185,17 +150,11 @@ export default function Wheel(props) {
 		}
 	});
 
-	const returnHandler = () => {
-		setCurrentQuestion({
-			category: '',
-			puzzle: '',
-			guessedLetters: [],
-			solved: false,
-		});
-		changeGameDisplay('select');
-	};
+	useEffect(() => {
+		console.log(window);
+	});
 
-	if (!state.gameController.currentQuestion.puzzle) {
+	if (!state.gameController.gameStarted) {
 		return <div />;
 	}
 
@@ -204,7 +163,7 @@ export default function Wheel(props) {
 			<Title display={state.gameController.display}>
 				Please select puzzle:
 			</Title>
-			{props.window === 'controlPanel' && (
+			{window === 'controlPanel' && (
 				<CategoryContainer display={state.gameController.display}>
 					{state.gameController.board.map((item, index) => {
 						return (
@@ -212,17 +171,16 @@ export default function Wheel(props) {
 								done={item.solved}
 								key={index}
 								onClick={() => {
-									clickHandlerCategory(item, index);
+									handleClickCategory(item, index);
 								}}
 							>
-								<h3 style={{ margin: 'auto' }}>{item.puzzle}</h3>
+								<CategoryH3>{item.puzzle}</CategoryH3>
 							</CategoryCard>
 						);
 					})}
 				</CategoryContainer>
 			)}
-			{(state.gameController.display === 'board' ||
-				props.window === 'gameboard') && (
+			{(state.gameController.display === 'board' || window === 'gameboard') && (
 				<Board>
 					{renderPuzzle(state).map((row) => {
 						return row.map((letter, index) => {
@@ -231,7 +189,7 @@ export default function Wheel(props) {
 							} else {
 								return (
 									<LetterCell key={index}>
-										<Span>{letter}</Span>
+										<Span data-cell>{letter}</Span>
 									</LetterCell>
 								);
 							}
@@ -251,19 +209,19 @@ export default function Wheel(props) {
 				</GuessedLettersDisplay>
 			)}
 			{state.gameController.currentQuestion.solved &&
-				props.window === 'controlPanel' && (
+				window === 'controlPanel' && (
 					<ReturnButton
-						screen={props.window}
+						screen={window}
 						display={state.gameController.display}
-						onClick={returnHandler}
+						onClick={handleClickReturn}
 					>
 						<H2>Select New Puzzle</H2>
 					</ReturnButton>
 				)}
 			<SolvePuzzle
 				display={state.gameController.display}
-				screen={props.window}
-				onClick={solvePuzzle}
+				screen={window}
+				onClick={handleClickSolve}
 			>
 				<H2>Solve puzzle</H2>
 			</SolvePuzzle>

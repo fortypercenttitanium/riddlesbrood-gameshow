@@ -13,7 +13,7 @@ import minus from '../../../assets/images/icons/minus.svg';
 import upArrow from '../../../assets/images/icons/uparrow.png';
 import downArrow from '../../../assets/images/icons/downarrow.png';
 import buzzer from '../../../assets/sound_fx/buzzer.mp3';
-import pyramidBell from '../../../assets/sound_fx/pyramidbell.mp3';
+import pyramidBell from '../../../assets/sound_fx/pyramid/pyramidbell.mp3';
 import { StoreContext } from '../../../store/context';
 import { actions } from '../../../store/actions';
 

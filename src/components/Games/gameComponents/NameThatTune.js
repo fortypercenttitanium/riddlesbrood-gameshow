@@ -20,7 +20,23 @@ import {
 	StoreContextCP,
 	actions,
 	ReactAudioPlayer,
+	playPauseHandler,
+	rewindHandler,
+	toggleReveal,
+	nextSong,
+	importAll,
+	playButton,
+	pauseButton,
+	rewindButton,
 } from '../helpers/tune/imports';
+
+const songs = importAll(
+	require.context(
+		'../../../assets/sound_fx/name_that_tune',
+		false,
+		/\.mp3$|.wav$/
+	)
+);
 
 export default function NameThatTune(props) {
 	let StoreContext;
@@ -36,62 +52,48 @@ export default function NameThatTune(props) {
 	let sfxPlayer = useRef();
 
 	useEffect(() => {
+		console.log(state.gameController.currentQuestion);
+	});
+
+	useEffect(() => {
 		if (!state.gameController.gameStarted) {
+			let initState = { ...initGame(state, 'nameThatTune', 'board') };
+			initState = {
+				...initState,
+				currentQuestion: initState.board[0],
+				currentAnswer: `${initState.board[0].title} - ${initState.board[0].artist}`,
+			};
 			dispatch({
 				type: actions.INIT_GAME,
-				payload: initGame(state, 'nameThatTune'),
+				payload: initState,
 			});
 		}
 	}, [dispatch, state]);
 
 	const { board, display, currentQuestion, score } = state.gameController;
 
-	const playPauseHandler = () => {
-		const player = musicPlayer.current.audioEl.current;
-		const currentQuestionCopy = currentQuestion;
-		if (!currentQuestion.isPlaying && player.currentTime < 1) {
-			currentQuestionCopy.isPlaying = true;
-			dispatch({ type: actions.SET_QUESTION, payload: currentQuestionCopy });
-			player.src = `media/soundfx/namethattune/${currentQuestion.file}`;
-			player.play().catch((err) => console.log(err));
-		} else if (currentQuestion.isPlaying) {
-			player.pause();
-			currentQuestionCopy.isPlaying = false;
-			dispatch({ type: actions.SET_QUESTION, payload: currentQuestionCopy });
-		} else {
-			currentQuestionCopy.isPlaying = true;
-			dispatch({ type: actions.SET_QUESTION, payload: currentQuestionCopy });
-			player.play();
-		}
+	const handleClickRewind = () => {
+		rewindHandler({ musicPlayer, currentQuestion, dispatch, actions });
 	};
 
-	const rewindHandler = () => {
-		const player = musicPlayer.current.audioEl.current;
-		const currentQuestionCopy = currentQuestion;
-		currentQuestionCopy.isPlaying = false;
-		dispatch({ type: actions.SET_QUESTION, payload: currentQuestionCopy });
-		player.load();
+	const handleClickPlayPause = () => {
+		playPauseHandler({
+			musicPlayer,
+			currentQuestion,
+			dispatch,
+			actions,
+			songs,
+		});
 	};
 
-	const toggleReveal = (setting = !state.gameController.answerRevealed) => {
-		dispatch({ type: actions.SET_ANSWER_REVEALED, payload: setting });
-	};
-
-	const nextSong = () => {
-		const player = musicPlayer.current.audioEl.current;
-		const nextQuestionIndex = board.indexOf(currentQuestion) + 1;
-		if (nextQuestionIndex <= board.length - 1) {
-			player.load();
-			toggleReveal(false);
-			dispatch({
-				type: actions.SET_QUESTION,
-				payload: board[nextQuestionIndex],
-			});
-			dispatch({
-				type: actions.SET_ANSWER,
-				payload: `${board[nextQuestionIndex].title} - ${board[nextQuestionIndex].artist}`,
-			});
-		}
+	const handleClickNext = () => {
+		nextSong({
+			musicPlayer,
+			board,
+			currentQuestion,
+			dispatch,
+			actions,
+		});
 	};
 
 	if (display === '') {
@@ -120,29 +122,28 @@ export default function NameThatTune(props) {
 				</Artist>
 			</TitleContainer>
 			<PlayerContainer>
+				<AudioImg onClick={handleClickRewind} src={rewindButton} alt='' />
 				<AudioImg
-					onClick={rewindHandler}
-					src='media/images/rewind-button.png'
+					src={currentQuestion.isPlaying ? pauseButton : playButton}
 					alt=''
-				/>
-				<AudioImg
-					src={
-						currentQuestion.isPlaying
-							? 'media/images/pause-button.png'
-							: 'media/images/play-button.png'
-					}
-					alt=''
-					onClick={playPauseHandler}
+					onClick={handleClickPlayPause}
 				/>
 			</PlayerContainer>
 			{props.window === 'controlPanel' && (
 				<Controls>
-					<Button onClick={() => toggleReveal()}>
+					<Button
+						onClick={() =>
+							toggleReveal(!state.gameController.answerRevealed, {
+								dispatch,
+								actions,
+							})
+						}
+					>
 						<H3>
 							{state.gameController.answerRevealed ? 'Unreveal' : 'Reveal'}
 						</H3>
 					</Button>
-					<Button onClick={nextSong}>
+					<Button onClick={handleClickNext}>
 						<H3>Next song</H3>
 					</Button>
 				</Controls>

@@ -24,6 +24,13 @@ import {
 	StoreContextGB,
 	actions,
 	ReactAudioPlayer,
+	tickSound,
+	buzzer,
+	correctHandler,
+	incorrectHandler,
+	changeGameDisplay,
+	setActiveTeam,
+	clickHandlerCategory,
 } from '../helpers/pyramid/imports';
 
 export default function Pyramid(props) {
@@ -41,16 +48,29 @@ export default function Pyramid(props) {
 
 	useEffect(() => {
 		if (!state.gameController.gameStarted) {
+			let initState = {
+				...initGame(state, 'pyramid', 'board'),
+				timer: {
+					time: null,
+					running: false,
+					tickSound,
+				},
+				score: {
+					type: 'team',
+					scoreBoard: [0, 0],
+				},
+				activeTeam: 0,
+			};
 			dispatch({
 				type: actions.INIT_GAME,
-				payload: initGame(state, 'pyramid'),
+				payload: initState,
 			});
 		}
 	}, [dispatch, state]);
 
 	useEffect(() => {
 		if (state.gameController.timer.time === 0) {
-			playSound('media/soundfx/buzzer.mp3', 'sfx', {
+			playSound(buzzer, 'sfx', {
 				sfxPlayer,
 				musicPlayer,
 			});
@@ -59,119 +79,36 @@ export default function Pyramid(props) {
 		}
 	}, [state.gameController.timer.time, dispatch]);
 
-	const setCategoryCompleted = (categoryIndex) => {
-		const board = state.gameController.board;
-		board[categoryIndex].completed = true;
-		dispatch({ type: actions.SET_BOARD, payload: board });
-	};
-
-	const changeGameDisplay = (display) => {
-		dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: display });
-	};
-
-	const setActiveTeam = (team) => {
-		dispatch({ type: actions.SET_ACTIVE_TEAM, payload: team });
-	};
-
-	const setCurrentQuestion = (question) => {
-		dispatch({ type: actions.SET_QUESTION, payload: question });
-	};
-
-	const setCorrectCounter = (count = 0) => {
-		dispatch({ type: actions.SET_CORRECT_COUNTER, payload: count });
-	};
-
-	const incrementStreak = () => {
-		dispatch({ type: actions.INCREMENT_STREAK });
-	};
-
-	const resetStreak = () => {
-		dispatch({ type: actions.RESET_STREAK });
-	};
-
-	const addBonusTime = (seconds) => {
-		dispatch({
-			type: actions.SET_TIMER,
-			payload: state.gameController.timer.time + seconds,
-		});
-		dispatch({ type: actions.RUN_TIMER });
-		playSound('media/soundfx/ohyeah.wav', 'sfx', {
+	const handleClickCorrect = () => {
+		correctHandler(state.gameController.activeTeam, {
+			dispatch,
+			actions,
+			state,
 			sfxPlayer,
 			musicPlayer,
 		});
 	};
 
-	const clickHandlerCategory = (question, index) => {
-		if (state.gameController.activeTeam !== 0) {
-			setCategoryCompleted(index);
-			changeGameDisplay('question');
-			setCurrentQuestion({
-				category: question.category,
-				words: question.words,
-				index: 0,
-			});
-			setCorrectCounter();
-			resetStreak();
-			dispatch({ type: actions.SET_TIMER, payload: 20 });
-			dispatch({ type: actions.RUN_TIMER });
-		} else {
-			alert('Please select active team');
-		}
-	};
-
-	const checkIfRoundOver = () => {
-		if (
-			state.gameController.currentQuestion.index ===
-			state.gameController.currentQuestion.words.length - 1
-		) {
-			changeGameDisplay('roundOver');
-			setCurrentQuestion({
-				category: '',
-				words: [],
-				index: 0,
-			});
-			dispatch({ type: actions.KILL_TIMER });
-			return true;
-		} else return false;
-	};
-
-	const nextQuestion = () => {
-		if (!checkIfRoundOver()) {
-			setCurrentQuestion({
-				category: state.gameController.currentQuestion.category,
-				words: state.gameController.currentQuestion.words,
-				index: state.gameController.currentQuestion.index + 1,
-			});
-		}
-	};
-
-	const correctHandler = (team) => {
-		if (state.gameController.streak === 9) {
-			addBonusTime(5);
-		} else if (state.gameController.streak === 14) {
-			addBonusTime(10);
-		} else {
-			playSound('media/soundfx/pyramidbell.mp3', 'sfx', {
-				sfxPlayer,
-				musicPlayer,
-			});
-		}
-		setCorrectCounter(state.gameController.correctCounter + 1);
-		nextQuestion();
-		dispatch({
-			type: actions.CHANGE_SCORE,
-			payload: { playerIndex: team - 1, amount: 1 },
-		});
-		incrementStreak();
-	};
-
-	const incorrectHandler = () => {
-		nextQuestion();
-		playSound('media/soundfx/buzzer.mp3', 'sfx', {
+	const handleClickIncorrect = () => {
+		incorrectHandler({
 			sfxPlayer,
 			musicPlayer,
+			state,
+			dispatch,
+			actions,
 		});
-		resetStreak();
+	};
+
+	const handleClickReturn = () => {
+		changeGameDisplay('board', { dispatch, actions });
+	};
+
+	const handleClickSetActive = (teamNumber) => {
+		setActiveTeam(teamNumber, { dispatch, actions });
+	};
+
+	const handleClickCategory = (item, index) => {
+		clickHandlerCategory(item, index, { state, dispatch, actions });
 	};
 
 	return (
@@ -208,12 +145,7 @@ export default function Pyramid(props) {
 					{state.gameController.display === 'question' ? (
 						<ModalContainer>
 							{props.window === 'controlPanel' && (
-								<Button
-									onClick={() => {
-										correctHandler(state.gameController.activeTeam);
-									}}
-									type='correct'
-								>
+								<Button onClick={handleClickCorrect} type='correct'>
 									<H2>Correct</H2>
 								</Button>
 							)}
@@ -225,20 +157,14 @@ export default function Pyramid(props) {
 								}
 							</H2>
 							{props.window === 'controlPanel' && (
-								<Button onClick={incorrectHandler} type='incorrect'>
+								<Button onClick={handleClickIncorrect} type='incorrect'>
 									<H2>Wrong/Pass</H2>
 								</Button>
 							)}
 						</ModalContainer>
 					) : (
 						<ModalContainer>
-							<Button
-								onClick={() => {
-									changeGameDisplay('board');
-								}}
-							>
-								Return To Categories
-							</Button>
+							<Button onClick={handleClickReturn}>Return To Categories</Button>
 						</ModalContainer>
 					)}
 				</ModalContainer>
@@ -253,7 +179,7 @@ export default function Pyramid(props) {
 					team={1}
 					activeTeam={state.gameController.activeTeam}
 					onClick={() => {
-						setActiveTeam(1);
+						handleClickSetActive(1);
 					}}
 				>
 					<H2>Team 1</H2>
@@ -262,7 +188,7 @@ export default function Pyramid(props) {
 					team={2}
 					activeTeam={state.gameController.activeTeam}
 					onClick={() => {
-						setActiveTeam(2);
+						handleClickSetActive(2);
 					}}
 				>
 					<H2>Team 2</H2>
@@ -283,7 +209,7 @@ export default function Pyramid(props) {
 								gridArea={`cat${index + 1}`}
 								done={item.completed}
 								onClick={() => {
-									clickHandlerCategory(item, index);
+									handleClickCategory(item, index);
 								}}
 							>
 								<Span>{item.category}</Span>

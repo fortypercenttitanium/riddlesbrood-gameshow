@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import pyramidBox from '../../../../assets/images/game_images/pyramid/pyramid-box.png';
 
 const PyramidHomeScreen = styled.div`
 	height: 100%;
@@ -63,7 +64,7 @@ const CategoryContainer = styled.div`
 const CategoryCard = styled.div`
 	background-size: cover;
 	height: 80px;
-	background-image: url('media/images/pyramid-box.png');
+	background-image: url(${pyramidBox});
 	grid-area: ${(props) => props.gridArea};
 	text-align: center;
 	display: ${(props) => (props.done ? 'none' : 'flex')};

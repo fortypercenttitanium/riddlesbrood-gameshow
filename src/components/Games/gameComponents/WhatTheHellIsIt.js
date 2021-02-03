@@ -17,6 +17,7 @@ import {
 	Button,
 	ScoreBoardDiv,
 	ScoreCardDiv,
+	ScoreBody,
 } from './gameComponentStyles/whatIsItStyles';
 import {
 	initGame,
@@ -25,7 +26,23 @@ import {
 	StoreContextGB,
 	actions,
 	ReactAudioPlayer,
+	playPauseHandler,
+	toggleTitleReveal,
+	nextPicture,
+	revealHandleCallback,
+	veilImage,
+	importAll,
+	playButton,
+	pauseButton,
 } from '../helpers/whatIsIt/imports';
+
+const pictures = importAll(
+	require.context(
+		'../../../assets/images/game_images/what_is_it',
+		false,
+		/\.jpg$|\.jpeg$|\.png$/
+	)
+);
 
 export default function WhatTheHellIsIt(props) {
 	let StoreContext;
@@ -42,9 +59,43 @@ export default function WhatTheHellIsIt(props) {
 
 	useEffect(() => {
 		if (!state.gameController.gameStarted) {
+			let initState = { ...initGame(state, 'whatTheHellIsIt') };
+			initState = {
+				...initState,
+				currentQuestion: initState.board[0],
+				currentAnswer: initState.board[0].title,
+				timer: {
+					time: 24,
+					running: false,
+					tickSound: '',
+				},
+				score: {
+					type: 'player',
+					scoreBoard: [0, 0, 0, 0],
+				},
+				answerRevealed: false,
+				blocks: [
+					true,
+					true,
+					true,
+					true,
+					true,
+					true,
+					true,
+					true,
+					true,
+					true,
+					true,
+					true,
+					true,
+					true,
+					true,
+					true,
+				],
+			};
 			dispatch({
 				type: actions.INIT_GAME,
-				payload: initGame(state, 'whatTheHellIsIt'),
+				payload: initState,
 			});
 		}
 	}, [dispatch, state]);
@@ -58,110 +109,58 @@ export default function WhatTheHellIsIt(props) {
 		blocks,
 	} = state.gameController;
 
-	const playPauseHandler = () => {
-		const player = sfxPlayer.current.audioEl.current;
-		if (!timer.running && blocks.every((block) => block)) {
-			player.src = 'media/soundfx/ticktock.wav';
-			player.play().catch((err) => console.log(err));
-			dispatch({ type: actions.RUN_TIMER });
-		} else if (timer.running) {
-			player.pause();
-			dispatch({ type: actions.PAUSE_TIMER });
-		} else if (timer.time > 0) {
-			dispatch({ type: actions.RUN_TIMER });
-			player.play();
-		}
+	const revealHandler = useCallback(revealHandleCallback, [blocks, dispatch]);
+
+	const handleClickReveal = () => {
+		toggleTitleReveal(!state.gameController.answerRevealed, {
+			dispatch,
+			actions,
+			sfxPlayer,
+			musicPlayer,
+		});
 	};
 
-	const toggleTitleReveal = (
-		setting = !state.gameController.answerRevealed
-	) => {
-		dispatch({ type: actions.SET_ANSWER_REVEALED, payload: setting });
-		setting && clearBlocks();
-		setting && dispatch({ type: actions.KILL_TIMER });
-		stopAllSounds({ sfxPlayer, musicPlayer });
+	const handleClickPlayPause = () => {
+		playPauseHandler({ sfxPlayer, timer, blocks, dispatch, actions });
 	};
 
-	const nextPicture = () => {
-		const nextQuestionIndex = board.indexOf(currentQuestion) + 1;
-		if (nextQuestionIndex <= board.length - 1) {
-			resetBlocks();
-			dispatch({ type: actions.SET_TIMER, payload: 24 });
-			toggleTitleReveal(false);
-			dispatch({
-				type: actions.SET_QUESTION,
-				payload: board[nextQuestionIndex],
-			});
-			dispatch({
-				type: actions.SET_ANSWER,
-				payload: board[nextQuestionIndex].title,
-			});
-		}
+	const handleClickNext = () => {
+		nextPicture({
+			board,
+			currentQuestion,
+			dispatch,
+			actions,
+			sfxPlayer,
+			musicPlayer,
+		});
 	};
-
-	const resetBlocks = () => {
-		let arr = [];
-		for (let i = 0; i < 16; i++) {
-			arr.push(true);
-		}
-		dispatch({ type: actions.SET_BLOCKS, payload: arr });
-	};
-	const clearBlocks = () => {
-		let arr = [];
-		for (let i = 0; i < 16; i++) {
-			arr.push(false);
-		}
-		dispatch({ type: actions.SET_BLOCKS, payload: arr });
-	};
-
-	const revealHandler = useCallback(
-		(level) => {
-			// order in which the blocks will be removed
-			const removalOrder = [
-				[7, 14],
-				[11, 12],
-				[0, 2],
-				[3, 8],
-				[13, 15],
-				[1, 4],
-				[5, 10],
-				[6, 9],
-			];
-			// find the index of the level we are at
-			const removal = removalOrder[level - 1];
-			const newBlocks = blocks;
-			removal.forEach((num) => (newBlocks[num] = false));
-			dispatch({ type: actions.SET_BLOCKS, payload: newBlocks });
-		},
-		[blocks, dispatch]
-	);
 
 	useEffect(() => {
 		if (timer.running) {
 			switch (timer.time) {
 				case 21:
-					revealHandler(1);
+					revealHandler(1, { blocks, dispatch, actions });
 					break;
 				case 18:
-					revealHandler(2);
+					revealHandler(2, { blocks, dispatch, actions });
 					break;
 				case 15:
-					revealHandler(3);
+					revealHandler(3, { blocks, dispatch, actions });
 					break;
 				case 12:
-					revealHandler(4);
+					revealHandler(4, { blocks, dispatch, actions });
 					break;
 				case 9:
-					revealHandler(5);
+					revealHandler(5, { blocks, dispatch, actions });
 					break;
 				case 6:
-					revealHandler(6);
+					revealHandler(6, { blocks, dispatch, actions });
 					break;
 				case 3:
-					revealHandler(7);
+					revealHandler(7, { blocks, dispatch, actions });
 					break;
 				case 0:
-					revealHandler(8);
+					revealHandler(8, { blocks, dispatch, actions });
 					dispatch({ type: actions.KILL_TIMER });
 					stopAllSounds({ sfxPlayer, musicPlayer });
 					break;
@@ -169,7 +168,7 @@ export default function WhatTheHellIsIt(props) {
 					break;
 			}
 		}
-	}, [timer, dispatch, revealHandler]);
+	}, [timer, dispatch, revealHandler, blocks]);
 
 	if (display === '') {
 		return <div />;
@@ -193,10 +192,16 @@ export default function WhatTheHellIsIt(props) {
 					!timer.running &&
 					!state.gameController.answerRevealed && (
 						<Veil>
-							<VeilImg src='media/images/whatthehellisit/veil.png' />
+							<VeilImg src={veilImage} />
 						</Veil>
 					)}
-				<GameImg src={`media/images/whatthehellisit/${currentQuestion.file}`} />
+				<GameImg
+					src={
+						currentQuestion.file.slice(6) === 'app://'
+							? currentQuestion.file
+							: pictures[currentQuestion.file]
+					}
+				/>
 				<BlocksDiv>
 					{blocks.map((block, blockIndex) =>
 						block ? (
@@ -209,21 +214,17 @@ export default function WhatTheHellIsIt(props) {
 			</PictureDiv>
 			{props.window === 'controlPanel' && (
 				<Controls>
-					<Button onClick={() => toggleTitleReveal()}>
+					<Button onClick={handleClickReveal}>
 						<H3>
 							{state.gameController.answerRevealed ? 'Unreveal' : 'Reveal'}
 						</H3>
 					</Button>
 					<AudioImg
-						src={
-							timer.running
-								? 'media/images/pause-button.png'
-								: 'media/images/play-button.png'
-						}
+						src={timer.running ? pauseButton : playButton}
 						alt=''
-						onClick={playPauseHandler}
+						onClick={handleClickPlayPause}
 					/>
-					<Button onClick={nextPicture}>
+					<Button onClick={handleClickNext}>
 						<H3>Next picture</H3>
 					</Button>
 				</Controls>
@@ -236,14 +237,9 @@ export default function WhatTheHellIsIt(props) {
 								<ScoreH2>
 									{score.type === 'player' ? 'Player' : 'Team'} {scoreIndex + 1}
 								</ScoreH2>
-								<div
-									style={{
-										display: 'flex',
-										margin: 'auto 0',
-									}}
-								>
+								<ScoreBody>
 									<ScoreH1>{scoreNum}</ScoreH1>
-								</div>
+								</ScoreBody>
 							</ScoreCardDiv>
 						);
 					})}
