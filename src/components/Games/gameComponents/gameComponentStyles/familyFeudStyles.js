@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import ffBackground from '../../../../assets/images/backgrounds/ffbackground.svg';
 
 const FamilyFeudHomeScreen = styled.div`
 	display: flex;
@@ -23,7 +24,7 @@ const GameBoard = styled.div`
 	width: 98%;
 	height: 98%;
 	margin: auto;
-	background: url('media/images/backgrounds/ffbackground.svg') #0c4779;
+	background: url(${ffBackground}) #0c4779;
 	background-repeat: repeat;
 	background-position: center center;
 	box-shadow: 0 1px 24px 1px rgba(0, 0, 0, 0.48);

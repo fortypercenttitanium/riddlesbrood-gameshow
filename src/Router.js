@@ -1,7 +1,7 @@
 import React from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
-import App from './App';
-import Gameboard from './Gameboard';
+import App from './components/MainComponents/App';
+import Gameboard from './components/MainComponents/Gameboard';
 import StartScreen from './components/SettingsComponent/StartScreen';
 
 const Router = () => (

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { VideoContainer } from './VideoPlayerStyles';
 import { StoreContext as StoreContextCP } from '../../../store/context';
-import { StoreContext as StoreContextGB } from '../../../Gameboard';
+import { StoreContext as StoreContextGB } from '../../MainComponents/Gameboard';
 
 export default function VideoPlayer({ window }) {
 	let StoreContext;

@@ -1,7 +1,7 @@
 import React, { useEffect, createContext, useState } from 'react';
-import ControlScreen from './components/ControlComponents/ControlScreen/ControlScreen';
-import GameboardContainer from './GameboardStyles';
-import { initialState } from './store/initialState';
+import ControlScreen from '../ControlComponents/ControlScreen/ControlScreen';
+import { GameboardContainer } from './GameboardStyles';
+import { initialState } from '../../store/initialState';
 const { ipcRenderer } = window.require('electron');
 
 export const StoreContext = createContext();

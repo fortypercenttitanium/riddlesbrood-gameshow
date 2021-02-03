@@ -1,14 +1,11 @@
 import React from 'react';
-import { LogoScreenDiv } from './LogoScreenStyles';
+import { LogoScreenDiv, LogoScreenImg } from './LogoScreenStyles';
+import RBLogo from '../../../assets/images/logos/RB Logo.jpg';
 
 export default function LogoScreen() {
 	return (
 		<LogoScreenDiv>
-			<img
-				src='media/images/logos/RB Logo.jpg'
-				alt=''
-				style={{ margin: 'auto' }}
-			/>
+			<LogoScreenImg src={RBLogo} alt='' />
 		</LogoScreenDiv>
 	);
 }

@@ -7,4 +7,8 @@ const LogoScreenDiv = styled.div`
 	display: flex;
 `;
 
-export { LogoScreenDiv };
+const LogoScreenImg = styled.img`
+	margin: auto;
+`;
+
+export { LogoScreenDiv, LogoScreenImg };

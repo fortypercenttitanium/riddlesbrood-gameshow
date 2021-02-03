@@ -53,7 +53,7 @@ const modalClick = ({ state, dispatch, sfxPlayer, musicPlayer }) => {
 			});
 		} else {
 			changeGameDisplay('question', { dispatch, actions });
-			playSound('media/soundfx/open.wav', 'sfx', { sfxPlayer, musicPlayer });
+			playSound(questionOpenSound, 'sfx', { sfxPlayer, musicPlayer });
 			dispatch({ type: actions.SET_TIMER, payload: 13 });
 			dispatch({ type: actions.RUN_TIMER });
 		}

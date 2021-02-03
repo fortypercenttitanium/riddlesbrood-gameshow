@@ -4,7 +4,7 @@ import LogoScreen from '../LogoScreen/LogoScreen';
 import { ControlScreenContainer } from './ControlScreenStyles';
 import * as Games from '../../Games/helpers/shared/gamesArray';
 import { StoreContext as StoreContextCP } from '../../../store/context';
-import { StoreContext as StoreContextGB } from '../../../Gameboard';
+import { StoreContext as StoreContextGB } from '../../MainComponents/Gameboard';
 
 export default function ControlScreen({ window }) {
 	let StoreContext;

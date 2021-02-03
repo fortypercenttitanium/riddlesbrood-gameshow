@@ -53,7 +53,7 @@ export const initialState = {
 			type: null,
 		},
 	],
-	timeline: 'init',
+	timeline: 'app-open',
 	currentGame: {
 		title: '',
 		logo: '',
