@@ -1,4 +1,6 @@
 import { playSound } from './imports';
+import ding from '../../../../assets/sound_fx/family_feud/ffding.mp3';
+import buzzer from '../../../../assets/sound_fx/family_feud/ffbuzzer.wav';
 
 const revealAnswer = (answerIndex, { state, dispatch, actions }) => {
 	const board = state.gameController.board;
@@ -11,7 +13,7 @@ const correctHandler = (
 	{ board, sfxPlayer, musicPlayer, state, dispatch, actions }
 ) => {
 	if (!board.answers[answerIndex].revealed) {
-		playSound('media/soundfx/ffding.mp3', 'sfx', {
+		playSound(ding, 'sfx', {
 			sfxPlayer,
 			musicPlayer,
 		});
@@ -28,7 +30,7 @@ const incorrectHandler = (
 	const tracker = JSON.parse(JSON.stringify(wrongTracker));
 	tracker[`team${team}`][index] = !isWrong;
 	if (!isWrong) {
-		playSound('media/soundfx/ffbuzzer.wav', 'sfx', {
+		playSound(buzzer, 'sfx', {
 			sfxPlayer,
 			musicPlayer,
 		});

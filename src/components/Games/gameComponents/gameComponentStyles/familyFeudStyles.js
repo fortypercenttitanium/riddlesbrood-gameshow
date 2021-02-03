@@ -178,6 +178,15 @@ const XModal = styled.div`
 	margin: auto;
 	z-index: 2;
 `;
+
+const WrongModalImg = styled.img`
+	width: ${(props) => props.width};
+`;
+
+const DivAutoMargin = styled.div`
+	margin: auto;
+`;
+
 export {
 	FamilyFeudHomeScreen,
 	GameBoard,
@@ -193,4 +202,6 @@ export {
 	AnswerContainer,
 	NumberButton,
 	XModal,
+	DivAutoMargin,
+	WrongModalImg,
 };

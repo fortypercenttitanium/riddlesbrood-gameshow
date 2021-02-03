@@ -14,6 +14,8 @@ import {
 	AnswerContainer,
 	NumberButton,
 	XModal,
+	DivAutoMargin,
+	WrongModalImg,
 } from './gameComponentStyles/familyFeudStyles';
 import {
 	initGame,
@@ -28,11 +30,11 @@ import blueWrongIcon from '../../../assets/images/game_images/family_feud/ff-wro
 import redWrongIcon from '../../../assets/images/game_images/family_feud/ff-wrong-red.png';
 import greyWrongIcon from '../../../assets/images/game_images/family_feud/ff-wrong-grey.png';
 
-export default function FamilyFeud(props) {
+export default function FamilyFeud({ window }) {
 	let StoreContext;
-	if (props.window === 'controlPanel') {
+	if (window === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (props.window === 'gameboard') {
+	} else if (window === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 
@@ -72,14 +74,12 @@ export default function FamilyFeud(props) {
 	return (
 		<FamilyFeudHomeScreen>
 			{wrongModal.display && (
-				<XModal window={props.window}>
+				<XModal window={window}>
 					{wrongModal.array.map((x, wrongModalIndex) => {
 						return x === true ? (
-							<div key={wrongModalIndex} style={{ margin: 'auto' }}>
-								<img
-									style={{
-										width: props.window === 'controlPanel' ? '85%' : '100%',
-									}}
+							<DivAutoMargin key={wrongModalIndex}>
+								<WrongModalImg
+									width={'controlPanel' ? '85%' : '100%'}
 									src={
 										wrongModal.team === 1
 											? redWrongIcon
@@ -89,7 +89,7 @@ export default function FamilyFeud(props) {
 									}
 									alt=''
 								/>
-							</div>
+							</DivAutoMargin>
 						) : null;
 					})}
 				</XModal>
@@ -106,11 +106,11 @@ export default function FamilyFeud(props) {
 										src={
 											isWrong
 												? redWrongIcon
-												: props.window === 'controlPanel'
+												: window === 'controlPanel'
 												? greyWrongIcon
 												: null
 										}
-										window={props.window}
+										window={window}
 										onClick={() => {
 											incorrectHandler(1, isWrong, index, {
 												wrongTracker,
@@ -126,7 +126,7 @@ export default function FamilyFeud(props) {
 						</XContainer>
 					</ScoreContainer>
 					<PromptContainer>
-						<Span window={props.window}>{board.prompt}</Span>
+						<Span window={window}>{board.prompt}</Span>
 					</PromptContainer>
 					<ScoreContainer team={2}>
 						<H2>Team 2</H2>
@@ -138,11 +138,11 @@ export default function FamilyFeud(props) {
 										src={
 											isWrong
 												? blueWrongIcon
-												: props.window === 'controlPanel'
+												: window === 'controlPanel'
 												? greyWrongIcon
 												: null
 										}
-										window={props.window}
+										window={window}
 										onClick={() => {
 											incorrectHandler(2, isWrong, index, {
 												wrongTracker,
@@ -161,12 +161,12 @@ export default function FamilyFeud(props) {
 				<AnswerGrid
 					rowTemplate={`repeat(${Math.round(board.answers.length / 2)}, 1fr)`}
 				>
-					{props.window === 'controlPanel' &&
+					{window === 'controlPanel' &&
 						board.answers.map((word, wordIndex) => {
 							return (
 								<AnswerContainer
 									key={wordIndex}
-									window={props.window}
+									window={window}
 									onClick={() => {
 										correctHandler(wordIndex, {
 											board,
@@ -179,22 +179,22 @@ export default function FamilyFeud(props) {
 									}}
 									side={word.revealed ? 'back' : 'front'}
 								>
-									<FlippableH3 window={props.window} revealed={word.revealed}>
+									<FlippableH3 window={window} revealed={word.revealed}>
 										{word.answer.toUpperCase()}
 									</FlippableH3>
 								</AnswerContainer>
 							);
 						})}
-					{props.window === 'gameboard' &&
+					{window === 'gameboard' &&
 						board.answers.map((word, wordIndex) => {
 							return (
 								<AnswerContainer
 									key={wordIndex}
-									window={props.window}
+									window={window}
 									side={word.revealed ? 'back' : 'front'}
 								>
 									{word.revealed ? (
-										<FlippableH3 window={props.window} revealed={word.revealed}>
+										<FlippableH3 window={window} revealed={word.revealed}>
 											{word.answer.toUpperCase()}
 										</FlippableH3>
 									) : (

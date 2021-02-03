@@ -9,6 +9,7 @@ import { StoreContext as StoreContextCP } from '../../../../store/context';
 import { StoreContext as StoreContextGB } from '../../../../Gameboard';
 import { actions } from '../../../../store/actions';
 import ReactAudioPlayer from 'react-audio-player';
+import { modalClick, openQuestion } from './gameHelpers';
 
 export {
 	questionOpenSound,
@@ -22,4 +23,6 @@ export {
 	actions,
 	importAll,
 	ReactAudioPlayer,
+	modalClick,
+	openQuestion,
 };

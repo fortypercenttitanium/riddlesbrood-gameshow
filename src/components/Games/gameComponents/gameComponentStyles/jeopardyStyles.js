@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const JeopardyContainer = styled.div`
+const JeopardyContainer = styled.div`
 	height: 100%;
 	width: 100%;
 	display: flex;
@@ -8,7 +8,7 @@ export const JeopardyContainer = styled.div`
 	position: relative;
 `;
 
-export const Board = styled.div`
+const Board = styled.div`
 	margin: auto;
 	height: 80%;
 	width: 80%;
@@ -19,7 +19,7 @@ export const Board = styled.div`
 	border: 1px solid black;
 `;
 
-export const Modal = styled.div`
+const Modal = styled.div`
 	height: 100%;
 	width: 100%;
 	position: absolute;
@@ -32,13 +32,13 @@ export const Modal = styled.div`
 	display: ${(props) => (props.display === 'board' ? 'none' : 'flex')};
 `;
 
-export const CellContainer = styled.div`
+const CellContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
 `;
 
-export const CatCell = styled.div`
+const CatCell = styled.div`
 	text-align: center;
 	display: flex;
 	flex: 1;
@@ -50,13 +50,35 @@ export const CatCell = styled.div`
 	border: 3px solid #000;
 `;
 
-export const QCell = styled(CatCell)`
+const QCell = styled(CatCell)`
 	color: #ccc;
 	&:hover {
 		color: #fff;
 	}
 `;
 
-export const StyledSpan = styled.span`
+const StyledSpan = styled.span`
 	margin: auto;
+	display: ${(props) => props.display};
 `;
+
+const DailyDiv = styled.div`
+	height: 100%;
+	width: 100%;
+`;
+
+const DailyImg = styled.img`
+	width: 100%;
+`;
+
+export {
+	JeopardyContainer,
+	Board,
+	Modal,
+	CellContainer,
+	CatCell,
+	QCell,
+	StyledSpan,
+	DailyDiv,
+	DailyImg,
+};
