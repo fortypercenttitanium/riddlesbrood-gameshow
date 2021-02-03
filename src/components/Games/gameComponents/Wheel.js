@@ -23,7 +23,6 @@ import {
 	StoreContextGB,
 	actions,
 	ReactAudioPlayer,
-	setCategorySolved,
 	clickHandlerCategory,
 	setQuestionCallback,
 	checkLettersCallback,

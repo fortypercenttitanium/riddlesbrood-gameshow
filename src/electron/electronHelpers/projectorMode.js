@@ -1,12 +1,11 @@
 const electron = require('electron');
 const { screen, dialog } = electron;
+const isDev = require('electron-is-dev');
 
-module.exports = function setProjectorMode({
-	projectorDisplay,
-	mainWindow,
-	gameWindow,
-	isDev,
-}) {
+module.exports = function setProjectorMode({ getWindow, setWindow }) {
+	let projectorDisplay = getWindow('projector');
+	const mainWindow = getWindow('main');
+	const gameWindow = getWindow('game');
 	projectorDisplay = screen.getAllDisplays().find((display) => {
 		return display.bounds.x !== 0 || display.bounds.y !== 0;
 	});
@@ -16,6 +15,7 @@ module.exports = function setProjectorMode({
 			y: projectorDisplay.bounds.y + 50,
 		});
 		gameWindow.maximize();
+		setWindow('game', gameWindow);
 		if (!isDev) {
 			dialog.showMessageBox(mainWindow, {
 				type: 'info',
@@ -31,4 +31,5 @@ module.exports = function setProjectorMode({
 			detail: 'Please plug in projector and try again.',
 		});
 	}
+	setWindow('projector', projectorDisplay);
 };

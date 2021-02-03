@@ -1,5 +1,6 @@
 import React, { useEffect, createContext, useState } from 'react';
 import ControlScreen from './components/ControlComponents/ControlScreen/ControlScreen';
+import GameboardContainer from './GameboardStyles';
 import { initialState } from './store/initialState';
 const { ipcRenderer } = window.require('electron');
 
@@ -31,18 +32,9 @@ export default function Gameboard() {
 
 	return (
 		<StoreContext.Provider value={store}>
-			<div
-				style={{
-					height: '100vh',
-					width: '100vw',
-					margin: '0',
-					padding: '0',
-					overflow: 'hidden',
-					pointerEvents: 'none',
-				}}
-			>
+			<GameboardContainer>
 				<ControlScreen window='gameboard' />
-			</div>
+			</GameboardContainer>
 		</StoreContext.Provider>
 	);
 }
