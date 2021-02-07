@@ -5,10 +5,11 @@ import EditFx from './EditFx';
 import EditGameVersions from './EditGameVersions';
 import Cloud from './Cloud';
 import FirebaseProvider from './FirebaseProvider/FirebaseContext';
+import { StartScreenContainer } from './styles/StartScreenStyles';
 const { ipcRenderer } = window.require('electron');
 
 function StartScreen() {
-	const [timeline, setTimeline] = useState('init');
+	const [timeline, setTimeline] = useState('edit-fx');
 
 	const render = (timeline) => {
 		return timeline === 'init' ? (
@@ -30,8 +31,7 @@ function StartScreen() {
 
 	return (
 		<FirebaseProvider>
-			{render(timeline)}
-			<button onClick={devTools}>Dev tools</button>
+			<StartScreenContainer>{render(timeline)}</StartScreenContainer>
 		</FirebaseProvider>
 	);
 }

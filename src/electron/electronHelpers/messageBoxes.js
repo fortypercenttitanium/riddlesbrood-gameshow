@@ -11,8 +11,8 @@ function showMessageBox(title = '', message) {
 
 function showErrorBox(title = '', message) {
 	let errorMessage = message;
+	console.log(message);
 	if (Array.isArray(errorMessage)) {
-		console.log(true);
 		errorMessage = errorMessage.join('\n');
 	}
 	dialog.showErrorBox(title, errorMessage);

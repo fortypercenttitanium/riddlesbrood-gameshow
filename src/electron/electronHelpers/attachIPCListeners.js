@@ -1,8 +1,14 @@
 const createGameWindows = require('./createGameWindows');
 const storeAppData = require('./storeAppData');
-const { dialog, ipcMain } = require('electron');
+const path = require('path');
+const fs = require('fs');
+const util = require('util');
+const { dialog, ipcMain, app } = require('electron');
 const { showErrorBox, showMessageBox } = require('./messageBoxes');
+const { getAllFxFiles, findFxFile } = require('./fxFiles');
 const projectorMode = require('./projectorMode');
+
+const readFilePromise = util.promisify(fs.readFile);
 
 module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 	ipcMain.once('LAUNCH_GAME', () => {
@@ -18,20 +24,66 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 	ipcMain.on('ERROR_BOX', (e, payload) => {
 		showErrorBox(payload.title, payload.message);
 	});
-	ipcMain.on('NEW_FX_BUTTON', async (e, { payload }) => {
+	ipcMain.handle('NEW_FX_BUTTON', async (e, { name, filePath, ext }) => {
 		try {
-			const file = await dialog.showOpenDialog({
-				title: 'Select file for new FX button',
-				filters: [
-					{ name: 'Media (mp3, wav, mp4)', extensions: ['mp3', 'mp4', 'wav'] },
-				],
+			const existingFileNames = getAllFxFiles().map((file) => {
+				return file.split('.')[0];
 			});
-			if (!file.canceled) {
-				await storeAppData('fx_button', payload.name, file);
+			if (existingFileNames.includes(name)) {
+				showErrorBox(
+					'Error',
+					'FX button name already exists. Please choose a different name.'
+				);
+				return false;
+			}
+			const newFileName = `${name}.${ext}`;
+			const fileData = await readFilePromise(filePath);
+			const result = await storeAppData('fx_button', newFileName, fileData);
+			if (result) {
 				showMessageBox('Success', 'FX button added!');
+				return true;
+			} else {
+				return false;
 			}
 		} catch (err) {
 			showErrorBox('Error', err);
+			return false;
+		}
+	});
+
+	ipcMain.handle('GET_CUSTOM_FX_BUTTON_FILES', async () => {
+		return getAllFxFiles('custom');
+	});
+
+	ipcMain.handle('DELETE_FX_BUTTON', async (e, fileName) => {
+		try {
+			const verification = await dialog.showMessageBox({
+				type: 'warning',
+				message: `Are you sure you want to delete the "${
+					fileName.split('.')[0]
+				}" fx button?`,
+				buttons: ['Delete', 'Cancel'],
+			});
+			if (verification.response === 0) {
+				const filePath = findFxFile(fileName);
+				if (fs.existsSync(filePath)) {
+					fs.unlink(filePath, (err) => {
+						if (err) {
+							throw new Error(err);
+						} else {
+							showMessageBox(
+								'File deleted',
+								`${fileName.split('.')[0]} successfully deleted`
+							);
+						}
+					});
+					return true;
+				} else {
+					throw new Error(`Unable to resolve path ${filePath}`);
+				}
+			} else return false;
+		} catch (err) {
+			throw new Error(err);
 		}
 	});
 
