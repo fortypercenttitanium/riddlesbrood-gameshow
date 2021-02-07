@@ -1,9 +1,8 @@
 const createGameWindows = require('./createGameWindows');
 const storeAppData = require('./storeAppData');
-const path = require('path');
 const fs = require('fs');
 const util = require('util');
-const { dialog, ipcMain, app } = require('electron');
+const { dialog, ipcMain } = require('electron');
 const { showErrorBox, showMessageBox } = require('./messageBoxes');
 const { getAllFxFiles, findFxFile } = require('./fxFiles');
 const projectorMode = require('./projectorMode');
