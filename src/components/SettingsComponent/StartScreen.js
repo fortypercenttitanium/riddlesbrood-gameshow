@@ -6,10 +6,9 @@ import EditGameVersions from './EditGameVersions';
 import Cloud from './Cloud';
 import FirebaseProvider from './FirebaseProvider/FirebaseContext';
 import { StartScreenContainer } from './styles/StartScreenStyles';
-const { ipcRenderer } = window.require('electron');
 
 function StartScreen() {
-	const [timeline, setTimeline] = useState('edit-fx');
+	const [timeline, setTimeline] = useState('init');
 
 	const render = (timeline) => {
 		return timeline === 'init' ? (
@@ -23,10 +22,6 @@ function StartScreen() {
 		) : timeline === 'cloud' ? (
 			<Cloud setTimeline={setTimeline} />
 		) : null;
-	};
-
-	const devTools = () => {
-		ipcRenderer.send('TOGGLE_DEV_TOOLS');
 	};
 
 	return (

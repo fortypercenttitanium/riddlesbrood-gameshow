@@ -32,6 +32,7 @@ function EditFx({ setTimeline }) {
 	useEffect(() => {
 		async function getFiles() {
 			const files = await ipcRenderer.invoke('GET_CUSTOM_FX_BUTTON_FILES');
+			console.log(files);
 			setFxFiles(files);
 		}
 		if (newFilesAvilable) {
@@ -152,11 +153,17 @@ function EditFx({ setTimeline }) {
 					<EditSelectBoxWrapper>
 						<EditSelect onChange={handleDeleteSelection} size='10'>
 							{fxFiles
-								.sort((a, b) => (a < b ? -1 : +1))
+								.sort((a, b) =>
+									a.name.toLowerCase() < b.name.toLowerCase() ? -1 : +1
+								)
 								.map((file) => {
 									return (
-										<option value={file} style={{ padding: '5px' }} key={file}>
-											{file.split('.')[0]}
+										<option
+											value={file.name}
+											style={{ padding: '5px' }}
+											key={file.name}
+										>
+											{file.name.split('.')[0]} ({file.type})
 										</option>
 									);
 								})}

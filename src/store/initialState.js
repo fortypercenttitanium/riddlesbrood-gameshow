@@ -52,6 +52,11 @@ export const initialState = {
 			file: null,
 			type: null,
 		},
+		{
+			name: null,
+			file: null,
+			type: null,
+		},
 	],
 	timeline: 'app-open',
 	currentGame: {

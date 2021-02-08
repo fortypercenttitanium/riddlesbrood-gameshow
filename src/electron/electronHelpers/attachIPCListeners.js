@@ -2,7 +2,7 @@ const createGameWindows = require('./createGameWindows');
 const storeAppData = require('./storeAppData');
 const fs = require('fs');
 const util = require('util');
-const { dialog, ipcMain } = require('electron');
+const { dialog, ipcMain, app } = require('electron');
 const { showErrorBox, showMessageBox } = require('./messageBoxes');
 const { getAllFxFiles, findFxFile } = require('./fxFiles');
 const projectorMode = require('./projectorMode');
@@ -26,7 +26,7 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 	ipcMain.handle('NEW_FX_BUTTON', async (e, { name, filePath, ext }) => {
 		try {
 			const existingFileNames = getAllFxFiles().map((file) => {
-				return file.split('.')[0];
+				return file.name;
 			});
 			if (existingFileNames.includes(name)) {
 				showErrorBox(
@@ -50,8 +50,8 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 		}
 	});
 
-	ipcMain.handle('GET_CUSTOM_FX_BUTTON_FILES', async () => {
-		return getAllFxFiles('custom');
+	ipcMain.handle('GET_FX_BUTTON_FILES', (e, type) => {
+		return getAllFxFiles(type);
 	});
 
 	ipcMain.handle('DELETE_FX_BUTTON', async (e, fileName) => {
@@ -84,6 +84,9 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 		} catch (err) {
 			throw new Error(err);
 		}
+	});
+	ipcMain.handle('GET_APP_DATA_PATH', () => {
+		return app.getPath('userData');
 	});
 
 	ipcMain.on('TOGGLE_DEV_TOOLS', () => {
