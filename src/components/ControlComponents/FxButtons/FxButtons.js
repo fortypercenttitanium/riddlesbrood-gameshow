@@ -16,7 +16,11 @@ import importAll from '../../Games/helpers/shared/importAll';
 const { ipcRenderer } = window.require('electron');
 
 const coreFiles = importAll(
-	require.context('../../../assets/fx_buttons', false, /\.mp4|.mp3|.wav$/)
+	require.context(
+		'../../../assets/fx_buttons',
+		false,
+		/\.mp4|\.mp3|\.wav|\.mov$/
+	)
 );
 
 export default function FxButtons() {
@@ -104,7 +108,7 @@ export default function FxButtons() {
 						}}
 					>
 						<Text>{button.name}</Text>
-						{button.type === 'audio' ? (
+						{button.type === 'audio' && (
 							<ReactAudioPlayer
 								src={
 									button.file.slice(0, 6) === 'app://'
@@ -113,7 +117,7 @@ export default function FxButtons() {
 								}
 								volume={(audio.volume.master / 100) * (audio.volume.sfx / 100)}
 							/>
-						) : null}
+						)}
 					</FxButton>
 				);
 			})}

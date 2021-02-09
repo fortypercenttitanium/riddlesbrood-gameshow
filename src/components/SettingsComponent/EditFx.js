@@ -31,8 +31,7 @@ function EditFx({ setTimeline }) {
 
 	useEffect(() => {
 		async function getFiles() {
-			const files = await ipcRenderer.invoke('GET_CUSTOM_FX_BUTTON_FILES');
-			console.log(files);
+			const files = await ipcRenderer.invoke('GET_FX_BUTTON_FILES', 'custom');
 			setFxFiles(files);
 		}
 		if (newFilesAvilable) {
@@ -67,7 +66,8 @@ function EditFx({ setTimeline }) {
 		);
 	};
 	const handleDeleteSelection = (e) => {
-		setDeleteMenuSelection(e.target.value);
+		const file = fxFiles.find((file) => file.name === e.target.value);
+		setDeleteMenuSelection(`${file.name}.${file.ext}`);
 	};
 	async function handleClickAdd(e) {
 		e.preventDefault();
