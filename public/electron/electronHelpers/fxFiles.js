@@ -6,7 +6,7 @@ const isDev = require('electron-is-dev');
 function getAllFxFiles(type = 'all') {
 	const assetDir = isDev
 		? path.join(app.getAppPath(), 'src', 'assets', 'fx_buttons')
-		: path.join(app.getAppPath(), 'build', 'assets', 'fx_buttons');
+		: path.join(process.resourcesPath, 'fx_buttons');
 	const appFiles = readDirectory(assetDir).map((file) =>
 		file.split('.').pop() === 'mp4'
 			? {

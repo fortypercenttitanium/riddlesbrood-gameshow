@@ -1,27 +1,7 @@
-import {
-	jeopardy,
-	pyramid,
-	wheel,
-	familyFeud,
-	nameThatTune,
-	whatTheHellIsIt,
-	newlywed,
-	couples,
-	esp,
-} from '../../../../assets/game_versions/gameVersions';
+import getAllVersions from '../../../../assets/game_versions/gameVersions';
 
-export default function initGame(state, game, initialDisplay = 'init') {
-	const games = {
-		jeopardy,
-		pyramid,
-		wheel,
-		familyFeud,
-		nameThatTune,
-		whatTheHellIsIt,
-		newlywed,
-		couples,
-		esp,
-	};
+export default async function initGame(state, game, initialDisplay = 'init') {
+	const games = await getAllVersions();
 	const initState = {
 		display: initialDisplay,
 		currentQuestion: {

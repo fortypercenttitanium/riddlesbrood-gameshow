@@ -60,9 +60,9 @@ export default function Wheel({ window }) {
 	let sfxPlayer = useRef();
 
 	useEffect(() => {
-		if (!state.gameController.gameStarted) {
+		async function initialize() {
 			let initState = {
-				...initGame(state, 'wheel', 'select'),
+				...(await initGame(state, 'wheel', 'select')),
 				score: {
 					type: 'players',
 					scoreBoard: [0, null, null, 0],
@@ -72,6 +72,9 @@ export default function Wheel({ window }) {
 				type: actions.INIT_GAME,
 				payload: initState,
 			});
+		}
+		if (!state.gameController.gameStarted) {
+			initialize();
 		}
 	}, [dispatch, state]);
 

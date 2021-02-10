@@ -58,8 +58,8 @@ export default function WhatTheHellIsIt(props) {
 	let sfxPlayer = useRef();
 
 	useEffect(() => {
-		if (!state.gameController.gameStarted) {
-			let initState = { ...initGame(state, 'whatTheHellIsIt') };
+		async function initialize() {
+			let initState = { ...(await initGame(state, 'whatTheHellIsIt')) };
 			initState = {
 				...initState,
 				currentQuestion: initState.board[0],
@@ -97,6 +97,9 @@ export default function WhatTheHellIsIt(props) {
 				type: actions.INIT_GAME,
 				payload: initState,
 			});
+		}
+		if (!state.gameController.gameStarted) {
+			initialize();
 		}
 	}, [dispatch, state]);
 

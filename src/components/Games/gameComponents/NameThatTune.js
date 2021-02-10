@@ -52,12 +52,8 @@ export default function NameThatTune(props) {
 	let sfxPlayer = useRef();
 
 	useEffect(() => {
-		console.log(state.gameController.currentQuestion);
-	});
-
-	useEffect(() => {
-		if (!state.gameController.gameStarted) {
-			let initState = { ...initGame(state, 'nameThatTune', 'board') };
+		async function initialize() {
+			let initState = { ...(await initGame(state, 'nameThatTune', 'board')) };
 			initState = {
 				...initState,
 				currentQuestion: initState.board[0],
@@ -67,6 +63,9 @@ export default function NameThatTune(props) {
 				type: actions.INIT_GAME,
 				payload: initState,
 			});
+		}
+		if (!state.gameController.gameStarted) {
+			initialize();
 		}
 	}, [dispatch, state]);
 

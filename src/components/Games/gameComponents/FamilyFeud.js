@@ -44,9 +44,9 @@ export default function FamilyFeud({ window }) {
 	let sfxPlayer = useRef();
 
 	useEffect(() => {
-		if (!state.gameController.gameStarted) {
+		async function initialize() {
 			const initState = {
-				...initGame(state, 'familyFeud', 'board'),
+				...(await initGame(state, 'familyFeud', 'board')),
 				score: { type: 'team', scoreBoard: [0, 0] },
 				wrongTracker: {
 					team1: [false, false, false],
@@ -62,6 +62,9 @@ export default function FamilyFeud({ window }) {
 				type: actions.INIT_GAME,
 				payload: initState,
 			});
+		}
+		if (!state.gameController.gameStarted) {
+			initialize();
 		}
 	}, [dispatch, state]);
 

@@ -47,9 +47,9 @@ export default function Pyramid(props) {
 	let sfxPlayer = useRef();
 
 	useEffect(() => {
-		if (!state.gameController.gameStarted) {
+		async function initialize() {
 			let initState = {
-				...initGame(state, 'pyramid', 'board'),
+				...(await initGame(state, 'pyramid', 'board')),
 				timer: {
 					time: null,
 					running: false,
@@ -65,6 +65,9 @@ export default function Pyramid(props) {
 				type: actions.INIT_GAME,
 				payload: initState,
 			});
+		}
+		if (!state.gameController.gameStarted) {
+			initialize();
 		}
 	}, [dispatch, state]);
 

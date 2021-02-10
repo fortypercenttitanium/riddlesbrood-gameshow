@@ -2,6 +2,8 @@ const createGameWindows = require('./createGameWindows');
 const storeAppData = require('./storeAppData');
 const fs = require('fs');
 const util = require('util');
+const path = require('path');
+const isDev = require('electron-is-dev');
 const { dialog, ipcMain, app } = require('electron');
 const { showErrorBox, showMessageBox } = require('./messageBoxes');
 const { getAllFxFiles, findFxFile } = require('./fxFiles');
@@ -85,6 +87,23 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 			throw new Error(err);
 		}
 	});
+
+	ipcMain.handle('GET_ALL_GAME_VERSIONS', () => {
+		const versions = {};
+		const versionsPath = isDev
+			? path.join(app.getAppPath(), 'src', 'assets', 'game_versions')
+			: path.join(process.resourcesPath, 'game_versions');
+		const fileNames = fs
+			.readdirSync(versionsPath)
+			.filter((name) => name !== 'gameVersions.js');
+		fileNames.forEach((file) => {
+			versions[file.split('Versions')[0]] = JSON.parse(
+				fs.readFileSync(path.join(versionsPath, file))
+			);
+		});
+	return versions;
+	});
+
 	ipcMain.handle('GET_APP_DATA_PATH', () => {
 		return app.getPath('userData');
 	});

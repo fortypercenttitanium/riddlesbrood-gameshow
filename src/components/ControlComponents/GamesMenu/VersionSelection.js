@@ -6,22 +6,22 @@ import {
 	VersionOption,
 } from './GamesMenuModalStyles';
 
-function VersionSelection({ rating, gamesArray, optionHandler, title }) {
+function VersionSelection({ rating, gamesList, optionHandler, title }) {
 	return (
 		<VersionSelectDiv>
 			<VersionH1>
 				{rating !== 'kids' && 'Rated'} {rating.toUpperCase()}
 			</VersionH1>
 			<VersionSelect size='10'>
-				{gamesArray
+				{gamesList
 					.find((game) => game.title === title)
-					.versions.map((gameVer, gameVerIndex) => {
+					.versions.map((gameVer, index) => {
 						return (
 							gameVer.rating === rating && (
 								<VersionOption
-									key={gameVerIndex}
+									key={index}
 									onClick={(e) => {
-										optionHandler(e, title, gameVerIndex, rating);
+										optionHandler(e, title, index, rating);
 									}}
 								>
 									{gameVer.title}

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
 	ModalContainer,
 	GamesMenuModalDiv,
@@ -42,6 +42,16 @@ export default function GamesMenuModal() {
 		},
 		selectedRating: '',
 	});
+
+	const [gamesList, setGamesList] = useState([]);
+
+	useEffect(() => {
+		async function getGames() {
+			const games = await gamesArray();
+			setGamesList(games);
+		}
+		getGames();
+	}, []);
 
 	const handleOutsideClick = () => {
 		dispatch({ type: 'CLOSE_GAMES_MENU' });
@@ -98,7 +108,8 @@ export default function GamesMenuModal() {
 		<ModalContainer onClick={handleOutsideClick}>
 			<GamesMenuModalDiv onClick={handleModalClick}>
 				{state.gamesMenu.timeline === 'gamesMenu' &&
-					gamesArray.map((game, index) => {
+					gamesList.length > 0 &&
+					gamesList.map((game, index) => {
 						return (
 							<GameButton
 								key={index}
@@ -114,7 +125,7 @@ export default function GamesMenuModal() {
 					<VersionSelectContainer>
 						<Form className='versionSelectForm' onSubmit={submitHandler}>
 							<FlexDiv>
-								{gamesArray
+								{gamesList
 									.find(
 										(game) => game.title === state.gamesMenu.selectedGame.title
 									)
@@ -129,7 +140,7 @@ export default function GamesMenuModal() {
 											<VersionSelection
 												key={ratingIndex}
 												rating={rating}
-												gamesArray={gamesArray}
+												gamesList={gamesList}
 												optionHandler={optionHandler}
 												title={state.gamesMenu.selectedGame.title}
 											/>

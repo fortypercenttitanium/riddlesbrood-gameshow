@@ -44,9 +44,9 @@ export default function CouplesConundrum(props) {
 	let sfxPlayer = useRef();
 
 	useEffect(() => {
-		if (!gameStarted) {
+		async function initialize() {
 			const initState = {
-				...initGame(state, 'couples', 'board'),
+				...(await initGame(state, 'couples', 'board')),
 				score: {
 					type: 'team',
 					scoreBoard: [0, 0, 0, 0],
@@ -57,6 +57,9 @@ export default function CouplesConundrum(props) {
 				type: actions.INIT_GAME,
 				payload: initState,
 			});
+		}
+		if (!gameStarted) {
+			initialize();
 		}
 	}, [dispatch, state, gameStarted]);
 

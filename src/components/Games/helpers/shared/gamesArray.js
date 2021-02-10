@@ -1,57 +1,60 @@
-import * as gameVersions from '../../../../assets/game_versions/gameVersions';
+import getAllVersions from '../../../../assets/game_versions/gameVersions';
 
-export const gamesArray = [
-	{
-		title: 'Jeopardy',
-		logo: 'JeopardyLogo.png',
-		versions: gameVersions.jeopardy,
-	},
-	{
-		title: 'Name That Tune',
-		logo: 'NameThatTuneLogo.png',
-		versions: gameVersions.nameThatTune,
-	},
-	{
-		title: 'Family Feud',
-		logo: 'FamilyFeudLogo.png',
-		versions: gameVersions.familyFeud,
-	},
-	{
-		title: 'What The Hell Is It?',
-		logo: 'WhatTheHellIsItLogo.png',
-		versions: gameVersions.whatTheHellIsIt,
-	},
-	{
-		title: 'Wheel Of Fortune',
-		logo: 'WheelOfFortuneLogo.jpeg',
-		versions: gameVersions.wheel,
-	},
-	{
-		title: '$25,000 Pyramid',
-		logo: '25kPyramidLogo.png',
-		versions: gameVersions.pyramid,
-	},
-	{
-		title: 'Newlywed Game',
-		logo: 'NewlywedLogo.jpg',
-		versions: gameVersions.newlywed,
-	},
-	{
-		title: 'Couples Conundrum',
-		logo: 'CouplesConundrumLogo.png',
-		versions: gameVersions.couples,
-	},
-	{
-		title: 'ESP',
-		logo: 'ESPLogo.png',
-		versions: gameVersions.esp,
-	},
-	{
-		title: 'Card Sharks',
-		logo: 'CardSharksLogo.png',
-		versions: [],
-	},
-];
+export async function gamesArray() {
+	const gameVersions = await getAllVersions();
+	return [
+		{
+			title: 'Jeopardy',
+			logo: 'JeopardyLogo.png',
+			versions: gameVersions.jeopardy,
+		},
+		{
+			title: 'Name That Tune',
+			logo: 'NameThatTuneLogo.png',
+			versions: gameVersions.nameThatTune,
+		},
+		{
+			title: 'Family Feud',
+			logo: 'FamilyFeudLogo.png',
+			versions: gameVersions.familyFeud,
+		},
+		{
+			title: 'What The Hell Is It?',
+			logo: 'WhatTheHellIsItLogo.png',
+			versions: gameVersions.whatTheHellIsIt,
+		},
+		{
+			title: 'Wheel Of Fortune',
+			logo: 'WheelOfFortuneLogo.jpeg',
+			versions: gameVersions.wheel,
+		},
+		{
+			title: '$25,000 Pyramid',
+			logo: '25kPyramidLogo.png',
+			versions: gameVersions.pyramid,
+		},
+		{
+			title: 'Newlywed Game',
+			logo: 'NewlywedLogo.jpg',
+			versions: gameVersions.newlywed,
+		},
+		{
+			title: 'Couples Conundrum',
+			logo: 'CouplesConundrumLogo.png',
+			versions: gameVersions.couples,
+		},
+		{
+			title: 'ESP',
+			logo: 'ESPLogo.png',
+			versions: gameVersions.esp,
+		},
+		{
+			title: 'Card Sharks',
+			logo: 'CardSharksLogo.png',
+			versions: [],
+		},
+	];
+}
 
 export { default as Jeopardy } from '../../gameComponents/Jeopardy';
 export { default as FamilyFeud } from '../../gameComponents/FamilyFeud';

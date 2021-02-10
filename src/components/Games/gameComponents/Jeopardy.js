@@ -43,8 +43,8 @@ export default function Jeopardy({ window }) {
 
 	// initialize game
 	useEffect(() => {
-		if (!state.gameController.gameStarted) {
-			const newBoard = initGame(state, 'jeopardy', 'board');
+		async function initialize() {
+			const newBoard = await initGame(state, 'jeopardy', 'board');
 			newBoard.board.forEach((category) => {
 				category.questions = category.questions.map((question) => {
 					if (question.type !== 'video') {
@@ -61,6 +61,9 @@ export default function Jeopardy({ window }) {
 				});
 			});
 			dispatch({ type: actions.INIT_GAME, payload: newBoard });
+		}
+		if (!state.gameController.gameStarted) {
+			initialize();
 		}
 	}, [dispatch, state]);
 

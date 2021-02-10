@@ -1,5 +1,5 @@
 {
-	"main": "build/electron/electron.js",
+	"main": "public/electron/electron.js",
 	"name": "riddlesbrood-gameshow",
 	"version": "0.1.1",
 	"description": "Gameshow presentation app for Riddlesbrood Theatre Company",
@@ -14,8 +14,17 @@
 		},
 		"extends": null,
 		"files": [
-			"./build/**/*",
-			"./src/assets"
+			"./build/**/*"
+		],
+		"extraResources": [
+			{
+				"from": "./src/assets/fx_buttons",
+				"to": "./fx_buttons"
+			},
+			{
+				"from": "./src/assets/game_versions",
+				"to": "./game_versions"
+			}
 		]
 	},
 	"homepage": "./",
