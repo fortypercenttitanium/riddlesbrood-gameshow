@@ -1,17 +1,11 @@
 const isDev = require('electron-is-dev');
 const mainWindowConfig = require('./mainWindowConfig');
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, nativeImage } = require('electron');
 const path = require('path');
 
 module.exports = function createGameWindows({ getWindow, setWindow }) {
-	const iconPath = path.join(
-		__dirname,
-		'..',
-		'..',
-		'assets',
-		'images',
-		'icons',
-		'icon.png'
+	const iconPath = nativeImage.createFromPath(
+		path.join(__dirname, '..', 'icons', 'icon.png')
 	);
 
 	const projectorDisplay = getWindow('projector');
@@ -61,13 +55,13 @@ module.exports = function createGameWindows({ getWindow, setWindow }) {
 	mainWindow.loadURL(
 		isDev
 			? 'http://localhost:3000/#/play'
-			: `file://${path.join(__dirname, '..', '..', '..', '/build/index.html')}`
+			: `file://${path.join(app.getAppPath(), 'build', 'index.html')}`
 	);
 
 	gameWindow.loadURL(
 		isDev
 			? 'http://localhost:3000/#/gameboard'
-			: `file://${path.join(__dirname, '..', '..', '..', '/build/index.html')}`
+			: `file://${path.join(app.getAppPath(), 'build', 'index.html')}`
 	);
 
 	if (!isDev) {

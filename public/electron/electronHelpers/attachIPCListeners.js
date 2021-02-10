@@ -80,9 +80,7 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 				} else {
 					throw new Error(`Unable to resolve path ${filePath}`);
 				}
-			} else {
-				return false;
-			}
+			} else return false;
 		} catch (err) {
 			throw new Error(err);
 		}

@@ -1,5 +1,5 @@
 {
-	"main": "src/electron/electron.js",
+	"main": "build/electron/electron.js",
 	"name": "riddlesbrood-gameshow",
 	"version": "0.1.1",
 	"description": "Gameshow presentation app for Riddlesbrood Theatre Company",
@@ -10,8 +10,13 @@
 		"productName": "Riddlesbrood Gameshow",
 		"copyright": "Copyright 2021 Riddlesbrood Theatre Company",
 		"win": {
-			"icon": "./src/assets/images/icons/icon.png"
-		}
+			"icon": "public/electron/icons/icon.png"
+		},
+		"extends": null,
+		"files": [
+			"./build/**/*",
+			"./src/assets"
+		]
 	},
 	"homepage": "./",
 	"dependencies": {
@@ -43,7 +48,7 @@
 		"react-eject": "react-scripts eject",
 		"electron-build": "electron-builder",
 		"electron-dev": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
-		"electron-pack": "electron-builder -c.extraMetadata.main=build/electron.js",
+		"electron-pack": "electron-builder -c.extraMetadata.main=build/electron/electron.js",
 		"preelectron-pack": "npm run react-build"
 	},
 	"eslintConfig": {

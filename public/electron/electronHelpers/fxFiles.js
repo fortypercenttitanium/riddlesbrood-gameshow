@@ -1,11 +1,13 @@
 const path = require('path');
 const readDirectory = require('./readDirectory');
 const { app } = require('electron');
+const isDev = require('electron-is-dev');
 
 function getAllFxFiles(type = 'all') {
-	const appFiles = readDirectory(
-		path.join(app.getAppPath(), 'src', 'assets', 'fx_buttons')
-	).map((file) =>
+	const assetDir = isDev
+		? path.join(app.getAppPath(), 'src', 'assets', 'fx_buttons')
+		: path.join(app.getAppPath(), 'build', 'assets', 'fx_buttons');
+	const appFiles = readDirectory(assetDir).map((file) =>
 		file.split('.').pop() === 'mp4'
 			? {
 					name: file.split('.')[0],

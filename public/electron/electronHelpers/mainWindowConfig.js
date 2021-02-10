@@ -1,13 +1,8 @@
 const path = require('path');
+const { nativeImage } = require('electron');
 
-const iconPath = path.join(
-	__dirname,
-	'..',
-	'..',
-	'assets',
-	'images',
-	'icons',
-	'icon.png'
+const iconPath = nativeImage.createFromPath(
+	path.join(__dirname, '..', 'icons', 'icon.png')
 );
 
 module.exports = {
