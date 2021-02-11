@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { returnToEditSelect, returnToInit } from './helpers/timelines';
 import {
 	EditButtonDiv,
 	EditButtonText,
-	EditButtonsWrapper,
 	EditForm,
 	EditContainer,
-	EditHeader,
-	EditHeaderWrapper,
 	EditSelect,
 	EditSelectBoxWrapper,
 	EditInputWrapper,
@@ -16,10 +12,9 @@ import {
 	EditInput,
 	EditInputLabel,
 } from './styles/EditFxStyles';
-import { ReturnButton } from './styles/SharedStyles';
 const { ipcRenderer } = window.require('electron');
 
-function EditFx({ setTimeline }) {
+function EditFx({ setTitle }) {
 	const [name, setName] = useState('');
 	const [fxFiles, setFxFiles] = useState([]);
 	const [newFilesAvilable, setNewFilesAvailable] = useState(true);
@@ -28,6 +23,10 @@ function EditFx({ setTimeline }) {
 	const [deleteMenuSelection, setDeleteMenuSelection] = useState('');
 	const fileSelect = useRef();
 	const form = useRef();
+
+	useEffect(() => {
+		setTitle('Edit FX');
+	}, [setTitle]);
 
 	useEffect(() => {
 		async function getFiles() {
@@ -97,18 +96,9 @@ function EditFx({ setTimeline }) {
 			setNewFilesAvailable(true);
 		}
 	}
-	const returnClickSettings = () => {
-		returnToEditSelect(setTimeline);
-	};
-	const returnClickHome = () => {
-		returnToInit(setTimeline);
-	};
 
 	return (
 		<EditContainer>
-			<EditHeaderWrapper>
-				<EditHeader>Edit FX</EditHeader>
-			</EditHeaderWrapper>
 			<EditForm ref={form} onSubmit={handleClickAdd}>
 				<EditMiniHeader onClick={handleClickAddMenu}>
 					Add new FX button
@@ -178,14 +168,6 @@ function EditFx({ setTimeline }) {
 					</EditSelectBoxWrapper>
 				</>
 			)}
-			<EditButtonsWrapper>
-				<ReturnButton onClick={returnClickSettings}>
-					Return to settings menu
-				</ReturnButton>
-				<ReturnButton onClick={returnClickHome}>
-					Return to home screen
-				</ReturnButton>
-			</EditButtonsWrapper>
 		</EditContainer>
 	);
 }

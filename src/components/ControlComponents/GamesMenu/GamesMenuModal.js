@@ -35,7 +35,6 @@ export default function GamesMenuModal() {
 			'What The Hell Is It?': null,
 			'Wheel Of Fortune': null,
 			'$25,000 Pyramid': null,
-			'Newlywed Game': null,
 			'Couples Conundrum': null,
 			ESP: null,
 			'Card Sharks': null,

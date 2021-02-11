@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 const { ipcRenderer } = window.require('electron');
 
-function Init(props) {
-	const { setTimeline } = props;
+function Init({ setTimeline, setTitle }) {
+	useEffect(() => {
+		setTitle('Edit Game Content');
+	}, [setTitle]);
+
 	const handleLaunchClick = () => {
 		ipcRenderer.send('LAUNCH_GAME');
 	};
@@ -11,7 +14,6 @@ function Init(props) {
 	};
 	return (
 		<div>
-			<h1>Start Screen</h1>
 			<button onClick={handleLaunchClick}>Start game</button>
 			<button onClick={handleEditClick}>Edit content</button>
 		</div>

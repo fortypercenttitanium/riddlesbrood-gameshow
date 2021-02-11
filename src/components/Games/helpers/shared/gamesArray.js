@@ -34,11 +34,6 @@ export async function gamesArray() {
 			versions: gameVersions.pyramid,
 		},
 		{
-			title: 'Newlywed Game',
-			logo: 'NewlywedLogo.jpg',
-			versions: gameVersions.newlywed,
-		},
-		{
 			title: 'Couples Conundrum',
 			logo: 'CouplesConundrumLogo.png',
 			versions: gameVersions.couples,

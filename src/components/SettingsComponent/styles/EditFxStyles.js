@@ -7,31 +7,12 @@ const EditContainer = styled.div`
 	flex-direction: column;
 `;
 
-const EditHeaderWrapper = styled.div`
-	margin: 2rem auto;
-	text-align: center;
-	display: flex;
-`;
-
 const EditSelectBoxWrapper = styled.div`
 	margin: 1rem auto;
 	text-align: center;
 	display: flex;
 	flex-direction: column;
 	width: 70%;
-`;
-
-const EditButtonsWrapper = styled.div`
-	margin: auto;
-	text-align: center;
-	display: flex;
-	justify-items: center;
-	margin: 2rem auto;
-`;
-
-const EditHeader = styled.h1`
-	margin: auto;
-	font-weight: bold;
 `;
 
 const EditMiniHeader = styled.h2`
@@ -97,10 +78,7 @@ const EditForm = styled.form`
 export {
 	EditButtonDiv,
 	EditButtonText,
-	EditButtonsWrapper,
 	EditContainer,
-	EditHeader,
-	EditHeaderWrapper,
 	EditSelect,
 	EditSelectBoxWrapper,
 	EditInputWrapper,

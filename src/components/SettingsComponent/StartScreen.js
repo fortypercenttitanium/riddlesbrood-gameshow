@@ -6,27 +6,37 @@ import EditGameVersions from './EditGameVersions';
 import Cloud from './Cloud';
 import FirebaseProvider from './FirebaseProvider/FirebaseContext';
 import { StartScreenContainer } from './styles/StartScreenStyles';
+import EditContentTemplate from './templates/EditContentTemplate';
 
 function StartScreen() {
-	const [timeline, setTimeline] = useState('init');
+	const [timeline, setTimeline] = useState('edit-game-versions');
+	const [title, setTitle] = useState('Edit Game Content');
 
 	const render = (timeline) => {
 		return timeline === 'init' ? (
-			<Init setTimeline={setTimeline} />
+			<Init setTimeline={setTimeline} setTitle={setTitle} />
 		) : timeline === 'edit-select' ? (
-			<EditSelect setTimeline={setTimeline} />
+			<EditSelect setTimeline={setTimeline} setTitle={setTitle} />
 		) : timeline === 'edit-fx' ? (
-			<EditFx setTimeline={setTimeline} />
+			<EditFx setTimeline={setTimeline} setTitle={setTitle} />
 		) : timeline === 'edit-game-versions' ? (
-			<EditGameVersions setTimeline={setTimeline} />
+			<EditGameVersions setTimeline={setTimeline} setTitle={setTitle} />
 		) : timeline === 'cloud' ? (
-			<Cloud setTimeline={setTimeline} />
+			<Cloud setTimeline={setTimeline} setTitle={setTitle} />
 		) : null;
 	};
 
 	return (
 		<FirebaseProvider>
-			<StartScreenContainer>{render(timeline)}</StartScreenContainer>
+			<StartScreenContainer>
+				<EditContentTemplate
+					title={title}
+					timeline={timeline}
+					setTimeline={setTimeline}
+				>
+					{render(timeline)}
+				</EditContentTemplate>
+			</StartScreenContainer>
 		</FirebaseProvider>
 	);
 }
