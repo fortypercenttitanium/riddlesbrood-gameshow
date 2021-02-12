@@ -6,6 +6,7 @@ import {
 	GameButton,
 	GameLogo,
 } from '../ControlComponents/GamesMenu/GamesMenuModalStyles';
+import renderVersionForm from './helpers/renderVersionForm';
 
 const logos = importAll(
 	require.context('../../assets/images/logos', false, /\.png$|.jpg$|.jpeg$/)
@@ -28,25 +29,35 @@ function EditGameVersions({ setTitle }) {
 	});
 
 	const handleGameClick = (game) => {
+		console.log(game);
 		setSelectedGame(game);
 	};
 
 	return (
-		<GameLogosContainer>
-			{gamesList.length > 0 &&
-				gamesList.map((game, index) => {
-					return (
-						<GameButton
-							key={index}
-							onClick={() => {
-								handleGameClick(game);
-							}}
-						>
-							<GameLogo src={logos[game.logo]} />
-						</GameButton>
-					);
-				})}
-		</GameLogosContainer>
+		<>
+			{selectedGame ? (
+				<form>
+					<h1>{selectedGame.title}</h1>
+					{renderVersionForm(selectedGame.shortName)}
+				</form>
+			) : (
+				<GameLogosContainer>
+					{gamesList.length > 0 &&
+						gamesList.map((game, index) => {
+							return (
+								<GameButton
+									key={index}
+									onClick={() => {
+										handleGameClick(game);
+									}}
+								>
+									<GameLogo src={logos[game.logo]} />
+								</GameButton>
+							);
+						})}
+				</GameLogosContainer>
+			)}
+		</>
 	);
 }
 
