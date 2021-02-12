@@ -8,3 +8,10 @@ Content: [
   }
 ]
 */
+import React from 'react';
+
+function WhatIsIt() {
+	return <div></div>;
+}
+
+export default WhatIsIt;

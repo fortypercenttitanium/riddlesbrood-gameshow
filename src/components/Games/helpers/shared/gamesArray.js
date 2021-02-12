@@ -7,46 +7,55 @@ export async function gamesArray() {
 			title: 'Jeopardy',
 			logo: 'JeopardyLogo.png',
 			versions: gameVersions.jeopardy,
+			shortName: 'jeopardy',
 		},
 		{
 			title: 'Name That Tune',
 			logo: 'NameThatTuneLogo.png',
 			versions: gameVersions.nameThatTune,
+			shortName: 'nameThatTune',
 		},
 		{
 			title: 'Family Feud',
 			logo: 'FamilyFeudLogo.png',
 			versions: gameVersions.familyFeud,
+			shortName: 'familyFeud',
 		},
 		{
 			title: 'What The Hell Is It?',
 			logo: 'WhatTheHellIsItLogo.png',
 			versions: gameVersions.whatTheHellIsIt,
+			shortName: 'whatTheHellIsIt',
 		},
 		{
 			title: 'Wheel Of Fortune',
 			logo: 'WheelOfFortuneLogo.jpeg',
 			versions: gameVersions.wheel,
+			shortName: 'wheel',
 		},
 		{
 			title: '$25,000 Pyramid',
 			logo: '25kPyramidLogo.png',
 			versions: gameVersions.pyramid,
+			shortName: 'pyramid',
 		},
 		{
 			title: 'Couples Conundrum',
 			logo: 'CouplesConundrumLogo.png',
 			versions: gameVersions.couples,
+			shortName: 'couples',
 		},
 		{
 			title: 'ESP',
 			logo: 'ESPLogo.png',
 			versions: gameVersions.esp,
+			shortName: 'esp',
 		},
 		{
 			title: 'Card Sharks',
 			logo: 'CardSharksLogo.png',
 			versions: [],
+			shortName: 'cardSharks',
 		},
 	];
 }

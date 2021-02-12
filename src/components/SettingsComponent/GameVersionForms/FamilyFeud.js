@@ -9,3 +9,11 @@ Content: {
   }
 }
 */
+
+import React from 'react';
+
+function FamilyFeud() {
+	return <div></div>;
+}
+
+export default FamilyFeud;
