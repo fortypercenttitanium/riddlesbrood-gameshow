@@ -6,6 +6,7 @@ import {
 	GameButton,
 	GameLogo,
 } from '../ControlComponents/GamesMenu/GamesMenuModalStyles';
+import renderVersionForm from './helpers/renderVersionForm';
 const { ipcRenderer } = window.require('electron');
 
 const logos = importAll(
@@ -41,12 +42,18 @@ function EditGameVersions({ setTitle }) {
 	}, [selectedGame]);
 
 	const handleGameClick = (game) => {
+		console.log(game);
 		setSelectedGame(game);
 	};
 
 	return (
 		<>
-			{!selectedGame && (
+			{selectedGame ? (
+				<form>
+					<h1>{selectedGame.title}</h1>
+					{renderVersionForm(selectedGame.shortName)}
+				</form>
+			) : (
 				<GameLogosContainer>
 					{gamesList.length > 0 &&
 						gamesList.map((game, index) => {
