@@ -12,9 +12,9 @@ Content: [
 ]
 */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
-function Pyramid() {
+function Pyramid({ formData, setFormData, selectedGame }) {
 	return <div></div>;
 }
 

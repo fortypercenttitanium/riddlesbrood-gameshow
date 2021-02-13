@@ -8,9 +8,9 @@ Content: [
   }
 ]
 */
-import React from 'react';
+import React, { useEffect } from 'react';
 
-function WhatIsIt() {
+function WhatIsIt({ formData, setFormData, selectedGame }) {
 	return <div></div>;
 }
 

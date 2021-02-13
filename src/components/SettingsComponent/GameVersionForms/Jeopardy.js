@@ -18,9 +18,9 @@ Content: [
 ]
 */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
-function Jeopardy() {
+function Jeopardy({ formData, setFormData, selectedGame }) {
 	return <div></div>;
 }
 

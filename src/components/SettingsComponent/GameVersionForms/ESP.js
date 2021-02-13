@@ -4,9 +4,9 @@ Rating: String ('r', 'pg13', 'kids')
 Content: [(String)]
 */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
-function ESP() {
+function ESP({ formData, setFormData, selectedGame }) {
 	return <div></div>;
 }
 

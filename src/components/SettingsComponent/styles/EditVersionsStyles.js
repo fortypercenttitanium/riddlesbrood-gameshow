@@ -12,4 +12,20 @@ const GameLogosContainer = styled.div`
 	margin: auto;
 `;
 
-export { GameLogosContainer };
+const VersionForm = styled.form`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin: auto;
+	width: 60%;
+	text-align: center;
+`;
+
+const TitleRatingContainer = styled.div`
+	display: flex;
+	margin: auto;
+	justify-content: center;
+	padding: 1rem;
+`;
+
+export { GameLogosContainer, VersionForm, TitleRatingContainer };

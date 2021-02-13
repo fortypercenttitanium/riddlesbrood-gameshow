@@ -1,34 +1,87 @@
 import React from 'react';
-// import Couples from '../GameVersionForms';
-// import ESP from '../GameVersionForms';
-// import FamilyFeud from '../GameVersionForms';
-// import Jeopardy from '../GameVersionForms';
-// import Pyramid from '../GameVersionForms';
-// import WhatIsIt from '../GameVersionForms';
-// import Wheel from '../GameVersionForms';
+import NameThatTune from '../GameVersionForms/NameThatTune';
+import Couples from '../GameVersionForms/Couples';
+import ESP from '../GameVersionForms/ESP';
+import FamilyFeud from '../GameVersionForms/FamilyFeud';
+import Jeopardy from '../GameVersionForms/Jeopardy';
+import Pyramid from '../GameVersionForms/Pyramid';
+import WhatIsIt from '../GameVersionForms/WhatIsIt';
+import Wheel from '../GameVersionForms/Wheel';
 
-export default function renderVersionForm(game) {
+export default function renderVersionForm(game, props) {
+	const { formData, setFormData, selectedGame } = props;
 	switch (game) {
 		case 'couples': {
-			return <p>Couples</p>;
+			return (
+				<Couples
+					formData={formData}
+					setFormData={setFormData}
+					selectedGame={selectedGame}
+				/>
+			);
 		}
 		case 'esp': {
-			return <p>esp</p>;
+			return (
+				<ESP
+					formData={formData}
+					setFormData={setFormData}
+					selectedGame={selectedGame}
+				/>
+			);
 		}
 		case 'familyFeud': {
-			return <p>familyFeud</p>;
+			return (
+				<FamilyFeud
+					formData={formData}
+					setFormData={setFormData}
+					selectedGame={selectedGame}
+				/>
+			);
 		}
 		case 'jeopardy': {
-			return <p>jeopardy</p>;
+			return (
+				<Jeopardy
+					formData={formData}
+					setFormData={setFormData}
+					selectedGame={selectedGame}
+				/>
+			);
+		}
+		case 'nameThatTune': {
+			return (
+				<NameThatTune
+					formData={formData}
+					setFormData={setFormData}
+					selectedGame={selectedGame}
+				/>
+			);
 		}
 		case 'pyramid': {
-			return <p>pyramid</p>;
+			return (
+				<Pyramid
+					formData={formData}
+					setFormData={setFormData}
+					selectedGame={selectedGame}
+				/>
+			);
 		}
 		case 'whatTheHellIsIt': {
-			return <p>whatTheHellIsIt</p>;
+			return (
+				<WhatIsIt
+					formData={formData}
+					setFormData={setFormData}
+					selectedGame={selectedGame}
+				/>
+			);
 		}
 		case 'wheel': {
-			return <p>wheel</p>;
+			return (
+				<Wheel
+					formData={formData}
+					setFormData={setFormData}
+					selectedGame={selectedGame}
+				/>
+			);
 		}
 		default: {
 			return <h2>Error</h2>;

@@ -10,9 +10,9 @@ Content: {
 }
 */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
-function FamilyFeud() {
+function FamilyFeud({ formData, setFormData, selectedGame }) {
 	return <div></div>;
 }
 
