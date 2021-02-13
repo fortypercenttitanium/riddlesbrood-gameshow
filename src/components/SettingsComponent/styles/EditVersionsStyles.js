@@ -19,13 +19,15 @@ const VersionForm = styled.form`
 	margin: auto;
 	width: 60%;
 	text-align: center;
+	border: 1px solid grey;
+	padding: 1rem;
 `;
 
-const TitleRatingContainer = styled.div`
+const CenteredDiv = styled.div`
 	display: flex;
 	margin: auto;
 	justify-content: center;
 	padding: 1rem;
 `;
 
-export { GameLogosContainer, VersionForm, TitleRatingContainer };
+export { GameLogosContainer, VersionForm, CenteredDiv };

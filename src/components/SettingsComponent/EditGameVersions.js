@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
 	GameLogosContainer,
 	VersionForm,
-	TitleRatingContainer,
+	CenteredDiv,
 } from './styles/EditVersionsStyles';
 import { gamesArray } from '../Games/helpers/shared/gamesArray.js';
 import importAll from '../Games/helpers/shared/importAll';
@@ -15,9 +15,13 @@ import renderVersionForm from './helpers/renderVersionForm';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 import { makeStyles } from '@material-ui/core/styles';
 const { ipcRenderer } = window.require('electron');
 
@@ -27,12 +31,13 @@ const logos = importAll(
 
 const useStyles = makeStyles((theme) => ({
 	formControl: {
-		margin: theme.spacing(1),
-		minWidth: 120,
+		margin: theme.spacing(5),
+		minWidth: 100,
 	},
-	selectEmpty: {
-		marginTop: theme.spacing(2),
-		minWidth: 400,
+	buttonSpacing: {
+		'& > *': {
+			margin: theme.spacing(1),
+		},
 	},
 }));
 
@@ -47,10 +52,14 @@ function EditGameVersions({ setTitle }) {
 	const [formData, setFormData] = useState(formInit);
 	const [gamesList, setGamesList] = useState([]);
 	const [versionSelect, setVersionSelect] = useState([]);
+	const [deleteSelection, setDeleteSelection] = useState({});
+	const [formOpen, setFormOpen] = useState('');
 
 	useEffect(() => {
-		setTitle('Select a game:');
-	}, [setTitle]);
+		setTitle(
+			selectedGame ? `${selectedGame.title} Versions` : 'Select a game:'
+		);
+	}, [setTitle, selectedGame]);
 
 	useEffect(() => {
 		async function getGames() {
@@ -87,6 +96,14 @@ function EditGameVersions({ setTitle }) {
 		});
 	};
 
+	const handleClickOpenAdd = () => {
+		setFormOpen(formOpen === 'add' ? '' : 'add');
+	};
+
+	const handleClickOpenDelete = () => {
+		setFormOpen(formOpen === 'delete' ? '' : 'delete');
+	};
+
 	const handleTitleChange = (e) => {
 		setFormData({
 			...formData,
@@ -94,40 +111,92 @@ function EditGameVersions({ setTitle }) {
 		});
 	};
 
+	const handleDeleteSelection = (e) => {
+		setDeleteSelection(e.target.value);
+	};
+
 	return (
 		<>
 			{selectedGame ? (
-				<FormControl className={classes.formControl}>
-					<div>
-						{' '}
-						<InputLabel id='demo-simple-select-label'>Rating</InputLabel>
-						<Select
-							labelId='demo-simple-select-label'
-							id='demo-simple-select'
-							value={formData.rating}
-							onChange={handleRatingChange}
+				<>
+					<CenteredDiv className={classes.buttonSpacing}>
+						<Button
+							variant='contained'
+							color={formOpen === 'add' ? 'primary' : 'secondary'}
+							onClick={handleClickOpenAdd}
 						>
-							<MenuItem value='kids'>Kids</MenuItem>
-							<MenuItem value='pg13'>PG-13</MenuItem>
-							<MenuItem value='r'>R</MenuItem>
-						</Select>
-					</div>
-					<div>
-						<TextField
-							id='standard-basic'
-							label='Version Title'
-							onChange={handleTitleChange}
-						/>
-					</div>
-					{renderVersionForm(selectedGame.shortName, {
-						formData,
-						setFormData,
-						selectedGame,
-					})}
-					<ReturnButton onClick={handleClickReset}>
-						Choose different game
-					</ReturnButton>
-				</FormControl>
+							Add version
+						</Button>
+						<Button
+							variant='contained'
+							color={formOpen === 'delete' ? 'primary' : 'secondary'}
+							onClick={handleClickOpenDelete}
+						>
+							Delete version
+						</Button>
+					</CenteredDiv>
+					{formOpen === 'add' && (
+						<VersionForm>
+							<CenteredDiv>
+								<FormControl className={classes.formControl}>
+									<TextField
+										id='standard-basic'
+										label='Version Title'
+										onChange={handleTitleChange}
+									/>
+								</FormControl>
+								<FormControl className={classes.formControl}>
+									<InputLabel id='demo-simple-select-label'>Rating</InputLabel>
+									<Select
+										labelId='demo-simple-select-label'
+										id='demo-simple-select'
+										value={formData.rating}
+										onChange={handleRatingChange}
+									>
+										<MenuItem value='kids'>Kids</MenuItem>
+										<MenuItem value='pg13'>PG-13</MenuItem>
+										<MenuItem value='r'>R</MenuItem>
+									</Select>
+								</FormControl>
+							</CenteredDiv>
+
+							{renderVersionForm(selectedGame.shortName, {
+								formData,
+								setFormData,
+								selectedGame,
+							})}
+						</VersionForm>
+					)}
+					{formOpen === 'delete' && (
+						<VersionForm>
+							<FormControl component='fieldset'>
+								<FormLabel component='legend'>Versions</FormLabel>
+								<RadioGroup
+									aria-label='deleteVersion'
+									name='deleteVersion'
+									value={deleteSelection}
+									onChange={handleDeleteSelection}
+								>
+									{versionSelect.map((version) => {
+										return (
+											<FormControlLabel
+												value={version.title}
+												key={version.title}
+												control={<Radio />}
+												label={`${version.title} (${version.rating})`}
+											/>
+										);
+									})}
+								</RadioGroup>
+							</FormControl>
+						</VersionForm>
+					)}
+					<CenteredDiv style={{ marginTop: '3rem' }}>
+						<ReturnButton onClick={handleClickReset}>
+							Choose different game
+						</ReturnButton>
+					</CenteredDiv>
+				</>
 			) : (
 				<GameLogosContainer>
 					{gamesList.length > 0 &&
