@@ -31,8 +31,8 @@ const logos = importAll(
 
 const useStyles = makeStyles((theme) => ({
 	formControl: {
-		margin: theme.spacing(5),
-		minWidth: 100,
+		margin: theme.spacing(3),
+		minWidth: 120,
 	},
 	buttonSpacing: {
 		'& > *': {
@@ -140,18 +140,24 @@ function EditGameVersions({ setTitle }) {
 							<CenteredDiv>
 								<FormControl className={classes.formControl}>
 									<TextField
-										id='standard-basic'
+										id='outlined-basic'
 										label='Version Title'
+										variant='outlined'
 										onChange={handleTitleChange}
+										required
 									/>
 								</FormControl>
-								<FormControl className={classes.formControl}>
-									<InputLabel id='demo-simple-select-label'>Rating</InputLabel>
+								<FormControl variant='outlined' className={classes.formControl}>
+									<InputLabel id='demo-simple-select-outlined-label'>
+										Rating
+									</InputLabel>
 									<Select
-										labelId='demo-simple-select-label'
-										id='demo-simple-select'
+										labelId='demo-simple-select-outlined-label'
+										id='demo-simple-select-outlined'
+										labelWidth={45}
 										value={formData.rating}
 										onChange={handleRatingChange}
+										required
 									>
 										<MenuItem value='kids'>Kids</MenuItem>
 										<MenuItem value='pg13'>PG-13</MenuItem>
@@ -168,7 +174,7 @@ function EditGameVersions({ setTitle }) {
 						</VersionForm>
 					)}
 					{formOpen === 'delete' && (
-						<VersionForm>
+						<VersionForm width={'25%'}>
 							<FormControl component='fieldset'>
 								<FormLabel component='legend'>Versions</FormLabel>
 								<RadioGroup
@@ -188,6 +194,15 @@ function EditGameVersions({ setTitle }) {
 										);
 									})}
 								</RadioGroup>
+							</FormControl>
+							<FormControl>
+								<Button
+									style={{ marginTop: '1rem' }}
+									variant='contained'
+									color='secondary'
+								>
+									DELETE
+								</Button>
 							</FormControl>
 						</VersionForm>
 					)}

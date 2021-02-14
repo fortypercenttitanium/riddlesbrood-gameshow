@@ -17,7 +17,8 @@ const VersionForm = styled.form`
 	flex-direction: column;
 	justify-content: center;
 	margin: auto;
-	width: 60%;
+	flex: 0;
+	width: ${(props) => props.width || '60%'};
 	text-align: center;
 	border: 1px solid grey;
 	padding: 1rem;
