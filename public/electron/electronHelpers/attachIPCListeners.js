@@ -88,20 +88,54 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 		}
 	});
 
-	ipcMain.handle('GET_ALL_GAME_VERSIONS', () => {
-		const versions = {};
-		const versionsPath = isDev
+	ipcMain.handle('GET_GAME_VERSIONS', (e, type) => {
+		const coreVersions = {};
+		const customVersions = {};
+
+		const coreVersionsPath = isDev
 			? path.join(app.getAppPath(), 'src', 'assets', 'game_versions')
 			: path.join(process.resourcesPath, 'game_versions');
-		const fileNames = fs
-			.readdirSync(versionsPath)
+		const customVersionsPath = path.join(
+			app.getPath('userData'),
+			'game_versions'
+		);
+
+		if (!fs.existsSync(customVersionsPath)) {
+			fs.mkdirSync(path.join(app.getPath('userData'), 'game_versions'));
+		}
+
+		const coreFileNames = fs
+			.readdirSync(coreVersionsPath)
 			.filter((name) => name !== 'gameVersions.js');
-		fileNames.forEach((file) => {
-			versions[file.split('Versions')[0]] = JSON.parse(
-				fs.readFileSync(path.join(versionsPath, file))
+		const customFileNames = fs.readdirSync(customVersionsPath);
+		// custom file names should match the shortName of games
+
+		coreFileNames.forEach((file) => {
+			coreVersions[file.split('Versions')[0]] = JSON.parse(
+				fs.readFileSync(path.join(coreVersionsPath, file))
 			);
 		});
-	return versions;
+		customFileNames.forEach((file) => {
+			customVersions[file] = [];
+			const versionNames = fs.existsSync(path.join(customVersionsPath, file))
+				? fs.readdirSync(path.join(customVersionsPath, file))
+				: [];
+			versionNames.forEach((version) => {
+				const versionData = JSON.parse(
+					fs.readFileSync(
+						path.join(customVersionsPath, file, version, 'data.json')
+					)
+				);
+				customVersions[file].push(versionData);
+			});
+		});
+		return type === 'core'
+			? coreVersions
+			: type === 'custom'
+			? customVersions
+			: type === 'all'
+			? { coreVersions, customVersions }
+			: new Error('type must be "core", "custom", or "all"');
 	});
 
 	ipcMain.handle('GET_APP_DATA_PATH', () => {

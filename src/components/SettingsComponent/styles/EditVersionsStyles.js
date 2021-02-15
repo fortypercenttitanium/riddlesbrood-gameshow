@@ -18,8 +18,6 @@ const VersionForm = styled.form`
 	justify-content: center;
 	margin: auto;
 	width: ${(props) => props.width || '80%'};
-	max-height: 40rem;
-	overflow: auto;
 	text-align: center;
 	border: 1px solid grey;
 	padding: 1rem;

@@ -11,6 +11,7 @@ import {
 	GameLogo,
 } from '../ControlComponents/GamesMenu/GamesMenuModalStyles';
 import { ReturnButton } from './styles/TemplateStyles';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import renderVersionForm from './helpers/renderVersionForm';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -70,10 +71,11 @@ function EditGameVersions({ setTitle }) {
 
 	useEffect(() => {
 		async function populateGameVersions() {
-			const allVersions = await ipcRenderer.invoke('GET_ALL_GAME_VERSIONS');
-			const selectedGameVersions = selectedGame
-				? allVersions[selectedGame.shortName]
-				: [];
+			const versions = await ipcRenderer.invoke('GET_GAME_VERSIONS', 'custom');
+			const selectedGameVersions =
+				selectedGame && versions[selectedGame.shortName]
+					? versions[selectedGame.shortName]
+					: [];
 			setVersionSelect(selectedGameVersions);
 		}
 		populateGameVersions();
@@ -124,9 +126,11 @@ function EditGameVersions({ setTitle }) {
 		setDeleteSelection(e.target.value);
 	};
 
-	const handleSubmitAdd = (e) => {
+	const handleSubmitAdd = async (e) => {
 		e.preventDefault();
-		console.log(formData);
+		const versions = await ipcRenderer.invoke('GET_GAME_VERSIONS', 'all');
+		// if (versions===formData.title)
+		console.log(versions);
 	};
 
 	const handleSubmitDelete = (e) => {
@@ -139,6 +143,14 @@ function EditGameVersions({ setTitle }) {
 			{selectedGame ? (
 				<>
 					<CenteredDiv className={classes.buttonSpacing}>
+						<Button
+							color='default'
+							onClick={handleClickReset}
+							style={{ position: 'absolute', left: '2rem' }}
+						>
+							<ArrowBackIosIcon />
+							Back to Games
+						</Button>
 						<Button
 							variant='contained'
 							color={formOpen === 'add' ? 'primary' : 'default'}
@@ -162,6 +174,7 @@ function EditGameVersions({ setTitle }) {
 										id='outlined-basic'
 										label='Version Title'
 										variant='outlined'
+										style={{ width: '20rem' }}
 										onChange={handleTitleChange}
 										required
 									/>
@@ -194,10 +207,11 @@ function EditGameVersions({ setTitle }) {
 
 							<FormControl>
 								<Button
-									style={{ marginTop: '1rem' }}
+									style={{ margin: '1rem auto' }}
 									variant='contained'
 									color='primary'
 									type='submit'
+									size='large'
 								>
 									ADD VERSION
 								</Button>
@@ -235,11 +249,6 @@ function EditGameVersions({ setTitle }) {
 							</CenteredDiv>
 						</VersionForm>
 					)}
-					<CenteredDiv style={{ marginTop: '3rem' }}>
-						<ReturnButton onClick={handleClickReset}>
-							Choose different game
-						</ReturnButton>
-					</CenteredDiv>
 				</>
 			) : (
 				<GameLogosContainer>

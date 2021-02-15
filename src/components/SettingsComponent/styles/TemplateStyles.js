@@ -15,15 +15,17 @@ const ReturnButton = styled.button`
 	padding: 1rem;
 	font-weight: bold;
 	cursor: pointer;
-	margin: auto;
+	margin: auto 2rem;
 `;
 
 const ButtonsWrapper = styled.div`
-	margin: 3rem auto;
-	width: 50%;
+	margin: 2rem auto;
+	width: 80%;
 	text-align: center;
 	display: flex;
-	justify-items: center;
+	justify-content: center;
+	padding-top: 2rem;
+	border-top: 1px solid rgba(0, 0, 0, 0.4);
 `;
 
 export { ReturnButton, ButtonsWrapper, HeaderWrapper, Header };
