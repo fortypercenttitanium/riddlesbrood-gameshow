@@ -87,12 +87,28 @@ function EditGameVersions({ setTitle }) {
 		e.preventDefault();
 		setSelectedGame();
 		setFormData(formInit);
+		setDeleteSelection({});
+		setFormOpen('');
+	};
+
+	const handleTitleChange = (e) => {
+		setFormData({
+			...formData,
+			title: e.target.value,
+		});
 	};
 
 	const handleRatingChange = (e) => {
 		setFormData({
 			...formData,
 			rating: e.target.value,
+		});
+	};
+
+	const handleContentChange = (content) => {
+		setFormData({
+			...formData,
+			content,
 		});
 	};
 
@@ -104,15 +120,18 @@ function EditGameVersions({ setTitle }) {
 		setFormOpen(formOpen === 'delete' ? '' : 'delete');
 	};
 
-	const handleTitleChange = (e) => {
-		setFormData({
-			...formData,
-			title: e.target.value,
-		});
-	};
-
 	const handleDeleteSelection = (e) => {
 		setDeleteSelection(e.target.value);
+	};
+
+	const handleSubmitAdd = (e) => {
+		e.preventDefault();
+		console.log(formData);
+	};
+
+	const handleSubmitDelete = (e) => {
+		e.preventDefault();
+		console.log(deleteSelection);
 	};
 
 	return (
@@ -122,21 +141,21 @@ function EditGameVersions({ setTitle }) {
 					<CenteredDiv className={classes.buttonSpacing}>
 						<Button
 							variant='contained'
-							color={formOpen === 'add' ? 'primary' : 'secondary'}
+							color={formOpen === 'add' ? 'primary' : 'default'}
 							onClick={handleClickOpenAdd}
 						>
 							Add version
 						</Button>
 						<Button
 							variant='contained'
-							color={formOpen === 'delete' ? 'primary' : 'secondary'}
+							color={formOpen === 'delete' ? 'primary' : 'default'}
 							onClick={handleClickOpenDelete}
 						>
 							Delete version
 						</Button>
 					</CenteredDiv>
 					{formOpen === 'add' && (
-						<VersionForm>
+						<VersionForm onSubmit={handleSubmitAdd}>
 							<CenteredDiv>
 								<FormControl className={classes.formControl}>
 									<TextField
@@ -165,16 +184,28 @@ function EditGameVersions({ setTitle }) {
 									</Select>
 								</FormControl>
 							</CenteredDiv>
+							<CenteredDiv>
+								{renderVersionForm(selectedGame.shortName, {
+									formData,
+									handleContentChange,
+									selectedGame,
+								})}
+							</CenteredDiv>
 
-							{renderVersionForm(selectedGame.shortName, {
-								formData,
-								setFormData,
-								selectedGame,
-							})}
+							<FormControl>
+								<Button
+									style={{ marginTop: '1rem' }}
+									variant='contained'
+									color='primary'
+									type='submit'
+								>
+									ADD VERSION
+								</Button>
+							</FormControl>
 						</VersionForm>
 					)}
 					{formOpen === 'delete' && (
-						<VersionForm width={'25%'}>
+						<VersionForm width={'25%'} onSubmit={handleSubmitDelete}>
 							<FormControl component='fieldset'>
 								<FormLabel component='legend'>Versions</FormLabel>
 								<RadioGroup
@@ -183,27 +214,25 @@ function EditGameVersions({ setTitle }) {
 									value={deleteSelection}
 									onChange={handleDeleteSelection}
 								>
-									{versionSelect.map((version) => {
+									{versionSelect.map((version, index) => {
 										return (
 											<FormControlLabel
 												value={version.title}
 												key={version.title}
-												control={<Radio />}
+												control={<Radio required />}
 												label={`${version.title} (${version.rating})`}
 											/>
 										);
 									})}
 								</RadioGroup>
 							</FormControl>
-							<FormControl>
-								<Button
-									style={{ marginTop: '1rem' }}
-									variant='contained'
-									color='secondary'
-								>
-									DELETE
-								</Button>
-							</FormControl>
+							<CenteredDiv>
+								<FormControl>
+									<Button type='submit' variant='contained' color='secondary'>
+										DELETE
+									</Button>
+								</FormControl>
+							</CenteredDiv>
 						</VersionForm>
 					)}
 					<CenteredDiv style={{ marginTop: '3rem' }}>

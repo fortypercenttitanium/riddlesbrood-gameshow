@@ -9,13 +9,13 @@ import WhatIsIt from '../GameVersionForms/WhatIsIt';
 import Wheel from '../GameVersionForms/Wheel';
 
 export default function renderVersionForm(game, props) {
-	const { formData, setFormData, selectedGame } = props;
+	const { formData, handleContentChange, selectedGame } = props;
 	switch (game) {
 		case 'couples': {
 			return (
 				<Couples
 					formData={formData}
-					setFormData={setFormData}
+					handleContentChange={handleContentChange}
 					selectedGame={selectedGame}
 				/>
 			);
@@ -24,7 +24,7 @@ export default function renderVersionForm(game, props) {
 			return (
 				<ESP
 					formData={formData}
-					setFormData={setFormData}
+					setFormData={handleContentChange}
 					selectedGame={selectedGame}
 				/>
 			);
@@ -33,7 +33,7 @@ export default function renderVersionForm(game, props) {
 			return (
 				<FamilyFeud
 					formData={formData}
-					setFormData={setFormData}
+					setFormData={handleContentChange}
 					selectedGame={selectedGame}
 				/>
 			);
@@ -42,7 +42,7 @@ export default function renderVersionForm(game, props) {
 			return (
 				<Jeopardy
 					formData={formData}
-					setFormData={setFormData}
+					setFormData={handleContentChange}
 					selectedGame={selectedGame}
 				/>
 			);
@@ -51,7 +51,7 @@ export default function renderVersionForm(game, props) {
 			return (
 				<NameThatTune
 					formData={formData}
-					setFormData={setFormData}
+					setFormData={handleContentChange}
 					selectedGame={selectedGame}
 				/>
 			);
@@ -60,7 +60,7 @@ export default function renderVersionForm(game, props) {
 			return (
 				<Pyramid
 					formData={formData}
-					setFormData={setFormData}
+					setFormData={handleContentChange}
 					selectedGame={selectedGame}
 				/>
 			);
@@ -69,7 +69,7 @@ export default function renderVersionForm(game, props) {
 			return (
 				<WhatIsIt
 					formData={formData}
-					setFormData={setFormData}
+					setFormData={handleContentChange}
 					selectedGame={selectedGame}
 				/>
 			);
@@ -78,7 +78,7 @@ export default function renderVersionForm(game, props) {
 			return (
 				<Wheel
 					formData={formData}
-					setFormData={setFormData}
+					setFormData={handleContentChange}
 					selectedGame={selectedGame}
 				/>
 			);

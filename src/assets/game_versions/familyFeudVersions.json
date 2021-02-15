@@ -1,6 +1,6 @@
 [
 	{
-		"title": "8 answers",
+		"title": "8 answers family",
 		"rating": "r",
 		"content": {
 			"prompt": "Name a reason you might get rid of an old family heirloom.",
@@ -41,7 +41,7 @@
 		}
 	},
 	{
-		"title": "10 answers",
+		"title": "10 answers countries",
 		"rating": "pg13",
 		"content": {
 			"prompt": "Countries that speak Spanish",
@@ -90,7 +90,7 @@
 		}
 	},
 	{
-		"title": "6 answers",
+		"title": "6 answers dollar",
 		"rating": "kids",
 		"content": {
 			"prompt": "Things you can buy for a dollar or less",
@@ -123,7 +123,7 @@
 		}
 	},
 	{
-		"title": "9 answers",
+		"title": "9 answers gym",
 		"rating": "pg13",
 		"content": {
 			"prompt": "Something you haven't done since high school gym class.",
@@ -168,7 +168,7 @@
 		}
 	},
 	{
-		"title": "6 answers",
+		"title": "6 answers kitchen",
 		"rating": "r",
 		"content": {
 			"prompt": "Name a liquid in your kitchen that you hope no one ever accidentally drinks.",
@@ -201,7 +201,7 @@
 		}
 	},
 	{
-		"title": "7 answers",
+		"title": "7 answers wizards",
 		"rating": "kids",
 		"content": {
 			"prompt": "Famous wizards",
@@ -238,7 +238,7 @@
 		}
 	},
 	{
-		"title": "9 answers",
+		"title": "9 answers air",
 		"rating": "r",
 		"content": {
 			"prompt": "Something you fill with air",
