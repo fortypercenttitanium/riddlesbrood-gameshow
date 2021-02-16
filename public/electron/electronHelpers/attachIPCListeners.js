@@ -1,5 +1,5 @@
 const createGameWindows = require('./createGameWindows');
-const storeAppData = require('./storeAppData');
+const storeFxButton = require('./storeFxButton');
 const fs = require('fs');
 const util = require('util');
 const path = require('path');
@@ -8,6 +8,9 @@ const { dialog, ipcMain, app } = require('electron');
 const { showErrorBox, showMessageBox } = require('./messageBoxes');
 const { getAllFxFiles, findFxFile } = require('./fxFiles');
 const projectorMode = require('./projectorMode');
+const getGameVersions = require('./getGameVersions');
+const storeGameVersion = require('./storeGameVersion');
+const deleteGameVersion = require('./deleteGameVersion');
 
 const readFilePromise = util.promisify(fs.readFile);
 
@@ -15,9 +18,6 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 	ipcMain.once('LAUNCH_GAME', () => {
 		createGameWindows({ getWindow, setWindow });
 		getWindow('start').close();
-	});
-	ipcMain.on('STORE_APP_DATA', (e, type, filename, data) => {
-		storeAppData(type, filename, data);
 	});
 	ipcMain.on('MESSAGE_BOX', (e, payload) => {
 		showMessageBox(payload.title, payload.message);
@@ -39,7 +39,7 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 			}
 			const newFileName = `${name}.${ext}`;
 			const fileData = await readFilePromise(filePath);
-			const result = await storeAppData('fx_button', newFileName, fileData);
+			const result = await storeFxButton(newFileName, fileData);
 			if (result) {
 				showMessageBox('Success', 'FX button added!');
 				return true;
@@ -52,11 +52,11 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 		}
 	});
 
-	ipcMain.handle('GET_FX_BUTTON_FILES', (e, type) => {
+	ipcMain.handle('GET_FX_BUTTON_FILES', (_, type) => {
 		return getAllFxFiles(type);
 	});
 
-	ipcMain.handle('DELETE_FX_BUTTON', async (e, fileName) => {
+	ipcMain.handle('DELETE_FX_BUTTON', async (_, fileName) => {
 		try {
 			const verification = await dialog.showMessageBox({
 				type: 'warning',
@@ -88,54 +88,28 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 		}
 	});
 
-	ipcMain.handle('GET_GAME_VERSIONS', (e, type) => {
-		const coreVersions = {};
-		const customVersions = {};
+	ipcMain.handle('GET_GAME_VERSIONS', (_, type) => getGameVersions(type));
 
-		const coreVersionsPath = isDev
-			? path.join(app.getAppPath(), 'src', 'assets', 'game_versions')
-			: path.join(process.resourcesPath, 'game_versions');
-		const customVersionsPath = path.join(
-			app.getPath('userData'),
-			'game_versions'
+	ipcMain.handle('NEW_GAME_VERSION', (_, game, data, assets) => {
+		// check for existing names
+		const versions = getGameVersions('all');
+		const versionNameExists = versions[game].find(
+			(version) => version.title === data.title
 		);
 
-		if (!fs.existsSync(customVersionsPath)) {
-			fs.mkdirSync(path.join(app.getPath('userData'), 'game_versions'));
-		}
-
-		const coreFileNames = fs
-			.readdirSync(coreVersionsPath)
-			.filter((name) => name !== 'gameVersions.js');
-		const customFileNames = fs.readdirSync(customVersionsPath);
-		// custom file names should match the shortName of games
-
-		coreFileNames.forEach((file) => {
-			coreVersions[file.split('Versions')[0]] = JSON.parse(
-				fs.readFileSync(path.join(coreVersionsPath, file))
+		if (versionNameExists) {
+			showErrorBox(
+				'Version name exists',
+				'A game version by this name already exists. Please choose a different version name.'
 			);
-		});
-		customFileNames.forEach((file) => {
-			customVersions[file] = [];
-			const versionNames = fs.existsSync(path.join(customVersionsPath, file))
-				? fs.readdirSync(path.join(customVersionsPath, file))
-				: [];
-			versionNames.forEach((version) => {
-				const versionData = JSON.parse(
-					fs.readFileSync(
-						path.join(customVersionsPath, file, version, 'data.json')
-					)
-				);
-				customVersions[file].push(versionData);
-			});
-		});
-		return type === 'core'
-			? coreVersions
-			: type === 'custom'
-			? customVersions
-			: type === 'all'
-			? { coreVersions, customVersions }
-			: new Error('type must be "core", "custom", or "all"');
+			return false;
+		} else {
+			return storeGameVersion(game, data, assets);
+		}
+	});
+
+	ipcMain.handle('DELETE_GAME_VERSION', async (_, game, versionName) => {
+		return await deleteGameVersion(game, versionName);
 	});
 
 	ipcMain.handle('GET_APP_DATA_PATH', () => {

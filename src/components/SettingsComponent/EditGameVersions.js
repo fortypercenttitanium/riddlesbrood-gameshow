@@ -50,7 +50,9 @@ function EditGameVersions({ setTitle }) {
 		content: {},
 	};
 	const [selectedGame, setSelectedGame] = useState();
+	const [newFilesAvailable, setNewFilesAvailable] = useState(true);
 	const [formData, setFormData] = useState(formInit);
+	const [assets, setAssets] = useState([]);
 	const [gamesList, setGamesList] = useState([]);
 	const [versionSelect, setVersionSelect] = useState([]);
 	const [deleteSelection, setDeleteSelection] = useState({});
@@ -78,8 +80,11 @@ function EditGameVersions({ setTitle }) {
 					: [];
 			setVersionSelect(selectedGameVersions);
 		}
-		populateGameVersions();
-	}, [selectedGame]);
+		if (selectedGame && newFilesAvailable) {
+			populateGameVersions();
+			setNewFilesAvailable(false);
+		}
+	}, [selectedGame, newFilesAvailable]);
 
 	const handleClickGame = (game) => {
 		setSelectedGame(game);
@@ -128,14 +133,33 @@ function EditGameVersions({ setTitle }) {
 
 	const handleSubmitAdd = async (e) => {
 		e.preventDefault();
-		const versions = await ipcRenderer.invoke('GET_GAME_VERSIONS', 'all');
-		// if (versions===formData.title)
-		console.log(versions);
+		const { title, rating, content } = formData;
+		const result = await ipcRenderer.invoke(
+			'NEW_GAME_VERSION',
+			selectedGame.shortName,
+			{ title, rating, content },
+			assets
+		);
+		if (result) {
+			setFormData(formInit);
+			setDeleteSelection({});
+			setFormOpen('');
+			setNewFilesAvailable(true);
+		}
 	};
 
-	const handleSubmitDelete = (e) => {
+	const handleSubmitDelete = async (e) => {
 		e.preventDefault();
-		console.log(deleteSelection);
+		const result = await ipcRenderer.invoke(
+			'DELETE_GAME_VERSION',
+			selectedGame.shortName,
+			deleteSelection
+		);
+		if (result) {
+			setDeleteSelection({});
+			setFormOpen('');
+			setNewFilesAvailable(true);
+		}
 	};
 
 	return (
@@ -228,7 +252,7 @@ function EditGameVersions({ setTitle }) {
 									value={deleteSelection}
 									onChange={handleDeleteSelection}
 								>
-									{versionSelect.map((version, index) => {
+									{versionSelect.map((version) => {
 										return (
 											<FormControlLabel
 												value={version.title}
