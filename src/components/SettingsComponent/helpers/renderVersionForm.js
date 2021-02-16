@@ -9,32 +9,26 @@ import WhatIsIt from '../GameVersionForms/WhatIsIt';
 import Wheel from '../GameVersionForms/Wheel';
 
 export default function renderVersionForm(game, props) {
-	const { formData, handleContentChange, selectedGame } = props;
+	const { formData, handleContentChange } = props;
 	switch (game) {
 		case 'couples': {
 			return (
 				<Couples
 					formData={formData}
 					handleContentChange={handleContentChange}
-					selectedGame={selectedGame}
 				/>
 			);
 		}
 		case 'esp': {
 			return (
-				<ESP
-					formData={formData}
-					setFormData={handleContentChange}
-					selectedGame={selectedGame}
-				/>
+				<ESP formData={formData} handleContentChange={handleContentChange} />
 			);
 		}
 		case 'familyFeud': {
 			return (
 				<FamilyFeud
 					formData={formData}
-					setFormData={handleContentChange}
-					selectedGame={selectedGame}
+					handleContentChange={handleContentChange}
 				/>
 			);
 		}
@@ -42,8 +36,7 @@ export default function renderVersionForm(game, props) {
 			return (
 				<Jeopardy
 					formData={formData}
-					setFormData={handleContentChange}
-					selectedGame={selectedGame}
+					handleContentChange={handleContentChange}
 				/>
 			);
 		}
@@ -51,8 +44,7 @@ export default function renderVersionForm(game, props) {
 			return (
 				<NameThatTune
 					formData={formData}
-					setFormData={handleContentChange}
-					selectedGame={selectedGame}
+					handleContentChange={handleContentChange}
 				/>
 			);
 		}
@@ -60,8 +52,7 @@ export default function renderVersionForm(game, props) {
 			return (
 				<Pyramid
 					formData={formData}
-					setFormData={handleContentChange}
-					selectedGame={selectedGame}
+					handleContentChange={handleContentChange}
 				/>
 			);
 		}
@@ -69,18 +60,13 @@ export default function renderVersionForm(game, props) {
 			return (
 				<WhatIsIt
 					formData={formData}
-					setFormData={handleContentChange}
-					selectedGame={selectedGame}
+					handleContentChange={handleContentChange}
 				/>
 			);
 		}
 		case 'wheel': {
 			return (
-				<Wheel
-					formData={formData}
-					setFormData={handleContentChange}
-					selectedGame={selectedGame}
-				/>
+				<Wheel formData={formData} handleContentChange={handleContentChange} />
 			);
 		}
 		default: {
