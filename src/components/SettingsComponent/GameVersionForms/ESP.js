@@ -6,7 +6,7 @@ import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
 
 function ESP({ formData, handleContentChange }) {
-	const content = formData.content;
+	const { content } = formData;
 
 	useEffect(() => {
 		if (!Array.isArray(content)) {
