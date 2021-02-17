@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CenteredDiv, FlexContainer } from '../styles/EditVersionsStyles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
@@ -8,11 +8,15 @@ import TextField from '@material-ui/core/TextField';
 function ESP({ formData, handleContentChange }) {
 	const { content } = formData;
 
+	const [isContentInitialized, setIsContentInitialized] = useState(false);
+
 	useEffect(() => {
-		if (!Array.isArray(content)) {
+		// initialize content format
+		if (!isContentInitialized) {
 			handleContentChange(['']);
+			setIsContentInitialized(true);
 		}
-	}, [handleContentChange, content]);
+	}, [handleContentChange, isContentInitialized]);
 
 	const addQuestion = () => {
 		handleContentChange([...content, '']);

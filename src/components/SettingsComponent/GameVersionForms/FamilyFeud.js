@@ -1,16 +1,4 @@
-/*
-Title: String
-Rating: String ('r', 'pg13', 'kids')
-Content: {
-  "prompt": String,
-  "answers": [
-    {"answer": String,
-    "revealed": false}
-  ]  
-}
-*/
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CenteredDiv, FlexContainer } from '../styles/EditVersionsStyles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
@@ -20,9 +8,11 @@ import TextField from '@material-ui/core/TextField';
 function FamilyFeud({ formData, handleContentChange }) {
 	const { content } = formData;
 
+	const [isContentInitialized, setIsContentInitialized] = useState(false);
+
 	useEffect(() => {
 		// initialize content format
-		if (!content.hasOwnProperty('prompt')) {
+		if (!isContentInitialized) {
 			handleContentChange({
 				prompt: '',
 				answers: [
@@ -32,8 +22,9 @@ function FamilyFeud({ formData, handleContentChange }) {
 					},
 				],
 			});
+			setIsContentInitialized(true);
 		}
-	}, [handleContentChange, content]);
+	}, [handleContentChange, isContentInitialized]);
 
 	const addAnswer = () => {
 		if (content.answers.length < 10) {

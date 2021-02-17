@@ -10,7 +10,6 @@ import {
 	GameButton,
 	GameLogo,
 } from '../ControlComponents/GamesMenu/GamesMenuModalStyles';
-import { ReturnButton } from './styles/TemplateStyles';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import renderVersionForm from './helpers/renderVersionForm';
 import TextField from '@material-ui/core/TextField';
@@ -23,7 +22,8 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
 const { ipcRenderer } = window.require('electron');
 
 const logos = importAll(
@@ -41,6 +41,19 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 }));
+
+const AddVersionButton = withStyles((theme) => ({
+	root: {
+		color: '#ddddd',
+		padding: '1.2rem 2rem',
+		fontWeight: 'bold',
+		textShadow: '2px 2px 2px rgb(50, 50, 50)',
+		backgroundColor: green[500],
+		'&:hover': {
+			backgroundColor: green[700],
+		},
+	},
+}))(Button);
 
 function EditGameVersions({ setTitle }) {
 	const classes = useStyles();
@@ -150,15 +163,17 @@ function EditGameVersions({ setTitle }) {
 
 	const handleSubmitDelete = async (e) => {
 		e.preventDefault();
-		const result = await ipcRenderer.invoke(
-			'DELETE_GAME_VERSION',
-			selectedGame.shortName,
-			deleteSelection
-		);
-		if (result) {
-			setDeleteSelection({});
-			setFormOpen('');
-			setNewFilesAvailable(true);
+		if (Object.keys(deleteSelection).length) {
+			const result = await ipcRenderer.invoke(
+				'DELETE_GAME_VERSION',
+				selectedGame.shortName,
+				deleteSelection
+			);
+			if (result) {
+				setDeleteSelection({});
+				setFormOpen('');
+				setNewFilesAvailable(true);
+			}
 		}
 	};
 
@@ -230,7 +245,7 @@ function EditGameVersions({ setTitle }) {
 							</CenteredDiv>
 
 							<FormControl>
-								<Button
+								<AddVersionButton
 									style={{ margin: '1rem auto' }}
 									variant='contained'
 									color='primary'
@@ -238,7 +253,7 @@ function EditGameVersions({ setTitle }) {
 									size='large'
 								>
 									ADD VERSION
-								</Button>
+								</AddVersionButton>
 							</FormControl>
 						</VersionForm>
 					)}
