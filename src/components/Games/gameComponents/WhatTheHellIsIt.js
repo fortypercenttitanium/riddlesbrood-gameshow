@@ -179,11 +179,7 @@ export default function WhatTheHellIsIt(props) {
 		}
 	}, [timer, dispatch, revealHandler, blocks, timerDidUpdate]);
 
-	if (!state.gameController.gameStarted) {
-		return <div />;
-	}
-
-	return (
+	return state.gameController.gameStarted ? (
 		<WhatHomeScreen>
 			<TitleContainer>
 				<Title
@@ -268,5 +264,7 @@ export default function WhatTheHellIsIt(props) {
 				}
 			/>
 		</WhatHomeScreen>
+	) : (
+		<div />
 	);
 }

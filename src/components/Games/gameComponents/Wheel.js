@@ -156,11 +156,7 @@ export default function Wheel({ window }) {
 		console.log(window);
 	});
 
-	if (!state.gameController.gameStarted) {
-		return <div />;
-	}
-
-	return (
+	return state.gameController.gameStarted ? (
 		<WheelContainer>
 			<Title display={state.gameController.display}>
 				Please select puzzle:
@@ -240,5 +236,7 @@ export default function Wheel({ window }) {
 				}
 			/>
 		</WheelContainer>
+	) : (
+		<div />
 	);
 }

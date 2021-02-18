@@ -93,7 +93,7 @@ export default function Jeopardy({ window }) {
 		modalClick({ state, dispatch, sfxPlayer, musicPlayer });
 	};
 
-	return (
+	return state.gameController.gameStarted ? (
 		<JeopardyContainer>
 			<Modal display={state.gameController.display} onClick={handleClickModal}>
 				{state.gameController.display === 'daily-double' && (
@@ -148,5 +148,7 @@ export default function Jeopardy({ window }) {
 				}
 			/>
 		</JeopardyContainer>
+	) : (
+		<div />
 	);
 }

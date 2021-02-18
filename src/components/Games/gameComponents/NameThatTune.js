@@ -69,7 +69,7 @@ export default function NameThatTune(props) {
 		}
 	}, [dispatch, state]);
 
-	const { board, display, currentQuestion, score } = state.gameController;
+	const { board, currentQuestion, score } = state.gameController;
 
 	const handleClickRewind = () => {
 		rewindHandler({ musicPlayer, currentQuestion, dispatch, actions });
@@ -95,11 +95,7 @@ export default function NameThatTune(props) {
 		});
 	};
 
-	if (display === '') {
-		return <div />;
-	}
-
-	return (
+	return state.gameController.gameStarted ? (
 		<TuneHomeScreen>
 			<TitleContainer>
 				<Title
@@ -179,5 +175,7 @@ export default function NameThatTune(props) {
 				}
 			/>
 		</TuneHomeScreen>
+	) : (
+		<div />
 	);
 }

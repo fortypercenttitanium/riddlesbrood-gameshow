@@ -54,7 +54,7 @@ export default function ESP({ window }) {
 		}
 	}, [dispatch, state]);
 
-	const { board, display, currentQuestion, score } = state.gameController;
+	const { board, currentQuestion, score } = state.gameController;
 
 	const handleClickNext = () => {
 		nextPrompt({ board, currentQuestion, dispatch, actions });
@@ -64,11 +64,7 @@ export default function ESP({ window }) {
 		previousPrompt({ board, currentQuestion, dispatch, actions });
 	};
 
-	if (display === '') {
-		return <div />;
-	}
-
-	return (
+	return state.gameController.gameStarted ? (
 		<ESPHomeScreen>
 			<TitleContainer>
 				<Title window={window}>{currentQuestion}</Title>
@@ -120,5 +116,7 @@ export default function ESP({ window }) {
 				}
 			/>
 		</ESPHomeScreen>
+	) : (
+		<div />
 	);
 }

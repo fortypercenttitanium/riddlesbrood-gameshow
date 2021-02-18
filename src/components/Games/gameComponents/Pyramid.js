@@ -114,7 +114,7 @@ export default function Pyramid(props) {
 		clickHandlerCategory(item, index, { state, dispatch, actions });
 	};
 
-	return (
+	return state.gameController.gameStarted ? (
 		<PyramidHomeScreen team={state.gameController.activeTeam}>
 			<Modal display={state.gameController.display}>
 				<ModalDiv>
@@ -234,5 +234,7 @@ export default function Pyramid(props) {
 				}
 			/>
 		</PyramidHomeScreen>
+	) : (
+		<div />
 	);
 }

@@ -68,13 +68,9 @@ export default function FamilyFeud({ window }) {
 		}
 	}, [dispatch, state]);
 
-	const { board, display, wrongTracker, wrongModal } = state.gameController;
+	const { board, wrongTracker, wrongModal } = state.gameController;
 
-	if (display === '') {
-		return <div />;
-	}
-
-	return (
+	return state.gameController.gameStarted ? (
 		<FamilyFeudHomeScreen>
 			{wrongModal.display && (
 				<XModal window={window}>
@@ -222,5 +218,7 @@ export default function FamilyFeud({ window }) {
 				}
 			/>
 		</FamilyFeudHomeScreen>
+	) : (
+		<div />
 	);
 }

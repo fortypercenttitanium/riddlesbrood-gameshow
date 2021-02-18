@@ -32,13 +32,7 @@ export default function CouplesConundrum(props) {
 
 	const { state, dispatch } = useContext(StoreContext);
 	const { gameController } = state;
-	const {
-		board,
-		display,
-		currentQuestion,
-		score,
-		gameStarted,
-	} = gameController;
+	const { board, currentQuestion, score, gameStarted } = gameController;
 
 	let musicPlayer = useRef();
 	let sfxPlayer = useRef();
@@ -71,11 +65,7 @@ export default function CouplesConundrum(props) {
 		nextQuestion({ board, currentQuestion, dispatch, actions });
 	};
 
-	if (display === '') {
-		return <div />;
-	}
-
-	return (
+	return state.gameController.gameStarted ? (
 		<CouplesHomeScreen>
 			<TitleContainer>
 				<Title window={props.window}>{currentQuestion}</Title>
@@ -119,5 +109,7 @@ export default function CouplesConundrum(props) {
 				}
 			/>
 		</CouplesHomeScreen>
+	) : (
+		<div />
 	);
 }
