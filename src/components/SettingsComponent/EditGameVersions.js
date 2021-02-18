@@ -147,10 +147,27 @@ function EditGameVersions({ setTitle }) {
 	const handleSubmitAdd = async (e) => {
 		e.preventDefault();
 		const { title, rating, content } = formData;
+
+		let newContent = content;
+
+		if (assets.length) {
+			if (selectedGame.shortName !== 'jeopardy') {
+				newContent = content.map((question, index) => {
+					const { fileName } = assets.find(
+						(asset) => asset.forQuestion === index
+					);
+					question.file = `app://game_versions/${selectedGame.shortName}/${title}/${fileName}`;
+					return question;
+				});
+			} else {
+				// jeopardy file parsing
+			}
+		}
+
 		const result = await ipcRenderer.invoke(
 			'NEW_GAME_VERSION',
 			selectedGame.shortName,
-			{ title, rating, content },
+			{ title, rating, content: newContent },
 			assets
 		);
 		if (result) {
@@ -173,6 +190,7 @@ function EditGameVersions({ setTitle }) {
 				setDeleteSelection({});
 				setFormOpen('');
 				setNewFilesAvailable(true);
+				setAssets([]);
 			}
 		}
 	};
@@ -241,6 +259,8 @@ function EditGameVersions({ setTitle }) {
 									formData,
 									handleContentChange,
 									selectedGame,
+									setAssets,
+									assets,
 								})}
 							</CenteredDiv>
 

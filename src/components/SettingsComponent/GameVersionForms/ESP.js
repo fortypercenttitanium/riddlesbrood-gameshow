@@ -5,7 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
 
-function ESP({ formData, handleContentChange }) {
+function ESP({ formData, handleContentChange, setAssets }) {
 	const { content } = formData;
 
 	const [isContentInitialized, setIsContentInitialized] = useState(false);
@@ -14,9 +14,10 @@ function ESP({ formData, handleContentChange }) {
 		// initialize content format
 		if (!isContentInitialized) {
 			handleContentChange(['']);
+			setAssets([]);
 			setIsContentInitialized(true);
 		}
-	}, [handleContentChange, isContentInitialized]);
+	}, [handleContentChange, isContentInitialized, setAssets]);
 
 	const addQuestion = () => {
 		handleContentChange([...content, '']);

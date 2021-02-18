@@ -11,9 +11,10 @@ const playPauseHandler = ({
 		currentQuestionCopy.isPlaying = true;
 		dispatch({ type: actions.SET_QUESTION, payload: currentQuestionCopy });
 		player.src =
-			currentQuestion.file.slice(6) === 'app://'
+			currentQuestion.file.slice(0, 6) === 'app://'
 				? currentQuestion.file
 				: songs[currentQuestion.file];
+		console.log(currentQuestion.file);
 		player.play().catch((err) => console.log(err));
 	} else if (currentQuestion.isPlaying) {
 		player.pause();

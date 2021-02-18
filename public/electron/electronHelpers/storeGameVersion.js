@@ -22,6 +22,18 @@ module.exports = async function storeGameVersion(game, data, assets) {
 				(err) => {
 					if (err) {
 						throw new Error(err);
+					} else if (assets && assets.length) {
+						assets.forEach((asset) => {
+							fs.copyFile(
+								asset.path,
+								path.join(versionPath, asset.fileName),
+								(err) => {
+									if (err) {
+										throw new Error(err);
+									}
+								}
+							);
+						});
 					}
 				}
 			);

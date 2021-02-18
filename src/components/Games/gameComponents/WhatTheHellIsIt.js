@@ -200,7 +200,7 @@ export default function WhatTheHellIsIt(props) {
 					)}
 				<GameImg
 					src={
-						currentQuestion.file.slice(6) === 'app://'
+						currentQuestion.file.slice(0, 6) === 'app://'
 							? currentQuestion.file
 							: pictures[currentQuestion.file]
 					}

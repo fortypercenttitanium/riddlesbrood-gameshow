@@ -8,20 +8,27 @@ import Pyramid from '../GameVersionForms/Pyramid';
 import WhatIsIt from '../GameVersionForms/WhatIsIt';
 import Wheel from '../GameVersionForms/Wheel';
 
-export default function renderVersionForm(game, props) {
-	const { formData, handleContentChange } = props;
+export default function renderVersionForm(
+	game,
+	{ formData, handleContentChange, assets, setAssets }
+) {
 	switch (game) {
 		case 'couples': {
 			return (
 				<Couples
 					formData={formData}
 					handleContentChange={handleContentChange}
+					setAssets={setAssets}
 				/>
 			);
 		}
 		case 'esp': {
 			return (
-				<ESP formData={formData} handleContentChange={handleContentChange} />
+				<ESP
+					formData={formData}
+					handleContentChange={handleContentChange}
+					setAssets={setAssets}
+				/>
 			);
 		}
 		case 'familyFeud': {
@@ -29,6 +36,7 @@ export default function renderVersionForm(game, props) {
 				<FamilyFeud
 					formData={formData}
 					handleContentChange={handleContentChange}
+					setAssets={setAssets}
 				/>
 			);
 		}
@@ -37,6 +45,8 @@ export default function renderVersionForm(game, props) {
 				<Jeopardy
 					formData={formData}
 					handleContentChange={handleContentChange}
+					setAssets={setAssets}
+					assets={assets}
 				/>
 			);
 		}
@@ -45,6 +55,8 @@ export default function renderVersionForm(game, props) {
 				<NameThatTune
 					formData={formData}
 					handleContentChange={handleContentChange}
+					setAssets={setAssets}
+					assets={assets}
 				/>
 			);
 		}
@@ -53,6 +65,7 @@ export default function renderVersionForm(game, props) {
 				<Pyramid
 					formData={formData}
 					handleContentChange={handleContentChange}
+					setAssets={setAssets}
 				/>
 			);
 		}
@@ -61,12 +74,18 @@ export default function renderVersionForm(game, props) {
 				<WhatIsIt
 					formData={formData}
 					handleContentChange={handleContentChange}
+					setAssets={setAssets}
+					assets={assets}
 				/>
 			);
 		}
 		case 'wheel': {
 			return (
-				<Wheel formData={formData} handleContentChange={handleContentChange} />
+				<Wheel
+					formData={formData}
+					handleContentChange={handleContentChange}
+					setAssets={setAssets}
+				/>
 			);
 		}
 		default: {

@@ -1,17 +1,3 @@
-/*
-Title: String
-Rating: String ('r', 'pg13', 'kids')
-Content: [
-  "category": String,
-  "completed": false,
-  "words": [
-    String,
-    String,
-    String
-  ]
-]
-*/
-
 import React, { useEffect, useState } from 'react';
 import { CenteredDiv, FlexContainer } from '../styles/EditVersionsStyles';
 import { makeStyles } from '@material-ui/core/styles';
@@ -26,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Pyramid({ formData, handleContentChange }) {
+function Pyramid({ formData, handleContentChange, setAssets }) {
 	const classes = useStyles();
 	const { content } = formData;
 
@@ -42,9 +28,10 @@ function Pyramid({ formData, handleContentChange }) {
 					words: [''],
 				},
 			]);
+			setAssets([]);
+			setIsContentInitialized(true);
 		}
-		setIsContentInitialized(true);
-	}, [handleContentChange, isContentInitialized]);
+	}, [handleContentChange, isContentInitialized, setAssets]);
 
 	const addWord = (categoryIndex) => {
 		const newContent = [...content];

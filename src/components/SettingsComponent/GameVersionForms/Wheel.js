@@ -1,15 +1,3 @@
-/*
-Title: String
-Rating: String ('r', 'pg13', 'kids')
-Content: [
-  {
-    "category": String,
-    "puzzle": String (max-length: 52 chars),
-    "solved": false
-  }
-]
-*/
-
 import React, { useEffect, useState } from 'react';
 import { CenteredDiv, FlexContainer } from '../styles/EditVersionsStyles';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -17,7 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
 
-function Wheel({ formData, handleContentChange }) {
+function Wheel({ formData, handleContentChange, setAssets }) {
 	const { content } = formData;
 
 	const [isContentInitialized, setIsContentInitialized] = useState(false);
@@ -32,9 +20,10 @@ function Wheel({ formData, handleContentChange }) {
 					solved: false,
 				},
 			]);
+			setAssets([]);
 			setIsContentInitialized(true);
 		}
-	}, [handleContentChange, isContentInitialized]);
+	}, [handleContentChange, isContentInitialized, setAssets]);
 
 	const addPuzzle = () => {
 		const newContent = [...content];

@@ -5,7 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
 
-function FamilyFeud({ formData, handleContentChange }) {
+function FamilyFeud({ formData, handleContentChange, setAssets }) {
 	const { content } = formData;
 
 	const [isContentInitialized, setIsContentInitialized] = useState(false);
@@ -22,9 +22,10 @@ function FamilyFeud({ formData, handleContentChange }) {
 					},
 				],
 			});
+			setAssets([]);
 			setIsContentInitialized(true);
 		}
-	}, [handleContentChange, isContentInitialized]);
+	}, [handleContentChange, isContentInitialized, setAssets]);
 
 	const addAnswer = () => {
 		if (content.answers.length < 10) {
