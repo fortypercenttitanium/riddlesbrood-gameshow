@@ -58,7 +58,6 @@ function WhatIsIt({ formData, handleContentChange, setAssets, assets }) {
 		const ext = file.name.split('.').pop();
 		const id = nanoid();
 
-		const newContent = [...content];
 		const newAssets = [...assets];
 
 		newAssets[index] = {
@@ -68,7 +67,6 @@ function WhatIsIt({ formData, handleContentChange, setAssets, assets }) {
 		};
 
 		setAssets(newAssets);
-		handleContentChange(newContent);
 	};
 
 	return (

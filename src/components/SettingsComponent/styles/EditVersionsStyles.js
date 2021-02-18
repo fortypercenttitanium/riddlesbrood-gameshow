@@ -39,7 +39,6 @@ const CenteredDiv = styled.div`
 	justify-content: center;
 	padding: 1rem;
 	flex: 1 0 100%;
-	width: 100%;
 `;
 
 export { GameLogosContainer, VersionForm, CenteredDiv, FlexContainer };

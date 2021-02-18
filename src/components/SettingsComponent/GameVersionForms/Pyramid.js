@@ -66,9 +66,9 @@ function Pyramid({ formData, handleContentChange, setAssets }) {
 	};
 
 	const removeWord = (categoryIndex, wordIndex) => {
-		if (content[categoryIndex.words.length > 1]) {
+		if (content[categoryIndex].words.length > 1) {
 			const newContent = [...content];
-			newContent[categoryIndex].words[wordIndex].splice(wordIndex, 1);
+			newContent[categoryIndex].words.splice(wordIndex, 1);
 			handleContentChange(newContent);
 		}
 	};

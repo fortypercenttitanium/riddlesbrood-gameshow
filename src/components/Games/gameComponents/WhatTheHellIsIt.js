@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useRef, useCallback } from 'react';
+import React, {
+	useContext,
+	useEffect,
+	useRef,
+	useCallback,
+	useState,
+} from 'react';
 import {
 	WhatHomeScreen,
 	TitleContainer,
@@ -103,14 +109,9 @@ export default function WhatTheHellIsIt(props) {
 		}
 	}, [dispatch, state]);
 
-	const {
-		board,
-		display,
-		currentQuestion,
-		score,
-		timer,
-		blocks,
-	} = state.gameController;
+	const { board, currentQuestion, score, timer, blocks } = state.gameController;
+
+	const [timerDidUpdate, setTimerDidUpdate] = useState(false);
 
 	const revealHandler = useCallback(revealHandleCallback, [blocks, dispatch]);
 
@@ -139,7 +140,12 @@ export default function WhatTheHellIsIt(props) {
 	};
 
 	useEffect(() => {
-		if (timer.running) {
+		setTimerDidUpdate(true);
+	}, [timer]);
+
+	useEffect(() => {
+		if (timer.running && timerDidUpdate) {
+			setTimerDidUpdate(false);
 			switch (timer.time) {
 				case 21:
 					revealHandler(1, { blocks, dispatch, actions });
@@ -171,9 +177,9 @@ export default function WhatTheHellIsIt(props) {
 					break;
 			}
 		}
-	}, [timer, dispatch, revealHandler, blocks]);
+	}, [timer, dispatch, revealHandler, blocks, timerDidUpdate]);
 
-	if (display === '') {
+	if (!state.gameController.gameStarted) {
 		return <div />;
 	}
 
@@ -193,7 +199,8 @@ export default function WhatTheHellIsIt(props) {
 			<PictureDiv>
 				{timer.time < 24 &&
 					!timer.running &&
-					!state.gameController.answerRevealed && (
+					!state.gameController.answerRevealed &&
+					!blocks.every((block) => !block) && (
 						<Veil>
 							<VeilImg src={veilImage} />
 						</Veil>

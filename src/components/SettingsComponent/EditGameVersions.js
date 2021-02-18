@@ -148,11 +148,13 @@ function EditGameVersions({ setTitle }) {
 		e.preventDefault();
 		const { title, rating, content } = formData;
 
-		let newContent = content;
+		// content can be an array or object, check and copy appropriately
+		let newContent = Array.isArray(content) ? [...content] : { ...content };
 
 		if (assets.length) {
 			if (selectedGame.shortName !== 'jeopardy') {
-				newContent = content.map((question, index) => {
+				// parse assets for Name That Tune, What Is It
+				newContent = newContent.map((question, index) => {
 					const { fileName } = assets.find(
 						(asset) => asset.forQuestion === index
 					);
@@ -160,7 +162,14 @@ function EditGameVersions({ setTitle }) {
 					return question;
 				});
 			} else {
-				// jeopardy file parsing
+				// parse assets for jeopardy
+				assets.forEach((asset) => {
+					const { forQuestion, fileName } = asset;
+					const { categoryIndex, questionIndex } = forQuestion;
+					newContent[categoryIndex].questions[
+						questionIndex
+					].question = `app://game_versions/${selectedGame.shortName}/${title}/${fileName}`;
+				});
 			}
 		}
 
