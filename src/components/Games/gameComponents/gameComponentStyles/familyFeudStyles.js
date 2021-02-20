@@ -95,7 +95,8 @@ const H2 = styled.h2`
 
 const FlippableH3 = styled.h3`
 	margin: auto;
-	font-size: ${(props) => (props.window === 'controlPanel' ? '2rem' : '3rem')};
+	font-size: ${(props) =>
+		props.window === 'controlPanel' ? '1.5rem' : '2.5rem'};
 	opacity: ${(props) => (props.revealed ? '1' : '0.4')};
 	transform: ${(props) =>
 		props.revealed ? 'rotateX(-180deg)' : 'rotateX(0deg)'};
@@ -105,7 +106,7 @@ const Span = styled.span`
 	margin: auto;
 	padding: 3%;
 	font-size: ${(props) =>
-		props.window === 'controlPanel' ? '1.2rem' : '2.5rem'};
+		props.window === 'controlPanel' ? '1.5rem' : '2.5rem'};
 	line-height: ${(props) =>
 		props.window === 'controlPanel' ? '2rem' : '3.6rem'};
 	color: #003c7b;
@@ -122,7 +123,8 @@ const AnswerGrid = styled.div`
 
 const AnswerContainer = styled.div`
 	border: 2px solid #003c7b;
-	height: ${(props) => (props.window === 'controlPanel' ? '3rem' : '4rem')};
+	padding: ${(props) =>
+		props.window === 'controlPanel' ? '0.5rem' : '1.5rem'};
 	margin: 1%;
 	display: flex;
 	cursor: pointer;
@@ -161,8 +163,7 @@ const NumberButton = styled.span`
 	border: 2px solid #003c7b;
 	border-radius: 50%;
 	margin: auto;
-	line-height: 35px;
-	height: 35px;
+	height: 45px;
 	width: 45px;
 	font-size: 2rem;
 `;
