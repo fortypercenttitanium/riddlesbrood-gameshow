@@ -325,6 +325,7 @@ function EditGameVersions({ setTitle }) {
 							return (
 								game.shortName !== 'cardSharks' && (
 									<GameButton
+										style={{ height: '7rem', width: '12.5rem' }}
 										key={index}
 										onClick={() => {
 											handleClickGame(game);

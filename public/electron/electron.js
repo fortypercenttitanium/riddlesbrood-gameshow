@@ -2,6 +2,7 @@ const electron = require('electron');
 const path = require('path');
 const createStartScreen = require('./electronHelpers/createStartScreen');
 const attachIPCListeners = require('./electronHelpers/attachIPCListeners');
+const checkAssetFolders = require('./electronHelpers/checkAssetFolders');
 const { protocol, app } = electron;
 
 let mainWindow;
@@ -42,6 +43,8 @@ function setWindow(win, setting) {
 			break;
 	}
 }
+
+checkAssetFolders();
 
 attachIPCListeners({ getWindow, setWindow });
 

@@ -40,7 +40,7 @@ export default function ESP({ window }) {
 				...(await initGame(state, 'esp', 'board')),
 				score: {
 					type: 'team',
-					scoreBoard: [0, 0],
+					scoreBoard: [0, 0, 0, 0],
 				},
 			};
 			initState.currentQuestion = initState.board[0];

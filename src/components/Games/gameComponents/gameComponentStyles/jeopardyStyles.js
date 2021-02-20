@@ -43,7 +43,7 @@ const CatCell = styled.div`
 	display: flex;
 	flex: 1;
 	cursor: pointer;
-	font-size: 2rem;
+	font-size: ${(props) => (props.window === 'gameboard' ? '2rem' : '1rem')};
 	font-family: impact;
 	color: #eee;
 	background: linear-gradient(to top left, #000088, #0000ff);

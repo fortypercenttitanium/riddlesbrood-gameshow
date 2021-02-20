@@ -45,9 +45,9 @@ const GameButton = styled.div`
 	text-align: center;
 	cursor: pointer;
 	user-select: none;
+	transition: 0.3s;
 	&:hover {
 		background-color: white;
-		transition: 0.8s;
 	}
 `;
 

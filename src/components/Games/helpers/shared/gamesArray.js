@@ -1,7 +1,7 @@
-import getAllVersions from '../../../../assets/game_versions/gameVersions';
+import getGameVersions from '../../../../assets/game_versions/gameVersions';
 
 export async function gamesArray() {
-	const gameVersions = await getAllVersions();
+	const gameVersions = await getGameVersions({ filtered: true });
 	return [
 		{
 			title: 'Jeopardy',

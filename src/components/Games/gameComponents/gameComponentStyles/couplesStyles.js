@@ -101,6 +101,7 @@ export const ScoreBoardDiv = styled.div`
 	width: 80%;
 	margin: auto;
 	height: 35%;
+	justify-content: center;
 `;
 
 export const ScoreCardDiv = styled.div`

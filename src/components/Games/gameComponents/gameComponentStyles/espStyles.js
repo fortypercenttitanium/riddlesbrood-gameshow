@@ -90,6 +90,7 @@ const ScoreBoardDiv = styled.div`
 	display: flex;
 	width: 80%;
 	margin: auto;
+	justify-content: center;
 `;
 
 const ScoreCardDiv = styled.div`

@@ -23,7 +23,7 @@ module.exports = function setProjectorMode({ getWindow, setWindow }) {
 				message: 'Projector connection successful!',
 			});
 		}
-	} else {
+	} else if (!isDev) {
 		dialog.showMessageBox(mainWindow, {
 			type: 'error',
 			title: 'Projector error',

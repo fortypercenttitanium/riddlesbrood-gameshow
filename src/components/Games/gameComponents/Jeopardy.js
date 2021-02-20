@@ -114,12 +114,13 @@ export default function Jeopardy({ window }) {
 				{state.gameController.board.map((block, index) => {
 					return (
 						<CellContainer key={`category${index}`}>
-							<CatCell>
+							<CatCell window={window}>
 								<StyledSpan>{block.category}</StyledSpan>
 							</CatCell>
 							{block.questions.map((question, qIndex) => {
 								return (
 									<QCell
+										window={window}
 										key={qIndex}
 										onClick={() => {
 											handleClickBoard(question, index, qIndex);

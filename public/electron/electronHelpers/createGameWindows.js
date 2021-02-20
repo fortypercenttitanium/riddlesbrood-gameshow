@@ -30,6 +30,7 @@ module.exports = function createGameWindows({ getWindow, setWindow }) {
 
 	mainWindow.setMenuBarVisibility(false);
 	gameWindow.webContents.setAudioMuted(true);
+	gameWindow.webContents.openDevTools();
 
 	gameWindow.on('maximize', (e) => {
 		gameWindow.setFullScreen(true);

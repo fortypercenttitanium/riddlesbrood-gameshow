@@ -113,6 +113,7 @@ const ScoreBoardDiv = styled.div`
 	display: flex;
 	width: 80%;
 	margin: auto;
+	justify-content: center;
 `;
 
 const ScoreCardDiv = styled.div`
@@ -144,7 +145,7 @@ const ScoreCardDiv = styled.div`
 	border: 1px solid black;
 	border-radius: 10px;
 	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
-	margin: 0 30px;
+	margin: 0 60px;
 	height: 130px;
 `;
 

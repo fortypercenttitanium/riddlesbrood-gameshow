@@ -47,6 +47,7 @@ export default function GamesMenuModal() {
 	useEffect(() => {
 		async function getGames() {
 			const games = await gamesArray();
+			console.log('games: ', games);
 			setGamesList(games);
 		}
 		getGames();

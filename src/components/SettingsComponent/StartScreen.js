@@ -9,8 +9,8 @@ import { StartScreenContainer } from './styles/StartScreenStyles';
 import EditContentTemplate from './templates/EditContentTemplate';
 
 function StartScreen() {
-	const [timeline, setTimeline] = useState('edit-game-versions');
-	const [title, setTitle] = useState('Edit Game Content');
+	const [timeline, setTimeline] = useState('init');
+	const [title, setTitle] = useState('Riddlesbrood Gameshow');
 
 	const render = (timeline) => {
 		return timeline === 'init' ? (

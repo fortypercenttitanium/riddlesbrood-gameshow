@@ -47,7 +47,7 @@ export default function FamilyFeud({ window }) {
 		async function initialize() {
 			const initState = {
 				...(await initGame(state, 'familyFeud', 'board')),
-				score: { type: 'team', scoreBoard: [0, 0] },
+				score: { type: 'team', scoreBoard: [0, 0, null, null] },
 				wrongTracker: {
 					team1: [false, false, false],
 					team2: [false, false, false],

@@ -57,7 +57,7 @@ export default function Pyramid(props) {
 				},
 				score: {
 					type: 'team',
-					scoreBoard: [0, 0],
+					scoreBoard: [0, 0, null, null],
 				},
 				activeTeam: 0,
 			};
