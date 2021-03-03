@@ -4,37 +4,37 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
+import AddVersionButton from '../styles/AddVersionButton';
 
-function Couples({ formData, handleContentChange, setAssets }) {
-	const { content } = formData;
-
+function Couples({ setAssets, handleSubmitAdd }) {
+	const [content, setContent] = useState();
 	const [isContentInitialized, setIsContentInitialized] = useState(false);
 
 	useEffect(() => {
 		// initialize content format
 		if (!isContentInitialized) {
-			handleContentChange(['']);
+			setContent(['']);
 			setAssets([]);
 			setIsContentInitialized(true);
 		}
-	}, [handleContentChange, isContentInitialized, setAssets]);
+	}, [isContentInitialized, setAssets]);
 
 	const addQuestion = () => {
-		handleContentChange([...content, '']);
+		setContent([...content, '']);
 	};
 
 	const removeQuestion = (index) => {
 		if (content.length > 1) {
 			let newContent = [...content];
 			newContent.splice(index, 1);
-			handleContentChange(newContent);
+			setContent(newContent);
 		}
 	};
 
 	const handleChange = (e, index) => {
 		const newContent = [...content];
 		newContent[index] = e.target.value;
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	return (
@@ -76,6 +76,7 @@ function Couples({ formData, handleContentChange, setAssets }) {
 					<AddIcon />
 				</Fab>
 			</CenteredDiv>
+			<AddVersionButton onSubmit={() => handleSubmitAdd(content)} />
 		</FlexContainer>
 	);
 }

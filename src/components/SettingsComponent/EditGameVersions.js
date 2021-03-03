@@ -22,8 +22,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
+import { makeStyles } from '@material-ui/core/styles';
 const { ipcRenderer } = window.require('electron');
 
 const logos = importAll(
@@ -42,29 +41,12 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const AddVersionButton = withStyles((theme) => ({
-	root: {
-		color: '#ddddd',
-		padding: '1.2rem 2rem',
-		fontWeight: 'bold',
-		textShadow: '2px 2px 2px rgb(50, 50, 50)',
-		backgroundColor: green[500],
-		'&:hover': {
-			backgroundColor: green[700],
-		},
-	},
-}))(Button);
-
 function EditGameVersions({ setTitle }) {
 	const classes = useStyles();
-	const formInit = {
-		title: '',
-		rating: '',
-		content: {},
-	};
 	const [selectedGame, setSelectedGame] = useState();
 	const [newFilesAvailable, setNewFilesAvailable] = useState(true);
-	const [formData, setFormData] = useState(formInit);
+	const [versionTitle, setVersionTitle] = useState('');
+	const [versionRating, setVersionRating] = useState('');
 	const [assets, setAssets] = useState([]);
 	const [gamesList, setGamesList] = useState([]);
 	const [versionSelect, setVersionSelect] = useState([]);
@@ -106,30 +88,18 @@ function EditGameVersions({ setTitle }) {
 	const handleClickReset = (e) => {
 		e.preventDefault();
 		setSelectedGame();
-		setFormData(formInit);
+		setVersionTitle('');
+		setVersionRating('');
 		setDeleteSelection({});
 		setFormOpen('');
 	};
 
 	const handleTitleChange = (e) => {
-		setFormData({
-			...formData,
-			title: e.target.value,
-		});
+		setVersionTitle(e.target.value);
 	};
 
 	const handleRatingChange = (e) => {
-		setFormData({
-			...formData,
-			rating: e.target.value,
-		});
-	};
-
-	const handleContentChange = (content) => {
-		setFormData({
-			...formData,
-			content,
-		});
+		setVersionRating(e.target.value);
 	};
 
 	const handleClickOpenAdd = () => {
@@ -144,9 +114,8 @@ function EditGameVersions({ setTitle }) {
 		setDeleteSelection(e.target.value);
 	};
 
-	const handleSubmitAdd = async (e) => {
+	const handleSubmitAdd = async (e, content) => {
 		e.preventDefault();
-		const { title, rating, content } = formData;
 
 		// content can be an array or object, check and copy appropriately
 		let newContent = Array.isArray(content) ? [...content] : { ...content };
@@ -158,7 +127,7 @@ function EditGameVersions({ setTitle }) {
 					const { fileName } = assets.find(
 						(asset) => asset.forQuestion === index
 					);
-					question.file = `app://game_versions/${selectedGame.shortName}/${title}/${fileName}`;
+					question.file = `app://game_versions/${selectedGame.shortName}/${versionTitle}/${fileName}`;
 					return question;
 				});
 			} else {
@@ -168,7 +137,7 @@ function EditGameVersions({ setTitle }) {
 					const { categoryIndex, questionIndex } = forQuestion;
 					newContent[categoryIndex].questions[
 						questionIndex
-					].question = `app://game_versions/${selectedGame.shortName}/${title}/${fileName}`;
+					].question = `app://game_versions/${selectedGame.shortName}/${versionTitle}/${fileName}`;
 				});
 			}
 		}
@@ -176,13 +145,11 @@ function EditGameVersions({ setTitle }) {
 		const result = await ipcRenderer.invoke(
 			'NEW_GAME_VERSION',
 			selectedGame.shortName,
-			{ title, rating, content: newContent },
+			{ title: versionTitle, rating: versionRating, content: newContent },
 			assets
 		);
 		if (result) {
-			setFormData(formInit);
-			setDeleteSelection({});
-			setFormOpen('');
+			handleClickReset();
 			setNewFilesAvailable(true);
 		}
 	};
@@ -233,7 +200,7 @@ function EditGameVersions({ setTitle }) {
 						</Button>
 					</CenteredDiv>
 					{formOpen === 'add' && (
-						<VersionForm onSubmit={handleSubmitAdd}>
+						<VersionForm>
 							<CenteredDiv>
 								<FormControl className={classes.formControl}>
 									<TextField
@@ -253,7 +220,7 @@ function EditGameVersions({ setTitle }) {
 										labelId='demo-simple-select-outlined-label'
 										id='demo-simple-select-outlined'
 										labelWidth={45}
-										value={formData.rating}
+										value={versionRating}
 										onChange={handleRatingChange}
 										required
 									>
@@ -265,25 +232,12 @@ function EditGameVersions({ setTitle }) {
 							</CenteredDiv>
 							<CenteredDiv>
 								{renderVersionForm(selectedGame.shortName, {
-									formData,
-									handleContentChange,
 									selectedGame,
 									setAssets,
 									assets,
+									handleSubmitAdd,
 								})}
 							</CenteredDiv>
-
-							<FormControl>
-								<AddVersionButton
-									style={{ margin: '1rem auto' }}
-									variant='contained'
-									color='primary'
-									type='submit'
-									size='large'
-								>
-									ADD VERSION
-								</AddVersionButton>
-							</FormControl>
 						</VersionForm>
 					)}
 					{formOpen === 'delete' && (

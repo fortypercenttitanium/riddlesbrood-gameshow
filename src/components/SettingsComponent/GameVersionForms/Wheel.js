@@ -4,16 +4,16 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
+import AddVersionButton from '../styles/AddVersionButton';
 
-function Wheel({ formData, handleContentChange, setAssets }) {
-	const { content } = formData;
-
+function Wheel({ setAssets, handleSubmitAdd }) {
+	const [content, setContent] = useState();
 	const [isContentInitialized, setIsContentInitialized] = useState(false);
 
 	useEffect(() => {
 		// initialize content format
 		if (!isContentInitialized) {
-			handleContentChange([
+			setContent([
 				{
 					category: '',
 					puzzle: '',
@@ -23,7 +23,7 @@ function Wheel({ formData, handleContentChange, setAssets }) {
 			setAssets([]);
 			setIsContentInitialized(true);
 		}
-	}, [handleContentChange, isContentInitialized, setAssets]);
+	}, [setContent, isContentInitialized, setAssets]);
 
 	const addPuzzle = () => {
 		const newContent = [...content];
@@ -32,31 +32,31 @@ function Wheel({ formData, handleContentChange, setAssets }) {
 			puzzle: '',
 			solved: false,
 		});
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	const removePuzzle = (index) => {
 		if (content.length > 1) {
 			const newContent = [...content];
 			newContent.splice(index, 1);
-			handleContentChange(newContent);
+			setContent(newContent);
 		}
 	};
 
 	const handleChangeCategory = (e, index) => {
 		const newContent = [...content];
 		newContent[index].category = e.target.value;
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	const handleChangePuzzle = (e, index) => {
 		if (e.target.value.match(/^[a-zA-Z ]*$/g)) {
 			const newContent = [...content];
 			newContent[index].puzzle = e.target.value.toUpperCase();
-			handleContentChange(newContent);
+			setContent(newContent);
 			if (content[index].puzzle.length > 52) {
 				newContent[index].puzzle = newContent[index].puzzle.slice(0, 52);
-				handleContentChange(newContent);
+				setContent(newContent);
 			}
 		}
 	};
@@ -108,6 +108,7 @@ function Wheel({ formData, handleContentChange, setAssets }) {
 					<AddIcon />
 				</Fab>
 			</CenteredDiv>
+			<AddVersionButton onSubmit={() => handleSubmitAdd(content)} />
 		</FlexContainer>
 	);
 }

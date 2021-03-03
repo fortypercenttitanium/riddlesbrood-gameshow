@@ -26,6 +26,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import jeopardyFormInit from '../helpers/jeopardyFormInit';
+import AddVersionButton from '../styles/AddVersionButton';
 
 const nanoid = customAlphabet(
 	'1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
@@ -43,43 +44,43 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Jeopardy({ formData, handleContentChange, setAssets, assets }) {
+function Jeopardy({ setAssets, assets, handleSubmitAdd }) {
 	const classes = useStyles();
-	const { content } = formData;
 
+	const [content, setContent] = useState();
 	const [isContentInitialized, setIsContentInitialized] = useState(false);
 
 	useEffect(() => {
 		// initialize content format
 		if (!isContentInitialized) {
-			handleContentChange(jeopardyFormInit);
+			setContent(jeopardyFormInit);
 			setAssets([]);
 			setIsContentInitialized(true);
 		}
-	}, [handleContentChange, isContentInitialized, setAssets]);
+	}, [setContent, isContentInitialized, setAssets]);
 
 	const handleChangeCategory = (e, categoryIndex) => {
 		const newContent = [...content];
 		newContent[categoryIndex].category = e.target.value;
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	const handleChangeQuestion = (value, categoryIndex, questionIndex) => {
 		const newContent = [...content];
 		newContent[categoryIndex].questions[questionIndex].question = value;
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	const handleChangeQuestionType = (type, categoryIndex, questionIndex) => {
 		const newContent = [...content];
 		newContent[categoryIndex].questions[questionIndex].type = type;
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	const handleChangeAnswer = (e, categoryIndex, questionIndex) => {
 		const newContent = [...content];
 		newContent[categoryIndex].questions[questionIndex].answer = e.target.value;
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	const handleChangeFile = (e, categoryIndex, questionIndex) => {
@@ -210,6 +211,7 @@ function Jeopardy({ formData, handleContentChange, setAssets, assets }) {
 						</FlexContainer>
 					);
 				})}
+			<AddVersionButton onSubmit={() => handleSubmitAdd(content)} />
 		</FlexContainer>
 	);
 }

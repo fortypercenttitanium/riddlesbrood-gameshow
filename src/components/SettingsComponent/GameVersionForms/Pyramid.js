@@ -5,6 +5,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
+import AddVersionButton from '../styles/AddVersionButton';
 
 const useStyles = makeStyles((theme) => ({
 	extendedIcon: {
@@ -12,16 +13,15 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Pyramid({ formData, handleContentChange, setAssets }) {
+function Pyramid({ setAssets, handleSubmitAdd }) {
 	const classes = useStyles();
-	const { content } = formData;
-
+	const [content, setContent] = useState();
 	const [isContentInitialized, setIsContentInitialized] = useState(false);
 
 	useEffect(() => {
 		// initialize content format
 		if (!isContentInitialized) {
-			handleContentChange([
+			setContent([
 				{
 					category: '',
 					completed: false,
@@ -31,37 +31,37 @@ function Pyramid({ formData, handleContentChange, setAssets }) {
 			setAssets([]);
 			setIsContentInitialized(true);
 		}
-	}, [handleContentChange, isContentInitialized, setAssets]);
+	}, [setContent, isContentInitialized, setAssets]);
 
 	const addWord = (categoryIndex) => {
 		const newContent = [...content];
 		newContent[categoryIndex].words.push('');
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	const addCategory = () => {
 		const newContent = [...content];
 		newContent.push({ category: '', completed: false, words: [''] });
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	const handleChangeCategory = (e, categoryIndex) => {
 		const newContent = [...content];
 		newContent[categoryIndex].category = e.target.value;
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	const handleChangeWord = (e, categoryIndex, wordIndex) => {
 		const newContent = [...content];
 		newContent[categoryIndex].words[wordIndex] = e.target.value;
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	const removeCategory = (categoryIndex) => {
 		if (content.length > 1) {
 			const newContent = [...content];
 			newContent.splice(categoryIndex, 1);
-			handleContentChange(newContent);
+			setContent(newContent);
 		}
 	};
 
@@ -69,7 +69,7 @@ function Pyramid({ formData, handleContentChange, setAssets }) {
 		if (content[categoryIndex].words.length > 1) {
 			const newContent = [...content];
 			newContent[categoryIndex].words.splice(wordIndex, 1);
-			handleContentChange(newContent);
+			setContent(newContent);
 		}
 	};
 
@@ -159,6 +159,7 @@ function Pyramid({ formData, handleContentChange, setAssets }) {
 					New category
 				</Fab>
 			</CenteredDiv>
+			<AddVersionButton onSubmit={() => handleSubmitAdd(content)} />
 		</FlexContainer>
 	);
 }

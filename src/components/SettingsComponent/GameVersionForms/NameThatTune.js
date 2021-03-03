@@ -5,30 +5,28 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
+import AddVersionButton from '../styles/AddVersionButton';
 
 const nanoid = customAlphabet(
 	'1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
 	8
 );
 
-function NameThatTune({ formData, handleContentChange, setAssets, assets }) {
-	const { content } = formData;
-
+function NameThatTune({ setAssets, assets, handleSubmitAdd }) {
+	const [content, setContent] = useState();
 	const [isContentInitialized, setIsContentInitialized] = useState(false);
 
 	useEffect(() => {
 		// initialize content format
 		if (!isContentInitialized) {
-			handleContentChange([
-				{ title: '', artist: '', file: '', isPlaying: false },
-			]);
+			setContent([{ title: '', artist: '', file: '', isPlaying: false }]);
 			setAssets([]);
 			setIsContentInitialized(true);
 		}
-	}, [handleContentChange, isContentInitialized, setAssets]);
+	}, [setContent, isContentInitialized, setAssets]);
 
 	const addSong = () => {
-		handleContentChange([
+		setContent([
 			...content,
 			{ title: '', artist: '', file: '', isPlaying: false },
 		]);
@@ -38,20 +36,20 @@ function NameThatTune({ formData, handleContentChange, setAssets, assets }) {
 		if (content.length > 1) {
 			let newContent = [...content];
 			newContent.splice(index, 1);
-			handleContentChange(newContent);
+			setContent(newContent);
 		}
 	};
 
 	const handleChangeTitle = (e, index) => {
 		const newContent = [...content];
 		newContent[index].title = e.target.value;
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	const handleChangeArtist = (e, index) => {
 		const newContent = [...content];
 		newContent[index].artist = e.target.value;
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	const handleChangeFile = (e, index) => {
@@ -69,7 +67,7 @@ function NameThatTune({ formData, handleContentChange, setAssets, assets }) {
 		};
 
 		setAssets(newAssets);
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	return (
@@ -129,6 +127,7 @@ function NameThatTune({ formData, handleContentChange, setAssets, assets }) {
 					<AddIcon />
 				</Fab>
 			</CenteredDiv>
+			<AddVersionButton onSubmit={() => handleSubmitAdd(content)} />
 		</FlexContainer>
 	);
 }

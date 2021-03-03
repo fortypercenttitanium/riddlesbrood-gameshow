@@ -15,42 +15,42 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
+import AddVersionButton from '../styles/AddVersionButton';
 
 const nanoid = customAlphabet(
 	'1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
 	8
 );
 
-function WhatIsIt({ formData, handleContentChange, setAssets, assets }) {
-	const { content } = formData;
-
+function WhatIsIt({ setAssets, assets, handleSubmitAdd }) {
+	const [content, setContent] = useState();
 	const [isContentInitialized, setIsContentInitialized] = useState(false);
 
 	useEffect(() => {
 		// initialize content format
 		if (!isContentInitialized) {
-			handleContentChange([{ title: '', file: '' }]);
+			setContent([{ title: '', file: '' }]);
 			setAssets([]);
 			setIsContentInitialized(true);
 		}
-	}, [handleContentChange, isContentInitialized, setAssets]);
+	}, [setContent, isContentInitialized, setAssets]);
 
 	const addQuestion = () => {
-		handleContentChange([...content, { title: '', file: '' }]);
+		setContent([...content, { title: '', file: '' }]);
 	};
 
 	const removeQuestion = (index) => {
 		if (content.length > 1) {
 			let newContent = [...content];
 			newContent.splice(index, 1);
-			handleContentChange(newContent);
+			setContent(newContent);
 		}
 	};
 
 	const handleChangeTitle = (e, index) => {
 		const newContent = [...content];
 		newContent[index].title = e.target.value;
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	const handleChangeFile = (e, index) => {
@@ -116,6 +116,7 @@ function WhatIsIt({ formData, handleContentChange, setAssets, assets }) {
 					<AddIcon />
 				</Fab>
 			</CenteredDiv>
+			<AddVersionButton onSubmit={() => handleSubmitAdd(content)} />
 		</FlexContainer>
 	);
 }

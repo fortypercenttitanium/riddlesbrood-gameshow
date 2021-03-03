@@ -4,16 +4,16 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
+import AddVersionButton from '../styles/AddVersionButton';
 
-function FamilyFeud({ formData, handleContentChange, setAssets }) {
-	const { content } = formData;
-
+function FamilyFeud({ setAssets, handleSubmitAdd }) {
+	const [content, setContent] = useState();
 	const [isContentInitialized, setIsContentInitialized] = useState(false);
 
 	useEffect(() => {
 		// initialize content format
 		if (!isContentInitialized) {
-			handleContentChange({
+			setContent({
 				prompt: '',
 				answers: [
 					{
@@ -25,13 +25,13 @@ function FamilyFeud({ formData, handleContentChange, setAssets }) {
 			setAssets([]);
 			setIsContentInitialized(true);
 		}
-	}, [handleContentChange, isContentInitialized, setAssets]);
+	}, [setContent, isContentInitialized, setAssets]);
 
 	const addAnswer = () => {
 		if (content.answers.length < 10) {
 			const newContent = { ...content };
 			newContent.answers.push({ answer: '', revealed: false });
-			handleContentChange(newContent);
+			setContent(newContent);
 		}
 	};
 
@@ -39,7 +39,7 @@ function FamilyFeud({ formData, handleContentChange, setAssets }) {
 		if (content.answers.length > 1) {
 			const newContent = { ...content };
 			newContent.answers.splice(index, 1);
-			handleContentChange(newContent);
+			setContent(newContent);
 		}
 	};
 
@@ -47,14 +47,14 @@ function FamilyFeud({ formData, handleContentChange, setAssets }) {
 		if (e.target.value.length < 18) {
 			const newContent = { ...content };
 			newContent.answers[index] = { answer: e.target.value, revealed: false };
-			handleContentChange(newContent);
+			setContent(newContent);
 		}
 	};
 
 	const handlePromptChange = (e) => {
 		const newContent = { ...content };
 		newContent.prompt = e.target.value;
-		handleContentChange(newContent);
+		setContent(newContent);
 	};
 
 	return (
@@ -103,6 +103,7 @@ function FamilyFeud({ formData, handleContentChange, setAssets }) {
 					<AddIcon />
 				</Fab>
 			</CenteredDiv>
+			<AddVersionButton onSubmit={() => handleSubmitAdd(content)} />
 		</FlexContainer>
 	);
 }
