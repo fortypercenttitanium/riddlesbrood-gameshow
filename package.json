@@ -10,14 +10,6 @@
 		"appId": "riddlesbrood.gameshow",
 		"productName": "Riddlesbrood Gameshow",
 		"copyright": "Copyright 2021 Riddlesbrood Theatre Company",
-		"publish": {
-			"provider": "github",
-			"vPrefixedTagName": true,
-			"host": "github.com",
-			"protocol": "https",
-			"private": false,
-			"publishAutoUpdate": true
-		},
 		"win": {
 			"icon": "public/electron/icons/icon.png"
 		},
