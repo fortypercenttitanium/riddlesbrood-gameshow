@@ -74,7 +74,7 @@ function WhatIsIt({ setAssets, assets, handleSubmitAdd }) {
 			{content.length > 0 &&
 				content.map((question, index) => {
 					return (
-						<CenteredDiv>
+						<CenteredDiv key={index}>
 							<Fab
 								size='small'
 								color='secondary'

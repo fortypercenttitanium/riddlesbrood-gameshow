@@ -85,6 +85,7 @@ function EditGameVersions({ setTitle }) {
 
 	const handleClickGame = (game) => {
 		setSelectedGame(game);
+		setNewFilesAvailable(true);
 	};
 
 	const handleClickReset = (e) => {

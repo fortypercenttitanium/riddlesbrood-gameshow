@@ -65,7 +65,7 @@ function Wheel({ setAssets, handleSubmitAdd }) {
 		<FlexContainer>
 			{content.map((obj, index) => {
 				return (
-					<FlexContainer>
+					<FlexContainer key={index}>
 						<CenteredDiv>
 							<Fab
 								size='medium'
