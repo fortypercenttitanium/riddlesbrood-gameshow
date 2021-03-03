@@ -13,7 +13,7 @@ const nanoid = customAlphabet(
 );
 
 function NameThatTune({ setAssets, assets, handleSubmitAdd }) {
-	const [content, setContent] = useState();
+	const [content, setContent] = useState([]);
 	const [isContentInitialized, setIsContentInitialized] = useState(false);
 
 	useEffect(() => {

@@ -4,20 +4,23 @@ import { withStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
 
-const AddButton = withStyles((theme) => ({
+const AddButton = withStyles(() => ({
 	root: {
 		color: '#ddddd',
 		padding: '1.2rem 2rem',
 		fontWeight: 'bold',
-		textShadow: '2px 2px 2px rgb(50, 50, 50)',
+		textShadow: '2px 2px 2px rgba(50, 50, 50, 1)',
 		backgroundColor: green[500],
 		'&:hover': {
 			backgroundColor: green[700],
 		},
+		'&:disabled': {
+			textShadow: 'none',
+		},
 	},
 }))(Button);
 
-function AddVersionButton(onSubmit) {
+function AddVersionButton({ onSubmit, disabled }) {
 	return (
 		<FormControl>
 			<AddButton
@@ -27,6 +30,7 @@ function AddVersionButton(onSubmit) {
 				type='button'
 				size='large'
 				onClick={onSubmit}
+				disabled={disabled}
 			>
 				ADD VERSION
 			</AddButton>

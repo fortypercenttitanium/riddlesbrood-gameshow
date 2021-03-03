@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import AddVersionButton from '../styles/AddVersionButton';
 
 function Couples({ setAssets, handleSubmitAdd }) {
-	const [content, setContent] = useState();
+	const [content, setContent] = useState([]);
 	const [isContentInitialized, setIsContentInitialized] = useState(false);
 
 	useEffect(() => {

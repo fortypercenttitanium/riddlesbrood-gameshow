@@ -26,10 +26,10 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Jeopardy({ setAssets, assets, handleSubmitAdd }) {
+function Jeopardy({ setAssets, assets, handleSubmitAdd, form }) {
 	const classes = useStyles();
 
-	const [content, setContent] = useState();
+	const [content, setContent] = useState([]);
 	const [isContentInitialized, setIsContentInitialized] = useState(false);
 	const [categoryIndex, setCategoryIndex] = useState(0);
 
@@ -97,17 +97,29 @@ function Jeopardy({ setAssets, assets, handleSubmitAdd }) {
 	};
 
 	const handleCategoryChangeNext = () => {
-		function checkQuestionsAndAnswers(question) {
-			return question.question.trim() && question.answer.trim();
+		if (form.checkValidity()) {
+			function checkQuestionsAndAnswers(question) {
+				return question.question.trim() && question.answer.trim();
+			}
+			if (
+				categoryIndex < 4 &&
+				content[categoryIndex].category.trim() !== '' &&
+				content[categoryIndex].questions.every(checkQuestionsAndAnswers)
+			) {
+				setCategoryIndex(categoryIndex + 1);
+			}
+			window.scrollTo({ top: 300, behavior: 'smooth' });
+		} else {
+			form.reportValidity();
 		}
-		if (
-			categoryIndex < 4 &&
-			content[categoryIndex].category.trim() !== '' &&
-			content[categoryIndex].questions.every(checkQuestionsAndAnswers)
-		) {
-			setCategoryIndex(categoryIndex + 1);
+	};
+
+	const handleJeopardySubmit = () => {
+		if (form.checkValidity()) {
+			handleSubmitAdd(content);
+		} else {
+			form.reportValidity();
 		}
-		window.scrollTo({ top: 300, behavior: 'smooth' });
 	};
 
 	return (
@@ -251,6 +263,10 @@ function Jeopardy({ setAssets, assets, handleSubmitAdd }) {
 					</CenteredDiv>
 				</FlexContainer>
 			)}
+			<AddVersionButton
+				disabled={categoryIndex !== 4 || !form.checkValidity()}
+				onSubmit={() => handleJeopardySubmit(content)}
+			/>
 		</FlexContainer>
 	);
 }

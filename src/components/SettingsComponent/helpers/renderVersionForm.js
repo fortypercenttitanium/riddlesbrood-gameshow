@@ -10,14 +10,14 @@ import Wheel from '../GameVersionForms/Wheel';
 
 export default function renderVersionForm(
 	game,
-	{ formData, handleContentChange, assets, setAssets }
+	{ formData, handleSubmitAdd, assets, setAssets, form }
 ) {
 	switch (game) {
 		case 'couples': {
 			return (
 				<Couples
 					formData={formData}
-					handleContentChange={handleContentChange}
+					handleSubmitAdd={handleSubmitAdd}
 					setAssets={setAssets}
 				/>
 			);
@@ -26,7 +26,7 @@ export default function renderVersionForm(
 			return (
 				<ESP
 					formData={formData}
-					handleContentChange={handleContentChange}
+					handleSubmitAdd={handleSubmitAdd}
 					setAssets={setAssets}
 				/>
 			);
@@ -35,7 +35,7 @@ export default function renderVersionForm(
 			return (
 				<FamilyFeud
 					formData={formData}
-					handleContentChange={handleContentChange}
+					handleSubmitAdd={handleSubmitAdd}
 					setAssets={setAssets}
 				/>
 			);
@@ -44,9 +44,10 @@ export default function renderVersionForm(
 			return (
 				<Jeopardy
 					formData={formData}
-					handleContentChange={handleContentChange}
+					handleSubmitAdd={handleSubmitAdd}
 					setAssets={setAssets}
 					assets={assets}
+					form={form}
 				/>
 			);
 		}
@@ -54,7 +55,7 @@ export default function renderVersionForm(
 			return (
 				<NameThatTune
 					formData={formData}
-					handleContentChange={handleContentChange}
+					handleSubmitAdd={handleSubmitAdd}
 					setAssets={setAssets}
 					assets={assets}
 				/>
@@ -64,7 +65,7 @@ export default function renderVersionForm(
 			return (
 				<Pyramid
 					formData={formData}
-					handleContentChange={handleContentChange}
+					handleSubmitAdd={handleSubmitAdd}
 					setAssets={setAssets}
 				/>
 			);
@@ -73,7 +74,7 @@ export default function renderVersionForm(
 			return (
 				<WhatIsIt
 					formData={formData}
-					handleContentChange={handleContentChange}
+					handleSubmitAdd={handleSubmitAdd}
 					setAssets={setAssets}
 					assets={assets}
 				/>
@@ -83,7 +84,7 @@ export default function renderVersionForm(
 			return (
 				<Wheel
 					formData={formData}
-					handleContentChange={handleContentChange}
+					handleSubmitAdd={handleSubmitAdd}
 					setAssets={setAssets}
 				/>
 			);

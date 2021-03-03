@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
 	GameLogosContainer,
 	VersionForm,
@@ -53,6 +53,8 @@ function EditGameVersions({ setTitle }) {
 	const [deleteSelection, setDeleteSelection] = useState({});
 	const [formOpen, setFormOpen] = useState('');
 
+	const addGame = useRef();
+
 	useEffect(() => {
 		setTitle(
 			selectedGame ? `${selectedGame.title} Versions` : 'Select a game:'
@@ -86,7 +88,9 @@ function EditGameVersions({ setTitle }) {
 	};
 
 	const handleClickReset = (e) => {
-		e.preventDefault();
+		if (e) {
+			e.preventDefault();
+		}
 		setSelectedGame();
 		setVersionTitle('');
 		setVersionRating('');
@@ -114,43 +118,45 @@ function EditGameVersions({ setTitle }) {
 		setDeleteSelection(e.target.value);
 	};
 
-	const handleSubmitAdd = async (e, content) => {
-		e.preventDefault();
+	const handleSubmitAdd = async (content) => {
+		if (addGame.current.checkValidity()) {
+			// content can be an array or object, check and copy appropriately
+			let newContent = Array.isArray(content) ? [...content] : { ...content };
 
-		// content can be an array or object, check and copy appropriately
-		let newContent = Array.isArray(content) ? [...content] : { ...content };
-
-		if (assets.length) {
-			if (selectedGame.shortName !== 'jeopardy') {
-				// parse assets for Name That Tune, What Is It
-				newContent = newContent.map((question, index) => {
-					const { fileName } = assets.find(
-						(asset) => asset.forQuestion === index
-					);
-					question.file = `app://game_versions/${selectedGame.shortName}/${versionTitle}/${fileName}`;
-					return question;
-				});
-			} else {
-				// parse assets for jeopardy
-				assets.forEach((asset) => {
-					const { forQuestion, fileName } = asset;
-					const { categoryIndex, questionIndex } = forQuestion;
-					newContent[categoryIndex].questions[
-						questionIndex
-					].question = `app://game_versions/${selectedGame.shortName}/${versionTitle}/${fileName}`;
-				});
+			if (assets.length) {
+				if (selectedGame.shortName !== 'jeopardy') {
+					// parse assets for Name That Tune, What Is It
+					newContent = newContent.map((question, index) => {
+						const { fileName } = assets.find(
+							(asset) => asset.forQuestion === index
+						);
+						question.file = `app://game_versions/${selectedGame.shortName}/${versionTitle}/${fileName}`;
+						return question;
+					});
+				} else {
+					// parse assets for jeopardy
+					assets.forEach((asset) => {
+						const { forQuestion, fileName } = asset;
+						const { categoryIndex, questionIndex } = forQuestion;
+						newContent[categoryIndex].questions[
+							questionIndex
+						].question = `app://game_versions/${selectedGame.shortName}/${versionTitle}/${fileName}`;
+					});
+				}
 			}
-		}
 
-		const result = await ipcRenderer.invoke(
-			'NEW_GAME_VERSION',
-			selectedGame.shortName,
-			{ title: versionTitle, rating: versionRating, content: newContent },
-			assets
-		);
-		if (result) {
-			handleClickReset();
-			setNewFilesAvailable(true);
+			const result = await ipcRenderer.invoke(
+				'NEW_GAME_VERSION',
+				selectedGame.shortName,
+				{ title: versionTitle, rating: versionRating, content: newContent },
+				assets
+			);
+			if (result) {
+				handleClickReset();
+				setNewFilesAvailable(true);
+			}
+		} else {
+			addGame.current.reportValidity();
 		}
 	};
 
@@ -200,7 +206,7 @@ function EditGameVersions({ setTitle }) {
 						</Button>
 					</CenteredDiv>
 					{formOpen === 'add' && (
-						<VersionForm>
+						<VersionForm ref={addGame}>
 							<CenteredDiv>
 								<FormControl className={classes.formControl}>
 									<TextField
@@ -236,6 +242,7 @@ function EditGameVersions({ setTitle }) {
 									setAssets,
 									assets,
 									handleSubmitAdd,
+									form: addGame.current,
 								})}
 							</CenteredDiv>
 						</VersionForm>

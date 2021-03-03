@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Pyramid({ setAssets, handleSubmitAdd }) {
 	const classes = useStyles();
-	const [content, setContent] = useState();
+	const [content, setContent] = useState([]);
 	const [isContentInitialized, setIsContentInitialized] = useState(false);
 
 	useEffect(() => {
