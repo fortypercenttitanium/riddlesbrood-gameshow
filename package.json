@@ -58,7 +58,8 @@
 		"electron-build": "electron-builder",
 		"electron-dev": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
 		"electron-pack": "electron-builder -c.extraMetadata.main=build/electron/electron.js",
-		"preelectron-pack": "npm run react-build"
+		"preelectron-pack": "npm run react-build",
+		"publish": "electron-builder -c.extraMetadata.main=build/electron/electron.js -p onTag"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
