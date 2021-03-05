@@ -13,18 +13,21 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 	const startScreenWindow = new BrowserWindow(startScreenConfig);
 	startScreenWindow.once('ready-to-show', () => {
 		autoUpdater.checkForUpdatesAndNotify();
+		startScreenWindow.webContents.send('DISABLE_BUTTONS');
 	});
 	autoUpdater.on('checking-for-update', () => {
 		sendStatusToWindow(startScreenWindow, 'Checking for update...');
 	});
 	autoUpdater.on('update-available', (info) => {
-		sendStatusToWindow(startScreenWindow, 'Update available.');
+		sendStatusToWindow(startScreenWindow, 'Update available!');
 	});
 	autoUpdater.on('update-not-available', (info) => {
-		sendStatusToWindow(startScreenWindow, 'Update not available.');
+		sendStatusToWindow(startScreenWindow, 'Latest version already installed');
+		startScreenWindow.webContents.send('ENABLE_BUTTONS');
 	});
 	autoUpdater.on('error', (err) => {
 		sendStatusToWindow(startScreenWindow, 'Error in auto-updater. ' + err);
+		startScreenWindow.webContents.send('ENABLE_BUTTONS');
 	});
 	autoUpdater.on('download-progress', (progressObj) => {
 		let log_message = 'Download speed: ' + progressObj.bytesPerSecond;
@@ -48,7 +51,7 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 			app.relaunch();
 			app.exit();
 		} else {
-			startScreenWindow.send('DO_NOT_UPDATE');
+			startScreenWindow.send('ENABLE_BUTTONS');
 		}
 	});
 	startScreenWindow.loadURL(

@@ -27,7 +27,10 @@ function Init({ setTimeline, setTitle }) {
 			setButtonsDisabled(true);
 			setUpdateMessage(message);
 		});
-		ipcRenderer.on('DO_NOT_UPDATE', () => {
+		ipcRenderer.on('DISABLE_BUTTONS', () => {
+			setButtonsDisabled(true);
+		});
+		ipcRenderer.on('ENABLE_BUTTONS', () => {
 			setButtonsDisabled(false);
 		});
 	}, []);
@@ -51,8 +54,12 @@ function Init({ setTimeline, setTitle }) {
 
 	return (
 		<FlexContainer>
-			<p className='version'>Version {version}</p>
-			<p className='update-message'>{updateMessage}</p>
+			<CenteredDiv>
+				<p className='version'>Version {version}</p>
+			</CenteredDiv>
+			<CenteredDiv>
+				<p className='update-message'>{updateMessage}</p>
+			</CenteredDiv>
 			<CenteredDiv className={classes.buttonSpacing}>
 				<Button
 					size='large'
