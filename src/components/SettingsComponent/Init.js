@@ -57,17 +57,8 @@ function Init({ setTimeline, setTitle }) {
 		setTimeline('edit-select');
 	};
 
-	const handleTest = () => {
-		setDownloadProgress(
-			downloadProgress === undefined ? 0 : downloadProgress + 5
-		);
-	};
-
 	return (
 		<FlexContainer>
-			<button type='button' onClick={handleTest}>
-				Progress
-			</button>
 			<CenteredDiv>
 				<p className='version'>Version {version}</p>
 			</CenteredDiv>
