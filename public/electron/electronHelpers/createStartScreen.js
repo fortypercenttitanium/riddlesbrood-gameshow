@@ -1,6 +1,7 @@
 const mainWindowConfig = require('./mainWindowConfig');
 const path = require('path');
 const isDev = require('electron-is-dev');
+const log = require('electron-log');
 const { BrowserWindow, app, dialog } = require('electron');
 
 module.exports = function createStartScreen({ setWindow, autoUpdater }) {
@@ -48,7 +49,7 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 			buttons: ['Install', 'Later'],
 			cancelId: 1,
 		});
-		console.log(restart);
+		log.info(`restart: ${restart}`);
 		if (restart === 0) {
 			autoUpdater.quitAndInstall();
 		} else {
