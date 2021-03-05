@@ -1,8 +1,11 @@
 {
 	"main": "public/electron/electron.js",
 	"name": "riddlesbrood-gameshow",
-	"version": "0.1.4",
-	"repository": "git@github.com:fortypercenttitanium/riddlesbrood-gameshow.git",
+	"version": "0.1.2",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/fortypercenttitanium/riddlesbrood-gameshow"
+	},
 	"description": "Gameshow presentation app for Riddlesbrood Theatre Company",
 	"author": "Alex Younger",
 	"private": true,
@@ -58,11 +61,11 @@
 		"react-build": "react-scripts build",
 		"react-test": "react-scripts test",
 		"react-eject": "react-scripts eject",
-		"electron-build": "electron-builder",
-		"electron-dev": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
-		"electron-pack": "electron-builder -c.extraMetadata.main=build/electron/electron.js",
-		"preelectron-pack": "npm run react-build",
-		"publish": "electron-builder -c.extraMetadata.main=build/electron/electron.js -p onTag"
+		"build": "electron-builder -c.extraMetadata.main=build/electron/electron.js -p never",
+		"dev": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
+		"pack": "electron-builder -c.extraMetadata.main=build/electron/electron.js",
+		"prepack": "npm run react-build",
+		"publish": "electron-builder -c.extraMetadata.main=build/electron/electron.js -p always"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
