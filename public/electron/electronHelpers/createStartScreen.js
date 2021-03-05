@@ -26,10 +26,14 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 		startScreenWindow.webContents.send('ENABLE_BUTTONS');
 	});
 	autoUpdater.once('error', (err) => {
-		sendStatusToWindow(startScreenWindow, 'Error in auto-updater. ' + err);
+		sendStatusToWindow(
+			startScreenWindow,
+			'Skipping auto-update - no internet connection.'
+		);
+		autoUpdater.logger.info(`Auto-updater error: ${err}`);
 		startScreenWindow.webContents.send('ENABLE_BUTTONS');
 	});
-	autoUpdater.once('download-progress', (progressObj) => {
+	autoUpdater.on('download-progress', (progressObj) => {
 		let log_message = `Download speed: ${
 			Math.round(progressObj.bytesPerSecond) / 1000
 		} KB/sec`;
@@ -44,7 +48,7 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 			buttons: ['Install', 'Later'],
 			cancelId: 1,
 		});
-		if (restart) {
+		if (restart === 0) {
 			autoUpdater.quitAndInstall();
 		} else {
 			startScreenWindow.send('ENABLE_BUTTONS');
