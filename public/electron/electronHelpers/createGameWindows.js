@@ -38,7 +38,7 @@ module.exports = function createGameWindows({ getWindow, setWindow }) {
 		gameWindow.setFullScreen(true);
 	});
 
-	mainWindow.on('closed', () => {
+	mainWindow.on('close', () => {
 		setWindow('main', null);
 		gameWindow.close();
 		setWindow('game', null);
@@ -51,6 +51,7 @@ module.exports = function createGameWindows({ getWindow, setWindow }) {
 
 	gameWindow.on('close', (e) => {
 		if (getWindow('main')) {
+			console.log('uh oh');
 			e.preventDefault();
 		}
 	});

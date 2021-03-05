@@ -8,6 +8,7 @@ const { protocol, app } = electron;
 
 autoUpdater.logger = require('electron-log');
 autoUpdater.logger.transports.file.level = 'info';
+autoUpdater.autoDownload = false;
 
 let mainWindow;
 let gameWindow;

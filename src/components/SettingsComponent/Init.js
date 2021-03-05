@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
+import DownloadProgress from './styles/DownloadProgress';
 import { FlexContainer, CenteredDiv } from './styles/EditVersionsStyles';
 import { makeStyles } from '@material-ui/core/styles';
 const { ipcRenderer } = window.require('electron');
@@ -16,6 +17,7 @@ function Init({ setTimeline, setTitle }) {
 	const classes = useStyles();
 	const [version, setVersion] = useState('(fetching version info...)');
 	const [updateMessage, setUpdateMessage] = useState('');
+	const [downloadProgress, setDownloadProgress] = useState();
 	const [buttonsDisabled, setButtonsDisabled] = useState(false);
 
 	useEffect(() => {
@@ -32,6 +34,9 @@ function Init({ setTimeline, setTitle }) {
 		});
 		ipcRenderer.on('ENABLE_BUTTONS', () => {
 			setButtonsDisabled(false);
+		});
+		ipcRenderer.on('UPDATE_DOWNLOAD_PROGRESS', (e, value) => {
+			setDownloadProgress(value);
 		});
 	}, []);
 
@@ -52,14 +57,28 @@ function Init({ setTimeline, setTitle }) {
 		setTimeline('edit-select');
 	};
 
+	const handleTest = () => {
+		setDownloadProgress(
+			downloadProgress === undefined ? 0 : downloadProgress + 5
+		);
+	};
+
 	return (
 		<FlexContainer>
+			<button type='button' onClick={handleTest}>
+				Progress
+			</button>
 			<CenteredDiv>
 				<p className='version'>Version {version}</p>
 			</CenteredDiv>
 			<CenteredDiv>
 				<p className='update-message'>{updateMessage}</p>
 			</CenteredDiv>
+			{downloadProgress !== undefined && (
+				<div style={{ width: '250px' }}>
+					<DownloadProgress value={downloadProgress} />
+				</div>
+			)}
 			<CenteredDiv className={classes.buttonSpacing}>
 				<Button
 					size='large'
