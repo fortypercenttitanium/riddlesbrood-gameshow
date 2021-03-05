@@ -31,7 +31,8 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 	});
 	autoUpdater.on('download-progress', (progressObj) => {
 		let log_message = 'Download speed: ' + progressObj.bytesPerSecond;
-		log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+		log_message =
+			log_message + ' - Downloaded ' + Math.floor(progressObj.percent) + '%';
 		log_message =
 			log_message +
 			' (' +
@@ -48,8 +49,7 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 			buttons: ['Later', 'Restart'],
 		});
 		if (restart) {
-			app.relaunch();
-			app.exit();
+			autoUpdater.quitAndInstall();
 		} else {
 			startScreenWindow.send('ENABLE_BUTTONS');
 		}
