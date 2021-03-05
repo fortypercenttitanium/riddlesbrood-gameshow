@@ -48,6 +48,7 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 			buttons: ['Install', 'Later'],
 			cancelId: 1,
 		});
+		console.log(restart);
 		if (restart === 0) {
 			autoUpdater.quitAndInstall();
 		} else {
