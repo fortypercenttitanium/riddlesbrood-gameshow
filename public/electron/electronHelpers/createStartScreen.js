@@ -32,7 +32,7 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 			cancelId: 1,
 		});
 
-		if (!shouldNotDownload) {
+		if (!shouldNotDownload.response) {
 			autoUpdater.downloadUpdate();
 		} else {
 			startScreenWindow.webContents.send('ENABLE_BUTTONS');
@@ -77,7 +77,7 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 			startScreenWindow,
 			'Update downloaded. Restarting app and installing...'
 		);
-		setTimeout(autoUpdater.quitAndInstall, 2000);
+		setTimeout(() => autoUpdater.quitAndInstall(), 2000);
 	});
 
 	startScreenWindow.loadURL(
