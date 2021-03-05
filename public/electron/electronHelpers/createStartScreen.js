@@ -49,8 +49,7 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 			buttons: ['Install', 'Later'],
 			cancelId: 1,
 		});
-		log.info(`restart: ${restart}`);
-		if (restart === 0) {
+		if (restart.response === 0) {
 			autoUpdater.quitAndInstall();
 		} else {
 			startScreenWindow.send('ENABLE_BUTTONS');
