@@ -23,7 +23,7 @@ function Init({ setTimeline, setTitle }) {
 	}, [setTitle]);
 
 	useEffect(() => {
-		ipcRenderer.on('message', (message) => {
+		ipcRenderer.on('message', (e, message) => {
 			setButtonsDisabled(true);
 			setUpdateMessage(message);
 		});
