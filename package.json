@@ -1,7 +1,7 @@
 {
 	"main": "public/electron/electron.js",
 	"name": "riddlesbrood-gameshow",
-	"version": "0.1.8",
+	"version": "0.1.7",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/fortypercenttitanium/riddlesbrood-gameshow"
@@ -66,8 +66,7 @@
 		"react-eject": "react-scripts eject",
 		"build": "electron-builder -c.extraMetadata.main=build/electron/electron.js -p never",
 		"dev": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
-		"pack": "electron-builder -c.extraMetadata.main=build/electron/electron.js",
-		"prepack": "npm run react-build",
+		"prebuild": "npm run react-build",
 		"deploy": "electron-builder -c.extraMetadata.main=build/electron/electron.js -p always",
 		"predeploy": "npm run react-build"
 	},
