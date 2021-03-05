@@ -1,7 +1,7 @@
 const mainWindowConfig = require('./mainWindowConfig');
 const path = require('path');
 const isDev = require('electron-is-dev');
-const { BrowserWindow, app } = require('electron');
+const { BrowserWindow, app, dialog } = require('electron');
 
 module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 	function sendStatusToWindow(win, text) {
@@ -11,7 +11,9 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 	const startScreenConfig = { ...mainWindowConfig };
 	startScreenConfig.title = 'Riddlesbrood Gameshow App';
 	const startScreenWindow = new BrowserWindow(startScreenConfig);
-	startScreenWindow.webContents.openDevTools();
+	startScreenWindow.once('ready-to-show', () => {
+		autoUpdater.checkForUpdatesAndNotify();
+	});
 	autoUpdater.on('checking-for-update', () => {
 		sendStatusToWindow(startScreenWindow, 'Checking for update...');
 	});
@@ -36,8 +38,18 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 			')';
 		sendStatusToWindow(startScreenWindow, log_message);
 	});
-	autoUpdater.on('update-downloaded', (info) => {
-		sendStatusToWindow(startScreenWindow, 'Update downloaded');
+	autoUpdater.on('update-downloaded', async () => {
+		const restart = await dialog.showMessageBox({
+			message:
+				'New update has been downloaded and will be installed when the app restarts. Restart now?',
+			buttons: ['Later', 'Restart'],
+		});
+		if (restart) {
+			app.relaunch();
+			app.exit();
+		} else {
+			startScreenWindow.send('DO_NOT_UPDATE');
+		}
 	});
 	startScreenWindow.loadURL(
 		isDev

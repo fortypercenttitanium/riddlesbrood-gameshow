@@ -11,6 +11,7 @@ module.exports = {
 	title: 'Riddlesbrood Gameshow - Control Panel',
 	webPreferences: {
 		nodeIntegration: true,
+		contextIsolation: false,
 	},
 	icon: iconPath,
 };

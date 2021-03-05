@@ -53,7 +53,6 @@ checkAssetFolders();
 attachIPCListeners({ getWindow, setWindow });
 
 app.on('ready', () => {
-	autoUpdater.checkForUpdatesAndNotify();
 	protocol.registerFileProtocol('app', (req, cb) => {
 		const url = req.url.substr(6);
 		const userDataPath = app.getPath('userData');

@@ -2,8 +2,6 @@ const createGameWindows = require('./createGameWindows');
 const storeFxButton = require('./storeFxButton');
 const fs = require('fs');
 const util = require('util');
-const path = require('path');
-const isDev = require('electron-is-dev');
 const { dialog, ipcMain, app } = require('electron');
 const { showErrorBox, showMessageBox } = require('./messageBoxes');
 const { getAllFxFiles, findFxFile } = require('./fxFiles');
@@ -18,6 +16,9 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 	ipcMain.once('LAUNCH_GAME', () => {
 		createGameWindows({ getWindow, setWindow });
 		getWindow('start').close();
+	});
+	ipcMain.handle('GET_APP_VERSION', () => {
+		return app.getVersion();
 	});
 	ipcMain.on('MESSAGE_BOX', (e, payload) => {
 		showMessageBox(payload.title, payload.message);

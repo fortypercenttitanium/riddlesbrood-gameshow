@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import { FlexContainer, CenteredDiv } from './styles/EditVersionsStyles';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,10 +14,33 @@ const useStyles = makeStyles((theme) => ({
 
 function Init({ setTimeline, setTitle }) {
 	const classes = useStyles();
+	const [version, setVersion] = useState('(fetching version info...)');
+	const [updateMessage, setUpdateMessage] = useState('');
+	const [buttonsDisabled, setButtonsDisabled] = useState(false);
 
 	useEffect(() => {
 		setTitle('Riddlesbrood Gameshow');
 	}, [setTitle]);
+
+	useEffect(() => {
+		ipcRenderer.on('message', (message) => {
+			setButtonsDisabled(true);
+			setUpdateMessage(message);
+		});
+		ipcRenderer.on('DO_NOT_UPDATE', () => {
+			setButtonsDisabled(false);
+		});
+	}, []);
+
+	useEffect(() => {
+		async function getAppVersion() {
+			const currentVersion = await ipcRenderer.invoke('GET_APP_VERSION');
+			if (currentVersion) {
+				setVersion(currentVersion);
+			}
+		}
+		getAppVersion();
+	}, []);
 
 	const handleLaunchClick = () => {
 		ipcRenderer.send('LAUNCH_GAME');
@@ -28,12 +51,15 @@ function Init({ setTimeline, setTitle }) {
 
 	return (
 		<FlexContainer>
+			<p className='version'>Version {version}</p>
+			<p className='update-message'>{updateMessage}</p>
 			<CenteredDiv className={classes.buttonSpacing}>
 				<Button
 					size='large'
 					variant='contained'
 					color='primary'
 					onClick={handleLaunchClick}
+					disabled={buttonsDisabled}
 				>
 					Start game
 				</Button>
@@ -42,6 +68,7 @@ function Init({ setTimeline, setTitle }) {
 					variant='contained'
 					color='primary'
 					onClick={handleEditClick}
+					disabled={buttonsDisabled}
 				>
 					Edit content
 				</Button>

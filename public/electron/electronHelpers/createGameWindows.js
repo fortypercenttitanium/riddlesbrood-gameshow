@@ -15,6 +15,7 @@ module.exports = function createGameWindows({ getWindow, setWindow }) {
 		height: 900,
 		webPreferences: {
 			nodeIntegration: true,
+			contextIsolation: false,
 		},
 		x: projectorDisplay ? projectorDisplay.bounds.x + 50 : 0,
 		y: projectorDisplay ? projectorDisplay.bounds.y + 50 : 0,
