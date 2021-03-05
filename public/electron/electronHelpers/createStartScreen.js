@@ -18,35 +18,31 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 	autoUpdater.on('checking-for-update', () => {
 		sendStatusToWindow(startScreenWindow, 'Checking for update...');
 	});
-	autoUpdater.on('update-available', (info) => {
+	autoUpdater.once('update-available', (info) => {
 		sendStatusToWindow(startScreenWindow, 'Update available!');
 	});
-	autoUpdater.on('update-not-available', (info) => {
-		sendStatusToWindow(startScreenWindow, 'Latest version already installed');
+	autoUpdater.once('update-not-available', (info) => {
+		sendStatusToWindow(startScreenWindow, 'Latest version');
 		startScreenWindow.webContents.send('ENABLE_BUTTONS');
 	});
-	autoUpdater.on('error', (err) => {
+	autoUpdater.once('error', (err) => {
 		sendStatusToWindow(startScreenWindow, 'Error in auto-updater. ' + err);
 		startScreenWindow.webContents.send('ENABLE_BUTTONS');
 	});
-	autoUpdater.on('download-progress', (progressObj) => {
-		let log_message = 'Download speed: ' + progressObj.bytesPerSecond;
+	autoUpdater.once('download-progress', (progressObj) => {
+		let log_message = `Download speed: ${
+			Math.round(progressObj.bytesPerSecond) / 1000
+		} KB/sec`;
 		log_message =
 			log_message + ' - Downloaded ' + Math.floor(progressObj.percent) + '%';
-		log_message =
-			log_message +
-			' (' +
-			progressObj.transferred +
-			'/' +
-			progressObj.total +
-			')';
 		sendStatusToWindow(startScreenWindow, log_message);
 	});
-	autoUpdater.on('update-downloaded', async () => {
+	autoUpdater.once('update-downloaded', async () => {
 		const restart = await dialog.showMessageBox({
-			message:
-				'New update has been downloaded and will be installed when the app restarts. Restart now?',
-			buttons: ['Later', 'Restart'],
+			message: 'New version is ready to be installed.',
+			detail: 'Install now? The app will restart',
+			buttons: ['Install', 'Later'],
+			cancelId: 1,
 		});
 		if (restart) {
 			autoUpdater.quitAndInstall();
