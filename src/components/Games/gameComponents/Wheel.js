@@ -152,10 +152,6 @@ export default function Wheel({ window }) {
 		}
 	});
 
-	useEffect(() => {
-		console.log(window);
-	});
-
 	return state.gameController.gameStarted ? (
 		<WheelContainer>
 			<Title display={state.gameController.display}>

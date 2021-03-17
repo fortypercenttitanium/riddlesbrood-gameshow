@@ -1,24 +1,19 @@
-import React, { useEffect, createContext, useState } from 'react';
+import React, { useEffect, createContext, useReducer } from 'react';
 import ControlScreen from '../ControlComponents/ControlScreen/ControlScreen';
 import { GameboardContainer } from './GameboardStyles';
 import { initialState } from '../../store/initialState';
+import { reducer } from '../../store/reducer';
 const { ipcRenderer } = window.require('electron');
 
 export const StoreContext = createContext();
 
 export default function Gameboard() {
-	const [state, setState] = useState(initialState);
-	const store = { state, dispatch };
-
-	// dummy functions
-	function dispatch() {
-		return;
-	}
-
+	const [state, dispatch] = useReducer(reducer, initialState);
 	useEffect(() => {
-		ipcRenderer.on('SYNC_STATE', (e, state) => {
-			setState(state);
+		ipcRenderer.on('SYNC_STATE', (e, action) => {
+			dispatch(action);
 		});
+		return () => ipcRenderer.removeAllListeners('DISPATCH_RECEIVE');
 	}, []);
 
 	useEffect(() => {
@@ -31,7 +26,7 @@ export default function Gameboard() {
 	};
 
 	return (
-		<StoreContext.Provider value={store}>
+		<StoreContext.Provider value={{ state, dispatch: () => {} }}>
 			<GameboardContainer>
 				<ControlScreen window='gameboard' />
 			</GameboardContainer>

@@ -19,8 +19,12 @@ export default function VideoPlayer({ window }) {
 			(state.audio.volume.sfx / 100) * (state.audio.volume.master / 100);
 	}, [state.audio.volume]);
 
+	const handleClickContainer = () => {
+		dispatch({ type: 'END_VIDEO' });
+	};
+
 	return (
-		<VideoContainer>
+		<VideoContainer onClick={handleClickContainer}>
 			<video
 				ref={video}
 				width='100%'

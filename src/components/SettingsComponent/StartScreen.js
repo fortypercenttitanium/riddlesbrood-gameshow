@@ -3,8 +3,6 @@ import Init from './Init';
 import EditSelect from './EditSelect';
 import EditFx from './EditFx';
 import EditGameVersions from './EditGameVersions';
-import Cloud from './Cloud';
-import FirebaseProvider from './FirebaseProvider/FirebaseContext';
 import { StartScreenContainer } from './styles/StartScreenStyles';
 import EditContentTemplate from './templates/EditContentTemplate';
 
@@ -21,23 +19,19 @@ function StartScreen() {
 			<EditFx setTimeline={setTimeline} setTitle={setTitle} />
 		) : timeline === 'edit-game-versions' ? (
 			<EditGameVersions setTimeline={setTimeline} setTitle={setTitle} />
-		) : timeline === 'cloud' ? (
-			<Cloud setTimeline={setTimeline} setTitle={setTitle} />
 		) : null;
 	};
 
 	return (
-		<FirebaseProvider>
-			<StartScreenContainer>
-				<EditContentTemplate
-					title={title}
-					timeline={timeline}
-					setTimeline={setTimeline}
-				>
-					{render(timeline)}
-				</EditContentTemplate>
-			</StartScreenContainer>
-		</FirebaseProvider>
+		<StartScreenContainer>
+			<EditContentTemplate
+				title={title}
+				timeline={timeline}
+				setTimeline={setTimeline}
+			>
+				{render(timeline)}
+			</EditContentTemplate>
+		</StartScreenContainer>
 	);
 }
 

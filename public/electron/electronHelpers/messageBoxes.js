@@ -11,7 +11,6 @@ function showMessageBox(title = '', message) {
 
 function showErrorBox(title = '', message) {
 	let errorMessage = message;
-	console.log(message);
 	if (Array.isArray(errorMessage)) {
 		errorMessage = errorMessage.join('\n');
 	}

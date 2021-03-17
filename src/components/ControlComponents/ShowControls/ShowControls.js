@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import projector from '../../../assets/images/icons/projector.png';
 import {
 	ShowControlsDiv,
@@ -6,8 +6,30 @@ import {
 	Label,
 	ProjectorImage,
 } from './ShowControlsStyles';
+import { StoreContext } from '../../../store/context';
+import { actions } from '../../../store/actions';
+import importAll from '../../Games/helpers/shared/importAll';
+
+const videos = importAll(
+	require.context(
+		'../../../assets/videos/show_control_videos',
+		false,
+		/\.mp4|\.mov$/
+	)
+);
 
 export default function ShowControls({ projectorMode }) {
+	const { state, dispatch } = useContext(StoreContext);
+	const { VFX } = state;
+
+	const handleClickVideo = (e) => {
+		VFX.playing
+			? dispatch({ type: actions.END_VIDEO })
+			: dispatch({
+					type: actions.PLAY_VIDEO,
+					payload: videos[e.currentTarget.dataset.video],
+			  });
+	};
 	return (
 		<ShowControlsDiv>
 			<Button area='1 / 1 / 2 / 2'>
@@ -16,7 +38,11 @@ export default function ShowControls({ projectorMode }) {
 			<Button area='2 / 1 / 3 / 2'>
 				<Label>5 mins</Label>
 			</Button>
-			<Button area='1 / 2 / 2 / 3'>
+			<Button
+				data-video='Riddlesbrood 10sec NO SPIN Animated LOGO.mp4'
+				area='1 / 2 / 2 / 3'
+				onClick={handleClickVideo}
+			>
 				<Label>
 					START
 					<br />

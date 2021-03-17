@@ -134,7 +134,8 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 		projectorMode({ getWindow, setWindow });
 	});
 
-	ipcMain.on('UPDATE_STATE', (e, state) => {
+	ipcMain.on('DISPATCH', (e, state) => {
+		getWindow('main').webContents.send('SYNC_STATE', state);
 		getWindow('game').webContents.send('SYNC_STATE', state);
 	});
 

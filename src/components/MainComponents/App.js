@@ -24,7 +24,7 @@ export function App() {
 	}, []);
 
 	useEffect(() => {
-		console.log(state);
+		window.state = state;
 	}, [state]);
 
 	useEffect(() => {
@@ -46,9 +46,9 @@ export function App() {
 	}, [dispatch, state.fxButtons]);
 
 	// update state with Gameboard through IPC
-	useEffect(() => {
-		ipcRenderer.send('UPDATE_STATE', state);
-	});
+	// useEffect(() => {
+	// 	ipcRenderer.send('UPDATE_STATE', state);
+	// });
 
 	useInterval(
 		() => {
@@ -76,7 +76,6 @@ export function App() {
 	};
 
 	const playSound = (file, type = 'sfx') => {
-		console.log(true);
 		const player =
 			type === 'sfx'
 				? sfxPlayer.current.audioEl.current

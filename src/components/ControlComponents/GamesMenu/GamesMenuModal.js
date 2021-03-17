@@ -12,14 +12,7 @@ import {
 import { StoreContext } from '../../../store/context';
 import { gamesArray } from '../../Games/helpers/shared/gamesArray';
 import VersionSelection from './VersionSelection';
-
-function importAll(r) {
-	const logos = {};
-	r.keys().forEach((item) => {
-		logos[item.replace('./', '')] = r(item);
-	});
-	return logos;
-}
+import importAll from '../../Games/helpers/shared/importAll';
 
 const logos = importAll(
 	require.context('../../../assets/images/logos', false, /\.png$|.jpg$|.jpeg$/)
@@ -47,7 +40,6 @@ export default function GamesMenuModal() {
 	useEffect(() => {
 		async function getGames() {
 			const games = await gamesArray();
-			console.log('games: ', games);
 			setGamesList(games);
 		}
 		getGames();
@@ -60,16 +52,23 @@ export default function GamesMenuModal() {
 		e.stopPropagation();
 	};
 	const handleGameClick = (game) => {
-		const { title, logo, scoreType } = game;
+		const { title, logo, scoreType, video } = game;
 		const selectedGame = {
 			title,
 			logo,
 			scoreType,
+			video,
 		};
 		if (game.title === 'Card Sharks') {
 			selectedGame.version = 0;
-			dispatch({ type: 'SET_GAME', payload: selectedGame });
 			dispatch({ type: 'CLOSE_GAMES_MENU' });
+			dispatch({
+				type: 'PLAY_VIDEO',
+				payload: selectedGame.video,
+			});
+			setTimeout(() => {
+				dispatch({ type: 'SET_GAME', payload: selectedGame });
+			}, 2000);
 		} else {
 			dispatch({ type: 'RESET_GAME' });
 			dispatch({ type: 'GO_TO_VERSION_SELECT', payload: selectedGame });
@@ -77,15 +76,22 @@ export default function GamesMenuModal() {
 	};
 
 	const openGame = () => {
-		const { title, scoreType, logo } = state.gamesMenu.selectedGame;
+		const { title, scoreType, logo, video } = state.gamesMenu.selectedGame;
 		const selectedGame = {
 			title,
 			scoreType,
 			logo,
 			version: localState.selectedVersion[title],
+			video,
 		};
 		dispatch({ type: 'CLOSE_GAMES_MENU' });
-		dispatch({ type: 'SET_GAME', payload: selectedGame });
+		dispatch({
+			type: 'PLAY_VIDEO',
+			payload: selectedGame.video,
+		});
+		setTimeout(() => {
+			dispatch({ type: 'SET_GAME', payload: selectedGame });
+		}, 2000);
 	};
 
 	const submitHandler = (e) => {

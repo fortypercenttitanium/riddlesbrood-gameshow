@@ -1,13 +1,6 @@
 import React from 'react';
 import { GameLogoDiv, LogoImg } from './GameLogoStyles';
-
-function importAll(r) {
-	const logos = {};
-	r.keys().forEach((item) => {
-		logos[item.replace('./', '')] = r(item);
-	});
-	return logos;
-}
+import importAll from '../../Games/helpers/shared/importAll';
 
 const logos = importAll(
 	require.context('../../../assets/images/logos', false, /\.png$|.jpg$|.jpeg$/)

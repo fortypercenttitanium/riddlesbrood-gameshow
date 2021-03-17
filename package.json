@@ -1,7 +1,7 @@
 {
 	"main": "public/electron/electron.js",
 	"name": "riddlesbrood-gameshow",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/fortypercenttitanium/riddlesbrood-gameshow"
@@ -47,13 +47,12 @@
 		"electron-log": "^4.3.2",
 		"electron-store": "^5.2.0",
 		"electron-updater": "^4.3.8",
-		"firebase": "^8.2.4",
 		"nanoid": "^3.1.20",
 		"react": "^16.13.1",
 		"react-audio-player": "^0.13.0",
 		"react-dom": "^16.13.1",
 		"react-router-dom": "^5.2.0",
-		"react-scripts": "^3.4.3",
+		"react-scripts": "^4.0.3",
 		"styled-components": "^5.1.1"
 	},
 	"resolutions": {
