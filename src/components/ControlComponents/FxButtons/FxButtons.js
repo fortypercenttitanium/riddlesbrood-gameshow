@@ -42,7 +42,14 @@ export default function FxButtons() {
 		setAvailableFxButtons();
 	}, []);
 
-	useEffect(() => {});
+	useEffect(() => {
+		async function getFxButtons() {
+			const buttons = await ipcRenderer.invoke('GET_FX_BUTTONS');
+			buttons &&
+				dispatch({ type: actions.CHANGE_FX_BUTTONS, payload: buttons });
+		}
+		getFxButtons();
+	}, []);
 
 	const clickHandlerAudio = (e) => {
 		const audio = e.currentTarget.querySelector('audio');
@@ -93,6 +100,7 @@ export default function FxButtons() {
 				fx[alreadySelected] = { name: null, type: null, file: null };
 			}
 			fx[selectionWindowOpen] = selection;
+			ipcRenderer.send('SET_FX_BUTTONS', fx);
 			dispatch({ type: actions.CHANGE_FX_BUTTONS, payload: fx });
 		}
 		handleOutsideClick();
