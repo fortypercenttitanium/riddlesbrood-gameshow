@@ -21,6 +21,7 @@ module.exports = function createGameWindows({ getWindow, setWindow }) {
 		y: projectorDisplay ? projectorDisplay.bounds.y + 50 : 0,
 		frame: false,
 		fullscreen: !!projectorDisplay,
+		focusable: false,
 		title: 'Gameboard',
 		show: true,
 		icon: iconPath,
@@ -38,21 +39,12 @@ module.exports = function createGameWindows({ getWindow, setWindow }) {
 		gameWindow.setFullScreen(true);
 	});
 
-	mainWindow.on('closed', () => {
-		setWindow('main', null);
+	mainWindow.on('closed', (e) => {
 		gameWindow.close();
-		setWindow('game', null);
-		app.quit();
 	});
 
 	gameWindow.on('focus', () => {
 		mainWindow.focus();
-	});
-
-	gameWindow.on('closed', (e) => {
-		if (getWindow('main')) {
-			e.preventDefault();
-		}
 	});
 
 	mainWindow.loadURL(

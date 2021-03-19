@@ -86,6 +86,12 @@ export default function FxButtons() {
 	const handleSubmit = () => {
 		if (selectionWindowOpen >= 0) {
 			const fx = [...fxButtons];
+			const alreadySelected = fx.findIndex(
+				(button) => button.name === selection.name
+			);
+			if (alreadySelected >= 0) {
+				fx[alreadySelected] = { name: null, type: null, file: null };
+			}
 			fx[selectionWindowOpen] = selection;
 			dispatch({ type: actions.CHANGE_FX_BUTTONS, payload: fx });
 		}

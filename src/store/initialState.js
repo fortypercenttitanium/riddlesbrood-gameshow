@@ -44,7 +44,7 @@ export const initialState = {
 		},
 		{
 			name: 'excellent',
-			file: 'excellent.mov',
+			file: 'excellent.mp4',
 			type: 'video',
 		},
 		{
