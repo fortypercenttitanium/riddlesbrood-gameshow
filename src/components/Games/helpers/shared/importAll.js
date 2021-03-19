@@ -1,7 +1,9 @@
 export default function importAll(r) {
 	const files = {};
 	r.keys().forEach((item) => {
-		files[item.replace('./', '')] = r(item).default;
+		r(item).default
+			? (files[item.replace('./', '')] = r(item).default)
+			: (files[item.replace('./', '')] = r(item));
 	});
 	return files;
 }
