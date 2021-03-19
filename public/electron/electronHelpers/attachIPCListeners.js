@@ -9,6 +9,7 @@ const projectorMode = require('./projectorMode');
 const getGameVersions = require('./getGameVersions');
 const storeGameVersion = require('./storeGameVersion');
 const deleteGameVersion = require('./deleteGameVersion');
+const store = require('./electronStore');
 
 const readFilePromise = util.promisify(fs.readFile);
 
@@ -141,5 +142,13 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 
 	ipcMain.on('WHEEL_GUESS_SEND', (e, key) => {
 		getWindow('game').webContents.send('WHEEL_GUESS_RECEIVE', key);
+	});
+
+	ipcMain.handle('GET_FX_BUTTONS', () => {
+		return store.get('fx_buttons');
+	});
+
+	ipcMain.on('SET_FX_BUTTONS', (_, fx_buttons) => {
+		store.set('fx_buttons', fx_buttons);
 	});
 };

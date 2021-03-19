@@ -23,22 +23,22 @@ export const initialState = {
 			type: 'audio',
 		},
 		{
-			name: 'oh yeah',
+			name: 'ohyeah',
 			file: 'ohyeah.wav',
 			type: 'audio',
 		},
 		{
-			name: 'tick tock',
+			name: 'ticktock',
 			file: 'ticktock.wav',
 			type: 'audio',
 		},
 		{
-			name: 'wood block',
+			name: 'woodblock',
 			file: 'woodblock.wav',
 			type: 'audio',
 		},
 		{
-			name: 'sample video',
+			name: 'samplevfx',
 			file: 'samplevfx.mp4',
 			type: 'video',
 		},
