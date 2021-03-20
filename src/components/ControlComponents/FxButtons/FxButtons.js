@@ -45,11 +45,10 @@ export default function FxButtons() {
 	useEffect(() => {
 		async function getFxButtons() {
 			const buttons = await ipcRenderer.invoke('GET_FX_BUTTONS');
-			buttons &&
-				dispatch({ type: actions.CHANGE_FX_BUTTONS, payload: buttons });
+			dispatch({ type: actions.CHANGE_FX_BUTTONS, payload: buttons });
 		}
-		getFxButtons();
-	}, []);
+		!fxButtons.length && getFxButtons();
+	}, [fxButtons, dispatch]);
 
 	const clickHandlerAudio = (e) => {
 		const audio = e.currentTarget.querySelector('audio');
