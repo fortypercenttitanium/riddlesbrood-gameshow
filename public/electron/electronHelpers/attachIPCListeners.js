@@ -136,8 +136,10 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 	});
 
 	ipcMain.on('DISPATCH', (e, state) => {
-		getWindow('main').webContents.send('SYNC_STATE', state);
-		getWindow('game').webContents.send('SYNC_STATE', state);
+		if (getWindow('game')) {
+			getWindow('game').webContents.send('SYNC_STATE', state);
+		}
+		// getWindow('main').webContents.send('SYNC_STATE', state);
 	});
 
 	ipcMain.on('WHEEL_GUESS_SEND', (e, key) => {

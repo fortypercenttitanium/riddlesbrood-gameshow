@@ -9,11 +9,18 @@ export const StoreContext = createContext();
 
 export default function Gameboard() {
 	const [state, dispatch] = useReducer(reducer, initialState);
+	// useEffect(() => {
+	// 	ipcRenderer.on('SYNC_STATE', (e, action) => {
+	// 		dispatch(action);
+	// 	});
+	// 	return () => ipcRenderer.removeAllListeners('DISPATCH_RECEIVE');
+	// }, []);
+
 	useEffect(() => {
-		ipcRenderer.on('SYNC_STATE', (e, action) => {
-			dispatch(action);
+		ipcRenderer.on('SYNC_STATE', (e, newState) => {
+			dispatch({ type: 'SET_STATE', payload: newState });
 		});
-		return () => ipcRenderer.removeAllListeners('DISPATCH_RECEIVE');
+		return () => ipcRenderer.removeAllListeners('SYNC_STATE');
 	}, []);
 
 	useEffect(() => {

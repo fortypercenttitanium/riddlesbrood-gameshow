@@ -265,6 +265,10 @@ export const reducer = (state, { type, payload }) => {
 					blocks: payload,
 				},
 			};
+		case 'SET_STATE':
+			return {
+				...payload,
+			};
 		default:
 			return state;
 	}

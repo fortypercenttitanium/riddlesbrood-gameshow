@@ -29,7 +29,7 @@ export const initialState = {
 			tickSound: false,
 		},
 		score: {
-			type: '',
+			type: 'player',
 			scoreBoard: [0, 0, 0, 0],
 		},
 		display: '',
