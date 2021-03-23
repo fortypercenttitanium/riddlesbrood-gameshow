@@ -19,18 +19,29 @@ export default function VideoPlayer({ window }) {
 			(state.audio.volume.sfx / 100) * (state.audio.volume.master / 100);
 	}, [state.audio.volume]);
 
+	useEffect(() => {
+		if (state.VFX.playing && video.current.paused) {
+			video.current.play();
+		} else {
+			video.current.pause();
+			video.current.load();
+		}
+	}, [state.VFX.playing]);
+
 	const handleClickContainer = () => {
 		dispatch({ type: 'END_VIDEO' });
 	};
 
 	return (
-		<VideoContainer onClick={handleClickContainer}>
+		<VideoContainer
+			onClick={handleClickContainer}
+			style={{ pointerEvents: state.VFX.playing ? 'auto' : 'none' }}
+		>
 			<video
 				ref={video}
 				width='100%'
 				src={state.VFX.file}
 				type='video/mp4'
-				autoPlay
 				onEnded={() => {
 					dispatch({ type: 'END_VIDEO' });
 				}}

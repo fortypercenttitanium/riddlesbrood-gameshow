@@ -16,7 +16,7 @@ export default function ControlScreen({ window }) {
 	}
 
 	const { state } = useContext(StoreContext);
-	const { currentGame, timeline, VFX } = state;
+	const { currentGame, timeline } = state;
 
 	const {
 		Jeopardy,
@@ -46,7 +46,7 @@ export default function ControlScreen({ window }) {
 		<ControlScreenContainer>
 			{timeline === 'app-open' ? <LogoScreen /> : null}
 			{timeline === 'in-game' ? components[currentGame.title] : null}
-			{VFX.playing && <VideoPlayer window={window} />}
+			<VideoPlayer window={window} />
 		</ControlScreenContainer>
 	);
 }
