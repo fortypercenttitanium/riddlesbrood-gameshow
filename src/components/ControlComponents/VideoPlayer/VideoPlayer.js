@@ -3,15 +3,11 @@ import { VideoContainer } from './VideoPlayerStyles';
 import { StoreContext as StoreContextCP } from '../../../store/context';
 import { StoreContext as StoreContextGB } from '../../MainComponents/Gameboard';
 
-// TODO: create functions for playing/stopping videos. export them to the top parent level.
-// Add a listener for ipcRenderer for the play/stop video events. Send all requests to play videos
-// to ipcMain.
-
-export default function VideoPlayer({ window }) {
+export default function VideoPlayer({ windowInstance }) {
 	let StoreContext;
-	if (window === 'controlPanel') {
+	if (windowInstance === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (window === 'gameboard') {
+	} else if (windowInstance === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 	const { state, dispatch } = useContext(StoreContext);
@@ -20,8 +16,10 @@ export default function VideoPlayer({ window }) {
 
 	useEffect(() => {
 		video.current.volume =
-			(state.audio.volume.sfx / 100) * (state.audio.volume.master / 100);
-	}, [state.audio.volume]);
+			windowInstance === 'gameboard'
+				? (state.audio.volume.sfx / 100) * (state.audio.volume.master / 100)
+				: 0;
+	}, [state.audio.volume, windowInstance]);
 
 	useEffect(() => {
 		if (state.VFX.playing && video.current.paused) {
@@ -40,6 +38,7 @@ export default function VideoPlayer({ window }) {
 		<VideoContainer
 			onClick={handleClickContainer}
 			style={{ pointerEvents: state.VFX.playing ? 'auto' : 'none' }}
+			show={state.VFX.playing}
 		>
 			<video
 				ref={video}

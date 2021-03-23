@@ -35,7 +35,7 @@ const videos = importAll(
 	require.context('../../../assets/videos/jeopardy', false, /\.mp4$/)
 );
 
-export default function Jeopardy({ window: windowInstance }) {
+export default function Jeopardy({ windowInstance }) {
 	let StoreContext;
 	if (windowInstance === 'controlPanel') {
 		StoreContext = StoreContextCP;
@@ -47,10 +47,6 @@ export default function Jeopardy({ window: windowInstance }) {
 
 	let musicPlayer = useRef();
 	let sfxPlayer = useRef();
-
-	useEffect(() => {
-		console.log(state.gameController);
-	}, [state.gameController]);
 
 	// initialize game
 	useEffect(() => {
@@ -114,7 +110,7 @@ export default function Jeopardy({ window: windowInstance }) {
 			/>
 			<DecorContainer>
 				<ColumnContainer
-					window={windowInstance}
+					windowInstance={windowInstance}
 					margin={
 						windowInstance === 'controlPanel'
 							? '41px auto auto 5px'
@@ -123,11 +119,11 @@ export default function Jeopardy({ window: windowInstance }) {
 				>
 					<img src={jeopardyColumn} alt='' />
 				</ColumnContainer>
-				<TopContainer window={windowInstance}>
+				<TopContainer windowInstance={windowInstance}>
 					<img src={topBanner} alt='' />
 				</TopContainer>
 				<ColumnContainer
-					window={windowInstance}
+					windowInstance={windowInstance}
 					margin={
 						windowInstance === 'controlPanel'
 							? '41px 0px auto auto'
@@ -156,13 +152,13 @@ export default function Jeopardy({ window: windowInstance }) {
 				{state.gameController.board.map((block, index) => {
 					return (
 						<CellContainer key={`category${index}`}>
-							<CatCell window={windowInstance}>
+							<CatCell windowInstance={windowInstance}>
 								<StyledSpan>{block.category}</StyledSpan>
 							</CatCell>
 							{block.questions.map((question, qIndex) => {
 								return (
 									<QCell
-										window={windowInstance}
+										windowInstance={windowInstance}
 										key={qIndex}
 										onClick={() => {
 											handleClickBoard(question, index, qIndex);

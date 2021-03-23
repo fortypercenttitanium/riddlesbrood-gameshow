@@ -4,7 +4,8 @@ import styled from 'styled-components';
 const ComponentWrapper = styled.div`
 	display: flex;
 	flex: 1;
-	padding: ${(props) => (props.window === 'controlPanel' ? '10px' : '16px')};
+	padding: ${(props) =>
+		props.windowInstance === 'controlPanel' ? '10px' : '16px'};
 	justify-content: space-around;
 	border-radius: 4px;
 	text-shadow: 2px 2px 2px black;
@@ -37,14 +38,14 @@ const ComponentWrapper = styled.div`
 
 	.score-text {
 		font-size: ${(props) =>
-			props.window === 'controlPanel' ? '1.4rem' : '1.8rem'};
+			props.windowInstance === 'controlPanel' ? '1.4rem' : '1.8rem'};
 	}
 `;
 
 function ScoreComponent({ player, type, score, windowInstance }) {
 	const capitalizedType = type[0].toUpperCase() + type.slice(1);
 	return (
-		<ComponentWrapper window={windowInstance} index={player - 1}>
+		<ComponentWrapper windowInstance={windowInstance} index={player - 1}>
 			<span className='score-text'>
 				{capitalizedType} {player}:
 			</span>

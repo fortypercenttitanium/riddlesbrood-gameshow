@@ -25,7 +25,7 @@ const H1 = styled.h1`
 
 const Title = styled(H1)`
 	display: ${(props) => (props.show ? 'block' : 'none')};
-	font-size: ${(props) => props.window === 'controlPanel' && '2.4rem'};
+	font-size: ${(props) => props.windowInstance === 'controlPanel' && '2.4rem'};
 `;
 
 const H2 = styled.h2`

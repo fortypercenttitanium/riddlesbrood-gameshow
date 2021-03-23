@@ -11,7 +11,6 @@ const AnswerBlockDiv = styled.div`
 	color: white;
 	display: flex;
 	position: relative;
-	display: none;
 `;
 
 const TimerDiv = styled.div`

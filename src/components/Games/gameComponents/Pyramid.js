@@ -33,11 +33,11 @@ import {
 	clickHandlerCategory,
 } from '../helpers/pyramid/imports';
 
-export default function Pyramid(props) {
+export default function Pyramid({ windowInstance }) {
 	let StoreContext;
-	if (props.window === 'controlPanel') {
+	if (windowInstance === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (props.window === 'gameboard') {
+	} else if (windowInstance === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 
@@ -147,7 +147,7 @@ export default function Pyramid(props) {
 				<ModalContainer>
 					{state.gameController.display === 'question' ? (
 						<ModalContainer>
-							{props.window === 'controlPanel' && (
+							{windowInstance === 'controlPanel' && (
 								<Button onClick={handleClickCorrect} type='correct'>
 									<H2>Correct</H2>
 								</Button>
@@ -159,7 +159,7 @@ export default function Pyramid(props) {
 									]
 								}
 							</H2>
-							{props.window === 'controlPanel' && (
+							{windowInstance === 'controlPanel' && (
 								<Button onClick={handleClickIncorrect} type='incorrect'>
 									<H2>Wrong/Pass</H2>
 								</Button>

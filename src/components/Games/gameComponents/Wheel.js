@@ -35,18 +35,18 @@ import {
 
 const { ipcRenderer } = window.require('electron');
 
-export default function Wheel({ window }) {
+export default function Wheel({ windowInstance }) {
 	let StoreContext;
-	if (window === 'controlPanel') {
+	if (windowInstance === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (window === 'gameboard') {
+	} else if (windowInstance === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 
 	const { state, dispatch } = useContext(StoreContext);
 
 	useEffect(() => {
-		if (window === 'gameboard') {
+		if (windowInstance === 'gameboard') {
 			ipcRenderer.on('WHEEL_GUESS_RECEIVE', function (e, key) {
 				activateLetterCells(key.toUpperCase());
 			});
@@ -157,7 +157,7 @@ export default function Wheel({ window }) {
 			<Title display={state.gameController.display}>
 				Please select puzzle:
 			</Title>
-			{window === 'controlPanel' && (
+			{windowInstance === 'controlPanel' && (
 				<CategoryContainer display={state.gameController.display}>
 					{state.gameController.board.map((item, index) => {
 						return (
@@ -174,7 +174,8 @@ export default function Wheel({ window }) {
 					})}
 				</CategoryContainer>
 			)}
-			{(state.gameController.display === 'board' || window === 'gameboard') && (
+			{(state.gameController.display === 'board' ||
+				windowInstance === 'gameboard') && (
 				<Board>
 					{renderPuzzle(state).map((row) => {
 						return row.map((letter, index) => {
@@ -203,9 +204,9 @@ export default function Wheel({ window }) {
 				</GuessedLettersDisplay>
 			)}
 			{state.gameController.currentQuestion.solved &&
-				window === 'controlPanel' && (
+				windowInstance === 'controlPanel' && (
 					<ReturnButton
-						screen={window}
+						screen={windowInstance}
 						display={state.gameController.display}
 						onClick={handleClickReturn}
 					>
@@ -214,7 +215,7 @@ export default function Wheel({ window }) {
 				)}
 			<SolvePuzzle
 				display={state.gameController.display}
-				screen={window}
+				screen={windowInstance}
 				onClick={handleClickSolve}
 			>
 				<H2>Solve puzzle</H2>

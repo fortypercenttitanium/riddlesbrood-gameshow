@@ -50,11 +50,11 @@ const pictures = importAll(
 	)
 );
 
-export default function WhatTheHellIsIt(props) {
+export default function WhatTheHellIsIt({ windowInstance }) {
 	let StoreContext;
-	if (props.window === 'controlPanel') {
+	if (windowInstance === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (props.window === 'gameboard') {
+	} else if (windowInstance === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 
@@ -185,9 +185,9 @@ export default function WhatTheHellIsIt(props) {
 				<Title
 					show={Boolean(
 						state.gameController.answerRevealed ||
-							props.window === 'controlPanel'
+							windowInstance === 'controlPanel'
 					)}
-					window={props.window}
+					windowInstance={windowInstance}
 				>
 					{currentQuestion.title}
 				</Title>
@@ -218,7 +218,7 @@ export default function WhatTheHellIsIt(props) {
 					)}
 				</BlocksDiv>
 			</PictureDiv>
-			{props.window === 'controlPanel' && (
+			{windowInstance === 'controlPanel' && (
 				<Controls>
 					<Button onClick={handleClickReveal}>
 						<H3>
@@ -235,7 +235,7 @@ export default function WhatTheHellIsIt(props) {
 					</Button>
 				</Controls>
 			)}
-			{props.window === 'gameboard' && (
+			{windowInstance === 'gameboard' && (
 				<ScoreBoardDiv>
 					{score.scoreBoard.map((scoreNum, scoreIndex) => {
 						return (

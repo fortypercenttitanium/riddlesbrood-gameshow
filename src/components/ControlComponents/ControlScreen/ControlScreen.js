@@ -6,12 +6,12 @@ import * as Games from '../../Games/helpers/shared/gamesArray';
 import { StoreContext as StoreContextCP } from '../../../store/context';
 import { StoreContext as StoreContextGB } from '../../MainComponents/Gameboard';
 
-export default function ControlScreen({ window }) {
+export default function ControlScreen({ windowInstance }) {
 	let StoreContext;
 
-	if (window === 'controlPanel') {
+	if (windowInstance === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (window === 'gameboard') {
+	} else if (windowInstance === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 
@@ -31,14 +31,14 @@ export default function ControlScreen({ window }) {
 	} = Games;
 
 	const components = {
-		Jeopardy: <Jeopardy window={window} />,
-		'Family Feud': <FamilyFeud window={window} />,
-		'$25,000 Pyramid': <Pyramid window={window} />,
-		'Wheel Of Fortune': <Wheel window={window} />,
-		'Name That Tune': <NameThatTune window={window} />,
-		'What The Hell Is It?': <WhatTheHellIsIt window={window} />,
-		'Couples Conundrum': <CouplesConundrum window={window} />,
-		ESP: <ESP window={window} />,
+		Jeopardy: <Jeopardy windowInstance={windowInstance} />,
+		'Family Feud': <FamilyFeud windowInstance={windowInstance} />,
+		'$25,000 Pyramid': <Pyramid windowInstance={windowInstance} />,
+		'Wheel Of Fortune': <Wheel windowInstance={windowInstance} />,
+		'Name That Tune': <NameThatTune windowInstance={windowInstance} />,
+		'What The Hell Is It?': <WhatTheHellIsIt windowInstance={windowInstance} />,
+		'Couples Conundrum': <CouplesConundrum windowInstance={windowInstance} />,
+		ESP: <ESP windowInstance={windowInstance} />,
 		'Card Sharks': <CardSharks />,
 	};
 
@@ -46,7 +46,7 @@ export default function ControlScreen({ window }) {
 		<ControlScreenContainer>
 			{timeline === 'app-open' ? <LogoScreen /> : null}
 			{timeline === 'in-game' ? components[currentGame.title] : null}
-			<VideoPlayer window={window} />
+			<VideoPlayer windowInstance={windowInstance} />
 		</ControlScreenContainer>
 	);
 }

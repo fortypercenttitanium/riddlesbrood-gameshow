@@ -32,7 +32,7 @@ const H1 = styled.h1`
 
 const Title = styled(H1)`
 	display: block;
-	font-size: ${(props) => props.window === 'controlPanel' && '2.4rem'};
+	font-size: ${(props) => props.windowInstance === 'controlPanel' && '2.4rem'};
 	text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.7);
 `;
 

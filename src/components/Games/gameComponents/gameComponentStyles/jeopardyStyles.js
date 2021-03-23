@@ -45,7 +45,8 @@ const CatCell = styled.div`
 	text-align: center;
 	display: flex;
 	flex: 1;
-	font-size: ${(props) => (props.window === 'gameboard' ? '2rem' : '1rem')};
+	font-size: ${(props) =>
+		props.windowInstance === 'gameboard' ? '2rem' : '1rem'};
 	font-family: impact;
 	color: #eee;
 	background: linear-gradient(to top left, #000088, #0000ff);
@@ -57,7 +58,8 @@ const CatCell = styled.div`
 
 const QCell = styled(CatCell)`
 	color: #ffd87d;
-	font-size: ${(props) => (props.window === 'gameboard' ? '2.5rem' : '2.5rem')};
+	font-size: ${(props) =>
+		props.windowInstance === 'gameboard' ? '2.5rem' : '2.5rem'};
 	cursor: pointer;
 	transition: 0.3s;
 	&:hover {
@@ -93,11 +95,13 @@ const DecorContainer = styled.div`
 
 const ColumnContainer = styled.div`
 	display: flex;
-	height: ${(props) => (props.window === 'controlPanel' ? '350px' : '700px')};
+	height: ${(props) =>
+		props.windowInstance === 'controlPanel' ? '350px' : '700px'};
 	margin: ${(props) => props.margin};
 	justify-content: center;
 	img {
-		height: ${(props) => (props.window === 'controlPanel' ? '400px' : '550px')};
+		height: ${(props) =>
+			props.windowInstance === 'controlPanel' ? '400px' : '550px'};
 	}
 `;
 
@@ -109,7 +113,7 @@ const TopContainer = styled.div`
 	left: 0;
 	right: 0;
 	margin: ${(props) =>
-		props.window === 'controlPanel' ? '-32px 0 0' : '-40px 0 0'};
+		props.windowInstance === 'controlPanel' ? '-32px 0 0' : '-40px 0 0'};
 	z-index: -5;
 	width: 100%;
 	& > img {
