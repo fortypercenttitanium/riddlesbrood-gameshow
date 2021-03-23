@@ -33,7 +33,7 @@ module.exports = function createGameWindows({ getWindow, setWindow }) {
 	mainWindow.setMenuBarVisibility(false);
 	mainWindow.focus();
 
-	if (isDev) gameWindow.webContents.openDevTools();
+	// if (isDev) gameWindow.webContents.openDevTools();
 
 	gameWindow.on('maximize', (e) => {
 		gameWindow.setFullScreen(true);
