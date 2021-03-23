@@ -46,7 +46,7 @@ export default function ControlScreen({ windowInstance }) {
 		<ControlScreenContainer>
 			{timeline === 'app-open' ? <LogoScreen /> : null}
 			{timeline === 'in-game' ? components[currentGame.title] : null}
-			<VideoPlayer windowInstance={windowInstance} />
+			<VideoPlayer show={state.VFX.playing} windowInstance={windowInstance} />
 		</ControlScreenContainer>
 	);
 }

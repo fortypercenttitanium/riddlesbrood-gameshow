@@ -46,7 +46,8 @@ const openQuestion = (
 const modalClick = ({ state, dispatch, sfxPlayer, musicPlayer }) => {
 	if (state.gameController.display === 'daily-double') {
 		if (state.gameController.currentQuestion.type === 'video') {
-			changeGameDisplay('question', { dispatch, actions });
+			// changeGameDisplay('question', { dispatch, actions });
+			dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: 'question' });
 			dispatch({
 				type: actions.PLAY_VIDEO,
 				payload: state.gameController.currentQuestion.question,

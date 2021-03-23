@@ -31,7 +31,16 @@ export default function VideoPlayer({ windowInstance }) {
 	}, [state.VFX.playing]);
 
 	const handleClickContainer = () => {
-		dispatch({ type: 'END_VIDEO' });
+		// check if jeopardy video question is playing
+		if (
+			state.gameController.currentQuestion &&
+			!(
+				state.gameController.currentQuestion.type === 'video' &&
+				state.gameController.display === 'question'
+			)
+		) {
+			dispatch({ type: 'END_VIDEO' });
+		}
 	};
 
 	return (
