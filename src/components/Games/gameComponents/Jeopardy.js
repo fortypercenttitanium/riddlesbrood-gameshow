@@ -9,6 +9,9 @@ import {
 	QCell,
 	DailyDiv,
 	DailyImg,
+	DecorContainer,
+	TopContainer,
+	ColumnContainer,
 } from './gameComponentStyles/jeopardyStyles';
 import {
 	timeUpSound,
@@ -22,17 +25,21 @@ import {
 	ReactAudioPlayer,
 	modalClick,
 	openQuestion,
+	ScoreOverlay,
+	ScoreComponent,
+	jeopardyColumn,
+	topBanner,
 } from '../helpers/jeopardy/imports';
 
 const videos = importAll(
 	require.context('../../../assets/videos/jeopardy', false, /\.mp4$/)
 );
 
-export default function Jeopardy({ window }) {
+export default function Jeopardy({ windowInstance }) {
 	let StoreContext;
-	if (window === 'controlPanel') {
+	if (windowInstance === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (window === 'gameboard') {
+	} else if (windowInstance === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 
@@ -95,6 +102,37 @@ export default function Jeopardy({ window }) {
 
 	return state.gameController.gameStarted ? (
 		<JeopardyContainer>
+			<ScoreOverlay
+				ScoreComponent={ScoreComponent}
+				position={'bottom'}
+				windowInstance={windowInstance}
+				score={state.gameController.score}
+			/>
+			<DecorContainer>
+				<ColumnContainer
+					windowInstance={windowInstance}
+					margin={
+						windowInstance === 'controlPanel'
+							? '41px auto auto 5px'
+							: '62px auto auto 8px'
+					}
+				>
+					<img src={jeopardyColumn} alt='' />
+				</ColumnContainer>
+				<TopContainer windowInstance={windowInstance}>
+					<img src={topBanner} alt='' />
+				</TopContainer>
+				<ColumnContainer
+					windowInstance={windowInstance}
+					margin={
+						windowInstance === 'controlPanel'
+							? '41px 0px auto auto'
+							: '62px 4px auto auto'
+					}
+				>
+					<img src={jeopardyColumn} alt='' />
+				</ColumnContainer>
+			</DecorContainer>
 			<Modal display={state.gameController.display} onClick={handleClickModal}>
 				{state.gameController.display === 'daily-double' && (
 					<DailyDiv>
@@ -114,13 +152,13 @@ export default function Jeopardy({ window }) {
 				{state.gameController.board.map((block, index) => {
 					return (
 						<CellContainer key={`category${index}`}>
-							<CatCell window={window}>
+							<CatCell windowInstance={windowInstance}>
 								<StyledSpan>{block.category}</StyledSpan>
 							</CatCell>
 							{block.questions.map((question, qIndex) => {
 								return (
 									<QCell
-										window={window}
+										windowInstance={windowInstance}
 										key={qIndex}
 										onClick={() => {
 											handleClickBoard(question, index, qIndex);

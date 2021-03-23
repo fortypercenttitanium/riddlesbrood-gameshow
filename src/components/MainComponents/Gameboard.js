@@ -9,11 +9,12 @@ export const StoreContext = createContext();
 
 export default function Gameboard() {
 	const [state, dispatch] = useReducer(reducer, initialState);
+
 	useEffect(() => {
-		ipcRenderer.on('SYNC_STATE', (e, action) => {
-			dispatch(action);
+		ipcRenderer.on('SYNC_STATE', (e, newState) => {
+			dispatch({ type: 'SET_STATE', payload: newState });
 		});
-		return () => ipcRenderer.removeAllListeners('DISPATCH_RECEIVE');
+		return () => ipcRenderer.removeAllListeners('SYNC_STATE');
 	}, []);
 
 	useEffect(() => {
@@ -28,7 +29,7 @@ export default function Gameboard() {
 	return (
 		<StoreContext.Provider value={{ state, dispatch: () => {} }}>
 			<GameboardContainer>
-				<ControlScreen window='gameboard' />
+				<ControlScreen windowInstance='gameboard' />
 			</GameboardContainer>
 		</StoreContext.Provider>
 	);

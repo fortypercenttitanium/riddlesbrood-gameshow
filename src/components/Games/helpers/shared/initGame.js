@@ -18,7 +18,7 @@ export default async function initGame(state, game, initialDisplay = 'init') {
 			tickSound: '',
 		},
 		score: {
-			type: 'players',
+			type: 'player',
 			scoreBoard: [0, 0, 0, 0],
 		},
 		gameStarted: true,

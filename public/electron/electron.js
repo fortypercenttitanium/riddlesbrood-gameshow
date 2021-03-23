@@ -5,8 +5,11 @@ const createStartScreen = require('./electronHelpers/createStartScreen');
 const attachIPCListeners = require('./electronHelpers/attachIPCListeners');
 const checkAssetFolders = require('./electronHelpers/checkAssetFolders');
 const { protocol, app } = electron;
+const log = require('electron-log');
 
-autoUpdater.logger = require('electron-log');
+log.catchErrors();
+
+autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 autoUpdater.autoDownload = false;
 

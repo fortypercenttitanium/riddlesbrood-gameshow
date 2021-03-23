@@ -45,11 +45,6 @@ export function App() {
 		};
 	}, [dispatch, state.fxButtons]);
 
-	// update state with Gameboard through IPC
-	// useEffect(() => {
-	// 	ipcRenderer.send('UPDATE_STATE', state);
-	// });
-
 	useInterval(
 		() => {
 			dispatch({ type: actions.TICK_TIMER });
@@ -99,8 +94,8 @@ export function App() {
 	// 	dispatch({
 	// 		type: 'SET_GAME',
 	// 		payload: {
-	// 			title: 'Newlywed Game',
-	// 			logo: 'NewlywedLogo.jpg',
+	// 			title: 'Jeopardy',
+	// 			logo: 'JeopardyLogo.png',
 	// 			version: 0,
 	// 		},
 	// 	});
@@ -119,7 +114,7 @@ export function App() {
 			<ShowControls projectorMode={projectorMode} />
 			<FxButtons toggleDevTools={toggleDevTools} changeFX={changeFX} />
 			<ControlScreenContainer>
-				<ControlScreen window='controlPanel' />
+				<ControlScreen windowInstance='controlPanel' />
 			</ControlScreenContainer>
 			<AnswerBlock />
 			<Scoreboard playSound={playSound} />

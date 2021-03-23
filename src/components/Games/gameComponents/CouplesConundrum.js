@@ -22,11 +22,11 @@ import {
 	previousQuestion,
 } from '../helpers/couples/imports';
 
-export default function CouplesConundrum(props) {
+export default function CouplesConundrum({ windowInstance }) {
 	let StoreContext;
-	if (props.window === 'controlPanel') {
+	if (windowInstance === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (props.window === 'gameboard') {
+	} else if (windowInstance === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 
@@ -68,9 +68,9 @@ export default function CouplesConundrum(props) {
 	return state.gameController.gameStarted ? (
 		<CouplesHomeScreen>
 			<TitleContainer>
-				<Title window={props.window}>{currentQuestion}</Title>
+				<Title windowInstance={windowInstance}>{currentQuestion}</Title>
 			</TitleContainer>
-			{props.window === 'controlPanel' && (
+			{windowInstance === 'controlPanel' && (
 				<Controls>
 					<Button onClick={handleClickPrev}>
 						<H3>Previous question</H3>
@@ -80,7 +80,7 @@ export default function CouplesConundrum(props) {
 					</Button>
 				</Controls>
 			)}
-			{props.window === 'gameboard' && (
+			{windowInstance === 'gameboard' && (
 				<ScoreBoardDiv>
 					{score.scoreBoard.map((scoreNum, scoreIndex) => {
 						if (scoreNum !== null) {

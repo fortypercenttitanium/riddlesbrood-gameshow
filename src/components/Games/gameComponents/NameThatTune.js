@@ -38,11 +38,11 @@ const songs = importAll(
 	)
 );
 
-export default function NameThatTune(props) {
+export default function NameThatTune({ windowInstance }) {
 	let StoreContext;
-	if (props.window === 'controlPanel') {
+	if (windowInstance === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (props.window === 'gameboard') {
+	} else if (windowInstance === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 
@@ -101,16 +101,16 @@ export default function NameThatTune(props) {
 				<Title
 					show={Boolean(
 						state.gameController.answerRevealed ||
-							props.window === 'controlPanel'
+							windowInstance === 'controlPanel'
 					)}
-					window={props.window}
+					windowInstance={windowInstance}
 				>
 					{currentQuestion.title}
 				</Title>
 				<Artist
 					show={Boolean(
 						state.gameController.answerRevealed ||
-							props.window === 'controlPanel'
+							windowInstance === 'controlPanel'
 					)}
 				>
 					{currentQuestion.artist}
@@ -124,7 +124,7 @@ export default function NameThatTune(props) {
 					onClick={handleClickPlayPause}
 				/>
 			</PlayerContainer>
-			{props.window === 'controlPanel' && (
+			{windowInstance === 'controlPanel' && (
 				<Controls>
 					<Button
 						onClick={() =>
@@ -143,7 +143,7 @@ export default function NameThatTune(props) {
 					</Button>
 				</Controls>
 			)}
-			{props.window === 'gameboard' && (
+			{windowInstance === 'gameboard' && (
 				<ScoreBoardDiv>
 					{score.scoreBoard.map((scoreNum, scoreIndex) => {
 						return (

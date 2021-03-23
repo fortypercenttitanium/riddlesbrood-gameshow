@@ -3,11 +3,11 @@ import { VideoContainer } from './VideoPlayerStyles';
 import { StoreContext as StoreContextCP } from '../../../store/context';
 import { StoreContext as StoreContextGB } from '../../MainComponents/Gameboard';
 
-export default function VideoPlayer({ window }) {
+export default function VideoPlayer({ windowInstance }) {
 	let StoreContext;
-	if (window === 'controlPanel') {
+	if (windowInstance === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (window === 'gameboard') {
+	} else if (windowInstance === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 	const { state, dispatch } = useContext(StoreContext);
@@ -16,21 +16,35 @@ export default function VideoPlayer({ window }) {
 
 	useEffect(() => {
 		video.current.volume =
-			(state.audio.volume.sfx / 100) * (state.audio.volume.master / 100);
-	}, [state.audio.volume]);
+			windowInstance === 'gameboard'
+				? (state.audio.volume.sfx / 100) * (state.audio.volume.master / 100)
+				: 0;
+	}, [state.audio.volume, windowInstance]);
+
+	useEffect(() => {
+		if (state.VFX.playing && video.current.paused) {
+			video.current.play();
+		} else {
+			video.current.pause();
+			video.current.load();
+		}
+	}, [state.VFX.playing]);
 
 	const handleClickContainer = () => {
 		dispatch({ type: 'END_VIDEO' });
 	};
 
 	return (
-		<VideoContainer onClick={handleClickContainer}>
+		<VideoContainer
+			onClick={handleClickContainer}
+			style={{ pointerEvents: state.VFX.playing ? 'auto' : 'none' }}
+			show={state.VFX.playing}
+		>
 			<video
 				ref={video}
 				width='100%'
 				src={state.VFX.file}
 				type='video/mp4'
-				autoPlay
 				onEnded={() => {
 					dispatch({ type: 'END_VIDEO' });
 				}}

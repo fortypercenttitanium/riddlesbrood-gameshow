@@ -30,11 +30,11 @@ import blueWrongIcon from '../../../assets/images/game_images/family_feud/ff-wro
 import redWrongIcon from '../../../assets/images/game_images/family_feud/ff-wrong-red.png';
 import greyWrongIcon from '../../../assets/images/game_images/family_feud/ff-wrong-grey.png';
 
-export default function FamilyFeud({ window }) {
+export default function FamilyFeud({ windowInstance }) {
 	let StoreContext;
-	if (window === 'controlPanel') {
+	if (windowInstance === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (window === 'gameboard') {
+	} else if (windowInstance === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 
@@ -73,7 +73,7 @@ export default function FamilyFeud({ window }) {
 	return state.gameController.gameStarted ? (
 		<FamilyFeudHomeScreen>
 			{wrongModal.display && (
-				<XModal window={window}>
+				<XModal windowInstance={windowInstance}>
 					{wrongModal.array.map((x, wrongModalIndex) => {
 						return x === true ? (
 							<DivAutoMargin key={wrongModalIndex}>
@@ -105,11 +105,11 @@ export default function FamilyFeud({ window }) {
 										src={
 											isWrong
 												? redWrongIcon
-												: window === 'controlPanel'
+												: windowInstance === 'controlPanel'
 												? greyWrongIcon
 												: null
 										}
-										window={window}
+										windowInstance={windowInstance}
 										onClick={() => {
 											incorrectHandler(1, isWrong, index, {
 												wrongTracker,
@@ -125,7 +125,7 @@ export default function FamilyFeud({ window }) {
 						</XContainer>
 					</ScoreContainer>
 					<PromptContainer>
-						<Span window={window}>{board.prompt}</Span>
+						<Span windowInstance={windowInstance}>{board.prompt}</Span>
 					</PromptContainer>
 					<ScoreContainer team={2}>
 						<H2>Team 2</H2>
@@ -137,11 +137,11 @@ export default function FamilyFeud({ window }) {
 										src={
 											isWrong
 												? blueWrongIcon
-												: window === 'controlPanel'
+												: windowInstance === 'controlPanel'
 												? greyWrongIcon
 												: null
 										}
-										window={window}
+										windowInstance={windowInstance}
 										onClick={() => {
 											incorrectHandler(2, isWrong, index, {
 												wrongTracker,
@@ -160,12 +160,12 @@ export default function FamilyFeud({ window }) {
 				<AnswerGrid
 					rowTemplate={`repeat(${Math.round(board.answers.length / 2)}, 1fr)`}
 				>
-					{window === 'controlPanel' &&
+					{windowInstance === 'controlPanel' &&
 						board.answers.map((word, wordIndex) => {
 							return (
 								<AnswerContainer
 									key={wordIndex}
-									window={window}
+									windowInstance={windowInstance}
 									onClick={() => {
 										correctHandler(wordIndex, {
 											board,
@@ -178,22 +178,28 @@ export default function FamilyFeud({ window }) {
 									}}
 									side={word.revealed ? 'back' : 'front'}
 								>
-									<FlippableH3 window={window} revealed={word.revealed}>
+									<FlippableH3
+										windowInstance={windowInstance}
+										revealed={word.revealed}
+									>
 										{word.answer.toUpperCase()}
 									</FlippableH3>
 								</AnswerContainer>
 							);
 						})}
-					{window === 'gameboard' &&
+					{windowInstance === 'gameboard' &&
 						board.answers.map((word, wordIndex) => {
 							return (
 								<AnswerContainer
 									key={wordIndex}
-									window={window}
+									windowInstance={windowInstance}
 									side={word.revealed ? 'back' : 'front'}
 								>
 									{word.revealed ? (
-										<FlippableH3 window={window} revealed={word.revealed}>
+										<FlippableH3
+											windowInstance={windowInstance}
+											revealed={word.revealed}
+										>
 											{word.answer.toUpperCase()}
 										</FlippableH3>
 									) : (

@@ -4,12 +4,14 @@ const JeopardyContainer = styled.div`
 	height: 100%;
 	width: 100%;
 	display: flex;
-	background: lightgrey;
+	background: #222;
 	position: relative;
 `;
 
 const Board = styled.div`
 	margin: auto;
+	position: relative;
+	background: black;
 	height: 80%;
 	width: 80%;
 	display: grid;
@@ -22,6 +24,7 @@ const Board = styled.div`
 const Modal = styled.div`
 	height: 100%;
 	width: 100%;
+	z-index: 20;
 	position: absolute;
 	font-family: impact;
 	color: #ddd;
@@ -42,23 +45,31 @@ const CatCell = styled.div`
 	text-align: center;
 	display: flex;
 	flex: 1;
-	cursor: pointer;
-	font-size: ${(props) => (props.window === 'gameboard' ? '2rem' : '1rem')};
+	font-size: ${(props) =>
+		props.windowInstance === 'gameboard' ? '2rem' : '1rem'};
 	font-family: impact;
 	color: #eee;
 	background: linear-gradient(to top left, #000088, #0000ff);
 	border: 3px solid #000;
+	& > span {
+		text-shadow: 2px 2px 2px black;
+	}
 `;
 
 const QCell = styled(CatCell)`
-	color: #ccc;
+	color: #ffd87d;
+	font-size: ${(props) =>
+		props.windowInstance === 'gameboard' ? '2.5rem' : '2.5rem'};
+	cursor: pointer;
+	transition: 0.3s;
 	&:hover {
-		color: #fff;
+		color: #fffbaf;
 	}
 `;
 
 const StyledSpan = styled.span`
 	margin: auto;
+	text-shadow: 4px 4px 4px black;
 	display: ${(props) => props.display};
 `;
 
@@ -71,6 +82,45 @@ const DailyImg = styled.img`
 	width: 100%;
 `;
 
+const DecorContainer = styled.div`
+	position: absolute;
+	pointer-events: none;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	z-index: 0;
+`;
+
+const ColumnContainer = styled.div`
+	display: flex;
+	height: ${(props) =>
+		props.windowInstance === 'controlPanel' ? '350px' : '700px'};
+	margin: ${(props) => props.margin};
+	justify-content: center;
+	img {
+		height: ${(props) =>
+			props.windowInstance === 'controlPanel' ? '400px' : '550px'};
+	}
+`;
+
+const TopContainer = styled.div`
+	display: flex;
+	position: absolute;
+	justify-content: center;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin: ${(props) =>
+		props.windowInstance === 'controlPanel' ? '-32px 0 0' : '-40px 0 0'};
+	z-index: -5;
+	width: 100%;
+	& > img {
+		width: 100%;
+	}
+`;
+
 export {
 	JeopardyContainer,
 	Board,
@@ -81,4 +131,7 @@ export {
 	StyledSpan,
 	DailyDiv,
 	DailyImg,
+	DecorContainer,
+	TopContainer,
+	ColumnContainer,
 };

@@ -21,11 +21,11 @@ import {
 	previousPrompt,
 } from '../helpers/esp/imports';
 
-export default function ESP({ window }) {
+export default function ESP({ windowInstance }) {
 	let StoreContext;
-	if (window === 'controlPanel') {
+	if (windowInstance === 'controlPanel') {
 		StoreContext = StoreContextCP;
-	} else if (window === 'gameboard') {
+	} else if (windowInstance === 'gameboard') {
 		StoreContext = StoreContextGB;
 	}
 
@@ -67,9 +67,9 @@ export default function ESP({ window }) {
 	return state.gameController.gameStarted ? (
 		<ESPHomeScreen>
 			<TitleContainer>
-				<Title window={window}>{currentQuestion}</Title>
+				<Title windowInstance={windowInstance}>{currentQuestion}</Title>
 			</TitleContainer>
-			{window === 'controlPanel' && (
+			{windowInstance === 'controlPanel' && (
 				<Controls>
 					<Button onClick={handleClickPrev}>
 						<H3>Previous prompt</H3>
@@ -79,7 +79,7 @@ export default function ESP({ window }) {
 					</Button>
 				</Controls>
 			)}
-			{window === 'gameboard' && (
+			{windowInstance === 'gameboard' && (
 				<ScoreBoardDiv>
 					{score.scoreBoard.map((scoreNum, scoreIndex) => {
 						if (scoreNum !== null) {
