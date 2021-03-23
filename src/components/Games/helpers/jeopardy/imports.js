@@ -5,11 +5,15 @@ import dailyDoubleImage from '../../../../assets/images/game_images/jeopardy/dai
 import initGame from '../shared/initGame';
 import playSound from '../shared/audioHelpers';
 import importAll from '../shared/importAll';
+import ScoreOverlay from '../../gameComponents/ScoreOverlay';
+import ScoreComponent from './ScoreComponent';
 import { StoreContext as StoreContextCP } from '../../../../store/context';
 import { StoreContext as StoreContextGB } from '../../../MainComponents/Gameboard';
 import { actions } from '../../../../store/actions';
 import ReactAudioPlayer from 'react-audio-player';
 import { modalClick, openQuestion } from './gameHelpers';
+import jeopardyColumn from '../../../../assets/images/game_images/jeopardy/jeopardy-column.svg';
+import topBanner from '../../../../assets/images/game_images/jeopardy/jeopardy-top-banner.svg';
 
 export {
 	questionOpenSound,
@@ -25,4 +29,8 @@ export {
 	ReactAudioPlayer,
 	modalClick,
 	openQuestion,
+	ScoreOverlay,
+	ScoreComponent,
+	jeopardyColumn,
+	topBanner,
 };
