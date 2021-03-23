@@ -31,7 +31,6 @@ module.exports = function createGameWindows({ getWindow, setWindow }) {
 	const gameWindow = new BrowserWindow(gameWindowConfig);
 
 	mainWindow.setMenuBarVisibility(false);
-	// gameWindow.webContents.setAudioMuted(true);
 	mainWindow.focus();
 
 	if (isDev) gameWindow.webContents.openDevTools();
