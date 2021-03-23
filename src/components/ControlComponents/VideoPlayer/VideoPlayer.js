@@ -3,6 +3,10 @@ import { VideoContainer } from './VideoPlayerStyles';
 import { StoreContext as StoreContextCP } from '../../../store/context';
 import { StoreContext as StoreContextGB } from '../../MainComponents/Gameboard';
 
+// TODO: create functions for playing/stopping videos. export them to the top parent level.
+// Add a listener for ipcRenderer for the play/stop video events. Send all requests to play videos
+// to ipcMain.
+
 export default function VideoPlayer({ window }) {
 	let StoreContext;
 	if (window === 'controlPanel') {
