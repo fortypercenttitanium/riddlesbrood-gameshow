@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useContext } from 'react';
-import { Helmet } from 'react-helmet';
 import { StyledApp, ControlScreenContainer } from './AppStyles';
 import { StoreContext } from '../../store/context';
 import ControlScreen from '../ControlComponents/ControlScreen/ControlScreen';
@@ -91,16 +90,16 @@ export function App() {
 	// };
 
 	//	dev to work on game
-	useEffect(() => {
-		dispatch({
-			type: 'SET_GAME',
-			payload: {
-				title: 'Jeopardy',
-				logo: 'JeopardyLogo.png',
-				version: 0,
-			},
-		});
-	}, []);
+	// useEffect(() => {
+	// 	dispatch({
+	// 		type: 'SET_GAME',
+	// 		payload: {
+	// 			title: 'Jeopardy',
+	// 			logo: 'JeopardyLogo.png',
+	// 			version: 0,
+	// 		},
+	// 	});
+	// }, []);
 
 	return (
 		<StyledApp>
