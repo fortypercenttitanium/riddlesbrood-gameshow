@@ -103,7 +103,6 @@ export default function NameThatTune({ windowInstance }) {
 						state.gameController.answerRevealed ||
 							windowInstance === 'controlPanel'
 					)}
-					windowInstance={windowInstance}
 				>
 					{currentQuestion.title}
 				</Title>

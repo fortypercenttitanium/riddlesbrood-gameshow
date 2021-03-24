@@ -27,12 +27,11 @@ export const TitleContainer = styled.div`
 
 export const H1 = styled.h1`
 	font-weight: bold;
-	font-size: 3rem;
+	font-size: 4rem;
 `;
 
 export const Title = styled(H1)`
 	display: block;
-	font-size: ${(props) => props.windowInstance === 'controlPanel' && '2.4rem'};
 	text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.7);
 `;
 
@@ -57,11 +56,11 @@ export const ScoreH2 = styled(ScoreH1)`
 `;
 
 export const H3 = styled(H1)`
-	font-size: 1.6rem;
+	font-size: 3rem;
 	color: #ddd;
 	margin: auto;
-	padding: 2rem;
-	text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+	padding: 4rem;
+	text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
 `;
 
 export const Controls = styled.div`
@@ -73,7 +72,6 @@ export const Controls = styled.div`
 
 export const Button = styled.div`
 	display: flex;
-	width: 200px;
 	margin: auto;
 	border: 1px solid black;
 	background: rgb(72, 95, 145);

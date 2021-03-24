@@ -187,7 +187,6 @@ export default function WhatTheHellIsIt({ windowInstance }) {
 						state.gameController.answerRevealed ||
 							windowInstance === 'controlPanel'
 					)}
-					windowInstance={windowInstance}
 				>
 					{currentQuestion.title}
 				</Title>

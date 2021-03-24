@@ -90,13 +90,12 @@ const WrongImg = styled.img`
 const H2 = styled.h2`
 	margin: auto;
 	padding: 0.2rem;
-	font-size: 1.5rem;
+	font-size: 3rem;
 `;
 
 const FlippableH3 = styled.h3`
 	margin: auto;
-	font-size: ${(props) =>
-		props.windowInstance === 'controlPanel' ? '1.5rem' : '2.5rem'};
+	font-size: 2.5rem;
 	opacity: ${(props) => (props.revealed ? '1' : '0.4')};
 	transform: ${(props) =>
 		props.revealed ? 'rotateX(-180deg)' : 'rotateX(0deg)'};
@@ -105,10 +104,8 @@ const FlippableH3 = styled.h3`
 const Span = styled.span`
 	margin: auto;
 	padding: 3%;
-	font-size: ${(props) =>
-		props.windowInstance === 'controlPanel' ? '1.5rem' : '2.5rem'};
-	line-height: ${(props) =>
-		props.windowInstance === 'controlPanel' ? '2rem' : '3.6rem'};
+	font-size: 2.5rem;
+	line-height: 3.6rem;
 	color: #003c7b;
 `;
 
@@ -123,8 +120,7 @@ const AnswerGrid = styled.div`
 
 const AnswerContainer = styled.div`
 	border: 2px solid #003c7b;
-	padding: ${(props) =>
-		props.windowInstance === 'controlPanel' ? '0.5rem' : '1.5rem'};
+	padding: 1.5rem;
 	margin: 1%;
 	display: flex;
 	cursor: pointer;
@@ -171,7 +167,7 @@ const NumberButton = styled.span`
 const XModal = styled.div`
 	display: flex;
 	position: absolute;
-	width: ${(props) => (props.display === 'controlPanel' ? '95%' : '75%')};
+	width: 75%;
 	top: 0;
 	bottom: 0;
 	left: 0;

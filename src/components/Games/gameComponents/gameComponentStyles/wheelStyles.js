@@ -22,6 +22,7 @@ export const Title = styled.h1`
 	display: ${(props) => (props.display === 'select' ? 'inline' : 'none')};
 	margin: 3rem auto;
 	padding: 1rem;
+	font-size: 4rem;
 `;
 
 export const CategoryContainer = styled.div`
@@ -34,11 +35,10 @@ export const CategoryContainer = styled.div`
 
 export const CategoryCard = styled.div`
 	display: ${(props) => (props.done ? 'none' : 'flex')};
-	width: 200px;
 	margin: auto;
 	text-align: center;
 	color: white;
-	padding: 1rem;
+	padding: 2rem;
 	border: 1px solid black;
 	background: rgb(72, 95, 145);
 	background: linear-gradient(
@@ -152,4 +152,5 @@ export const CategoryDisplay = styled.div`
 
 export const CategoryH3 = styled.h3`
 	margin: auto;
+	font-size: 3rem;
 `;

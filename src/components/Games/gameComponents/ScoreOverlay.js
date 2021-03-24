@@ -44,7 +44,7 @@ const ScoreOverlayContainer = styled.div`
 	}
 `;
 
-function ScoreOverlay({ ScoreComponent, position, windowInstance, score }) {
+function ScoreOverlay({ ScoreComponent, position, score }) {
 	return position === 'corners' ? (
 		<ScoreOverlayContainer className='f pa'>
 			{score.scoreBoard.map((scoreNumber, index) => {
@@ -54,7 +54,6 @@ function ScoreOverlay({ ScoreComponent, position, windowInstance, score }) {
 							player={index + 1}
 							score={scoreNumber}
 							type={score.type}
-							windowInstance={windowInstance}
 						/>
 					</div>
 				);
@@ -70,7 +69,6 @@ function ScoreOverlay({ ScoreComponent, position, windowInstance, score }) {
 							player={index + 1}
 							score={scoreNumber}
 							type={score.type}
-							windowInstance={windowInstance}
 						/>
 					);
 				})}

@@ -68,7 +68,7 @@ export default function CouplesConundrum({ windowInstance }) {
 	return state.gameController.gameStarted ? (
 		<CouplesHomeScreen>
 			<TitleContainer>
-				<Title windowInstance={windowInstance}>{currentQuestion}</Title>
+				<Title>{currentQuestion}</Title>
 			</TitleContainer>
 			{windowInstance === 'controlPanel' && (
 				<Controls>

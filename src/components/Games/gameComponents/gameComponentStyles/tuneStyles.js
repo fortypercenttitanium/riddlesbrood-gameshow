@@ -20,16 +20,15 @@ const TitleContainer = styled.div`
 
 const H1 = styled.h1`
 	font-weight: bold;
-	font-size: 3rem;
+	font-size: 5rem;
 `;
 
 const Title = styled(H1)`
 	display: ${(props) => (props.show ? 'block' : 'none')};
-	font-size: ${(props) => props.windowInstance === 'controlPanel' && '2.4rem'};
 `;
 
 const H2 = styled.h2`
-	font-size: 2rem;
+	font-size: 3.5rem;
 `;
 
 const Artist = styled(H2)`
@@ -38,19 +37,20 @@ const Artist = styled(H2)`
 
 const ScoreH1 = styled(H1)`
 	margin: auto;
+	font-size: 4rem;
 	color: #ddd;
-	text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+	text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.9);
 `;
 
 const ScoreH2 = styled(ScoreH1)`
-	font-size: 2rem;
+	font-size: 3rem;
 `;
 
 const H3 = styled(H1)`
-	font-size: 1.6rem;
+	font-size: 3rem;
 	color: #ddd;
 	margin: auto;
-	padding: 2rem;
+	padding: 3rem;
 	text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 `;
 
@@ -86,7 +86,6 @@ const Controls = styled.div`
 
 const Button = styled.div`
 	display: flex;
-	width: 200px;
 	margin: auto;
 	border: 1px solid black;
 	background: rgb(72, 95, 145);
@@ -120,6 +119,7 @@ const ScoreCardDiv = styled.div`
 	display: flex;
 	flex-direction: column;
 	flex-basis: 240px;
+	padding: 2rem;
 	background: ${(props) =>
 		props.index === 0
 			? 'rgb(255,140,140)'
@@ -146,7 +146,6 @@ const ScoreCardDiv = styled.div`
 	border-radius: 10px;
 	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
 	margin: 0 60px;
-	height: 130px;
 `;
 
 export {

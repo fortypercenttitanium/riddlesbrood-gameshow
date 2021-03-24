@@ -67,7 +67,7 @@ export default function ESP({ windowInstance }) {
 	return state.gameController.gameStarted ? (
 		<ESPHomeScreen>
 			<TitleContainer>
-				<Title windowInstance={windowInstance}>{currentQuestion}</Title>
+				<Title>{currentQuestion}</Title>
 			</TitleContainer>
 			{windowInstance === 'controlPanel' && (
 				<Controls>

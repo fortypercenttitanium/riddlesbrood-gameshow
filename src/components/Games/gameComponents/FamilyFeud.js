@@ -73,7 +73,7 @@ export default function FamilyFeud({ windowInstance }) {
 	return state.gameController.gameStarted ? (
 		<FamilyFeudHomeScreen>
 			{wrongModal.display && (
-				<XModal windowInstance={windowInstance}>
+				<XModal>
 					{wrongModal.array.map((x, wrongModalIndex) => {
 						return x === true ? (
 							<DivAutoMargin key={wrongModalIndex}>
@@ -109,7 +109,6 @@ export default function FamilyFeud({ windowInstance }) {
 												? greyWrongIcon
 												: null
 										}
-										windowInstance={windowInstance}
 										onClick={() => {
 											incorrectHandler(1, isWrong, index, {
 												wrongTracker,
@@ -125,7 +124,7 @@ export default function FamilyFeud({ windowInstance }) {
 						</XContainer>
 					</ScoreContainer>
 					<PromptContainer>
-						<Span windowInstance={windowInstance}>{board.prompt}</Span>
+						<Span>{board.prompt}</Span>
 					</PromptContainer>
 					<ScoreContainer team={2}>
 						<H2>Team 2</H2>
@@ -141,7 +140,6 @@ export default function FamilyFeud({ windowInstance }) {
 												? greyWrongIcon
 												: null
 										}
-										windowInstance={windowInstance}
 										onClick={() => {
 											incorrectHandler(2, isWrong, index, {
 												wrongTracker,
@@ -165,7 +163,6 @@ export default function FamilyFeud({ windowInstance }) {
 							return (
 								<AnswerContainer
 									key={wordIndex}
-									windowInstance={windowInstance}
 									onClick={() => {
 										correctHandler(wordIndex, {
 											board,
@@ -178,10 +175,7 @@ export default function FamilyFeud({ windowInstance }) {
 									}}
 									side={word.revealed ? 'back' : 'front'}
 								>
-									<FlippableH3
-										windowInstance={windowInstance}
-										revealed={word.revealed}
-									>
+									<FlippableH3 revealed={word.revealed}>
 										{word.answer.toUpperCase()}
 									</FlippableH3>
 								</AnswerContainer>
@@ -192,14 +186,10 @@ export default function FamilyFeud({ windowInstance }) {
 							return (
 								<AnswerContainer
 									key={wordIndex}
-									windowInstance={windowInstance}
 									side={word.revealed ? 'back' : 'front'}
 								>
 									{word.revealed ? (
-										<FlippableH3
-											windowInstance={windowInstance}
-											revealed={word.revealed}
-										>
+										<FlippableH3 revealed={word.revealed}>
 											{word.answer.toUpperCase()}
 										</FlippableH3>
 									) : (

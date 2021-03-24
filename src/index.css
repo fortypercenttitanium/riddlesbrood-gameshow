@@ -13,6 +13,10 @@ body {
 	overflow-x: hidden;
 }
 
+.preview-screen {
+	zoom: 47.5%;
+}
+
 code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
 		monospace;

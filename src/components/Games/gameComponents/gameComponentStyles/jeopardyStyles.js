@@ -46,8 +46,7 @@ const CatCell = styled.div`
 	text-align: center;
 	display: flex;
 	flex: 1;
-	font-size: ${(props) =>
-		props.windowInstance === 'gameboard' ? '2rem' : '1rem'};
+	font-size: 2rem;
 	font-family: impact;
 	color: #eee;
 	background: linear-gradient(to top left, #000088, #0000ff);
@@ -59,8 +58,7 @@ const CatCell = styled.div`
 
 const QCell = styled(CatCell)`
 	color: #ffd87d;
-	font-size: ${(props) =>
-		props.windowInstance === 'gameboard' ? '2.5rem' : '2.5rem'};
+	font-size: 4rem;
 	cursor: pointer;
 	transition: 0.3s;
 	&:hover {

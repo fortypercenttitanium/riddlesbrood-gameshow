@@ -4,11 +4,10 @@ import styled from 'styled-components';
 const ComponentWrapper = styled.div`
 	display: flex;
 	flex: 1;
-	padding: ${(props) =>
-		props.windowInstance === 'controlPanel' ? '10px' : '16px'};
+	padding: 16px;
 	justify-content: space-around;
 	border-radius: 4px;
-	text-shadow: 2px 2px 2px black;
+	text-shadow: 3px 3px 3px black;
 	margin: auto 12px 3px;
 	font-weight: bold;
 	background: ${(props) =>
@@ -37,8 +36,7 @@ const ComponentWrapper = styled.div`
 			: null};
 
 	.score-text {
-		font-size: ${(props) =>
-			props.windowInstance === 'controlPanel' ? '1.4rem' : '1.8rem'};
+		font-size: 2.8rem;
 	}
 `;
 

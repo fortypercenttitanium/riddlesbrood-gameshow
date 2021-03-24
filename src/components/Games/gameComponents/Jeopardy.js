@@ -101,7 +101,6 @@ export default function Jeopardy({ windowInstance }) {
 			<ScoreOverlay
 				ScoreComponent={ScoreComponent}
 				position={'bottom'}
-				windowInstance={windowInstance}
 				score={state.gameController.score}
 			/>
 			<DecorContainer />
@@ -124,13 +123,12 @@ export default function Jeopardy({ windowInstance }) {
 				{state.gameController.board.map((block, index) => {
 					return (
 						<CellContainer key={`category${index}`}>
-							<CatCell windowInstance={windowInstance}>
+							<CatCell>
 								<StyledSpan>{block.category}</StyledSpan>
 							</CatCell>
 							{block.questions.map((question, qIndex) => {
 								return (
 									<QCell
-										windowInstance={windowInstance}
 										key={qIndex}
 										onClick={() => {
 											handleClickBoard(question, index, qIndex);

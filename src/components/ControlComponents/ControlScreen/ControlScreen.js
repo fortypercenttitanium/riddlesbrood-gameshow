@@ -43,7 +43,9 @@ export default function ControlScreen({ windowInstance }) {
 	};
 
 	return (
-		<ControlScreenContainer>
+		<ControlScreenContainer
+			className={windowInstance === 'controlPanel' && 'preview-screen'}
+		>
 			{timeline === 'app-open' ? <LogoScreen /> : null}
 			{timeline === 'in-game' ? components[currentGame.title] : null}
 			<VideoPlayer show={state.VFX.playing} windowInstance={windowInstance} />
