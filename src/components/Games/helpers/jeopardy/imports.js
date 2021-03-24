@@ -12,8 +12,6 @@ import { StoreContext as StoreContextGB } from '../../../MainComponents/Gameboar
 import { actions } from '../../../../store/actions';
 import ReactAudioPlayer from 'react-audio-player';
 import { modalClick, openQuestion } from './gameHelpers';
-import jeopardyColumn from '../../../../assets/images/game_images/jeopardy/jeopardy-column.svg';
-import topBanner from '../../../../assets/images/game_images/jeopardy/jeopardy-top-banner.svg';
 
 export {
 	questionOpenSound,
@@ -31,6 +29,4 @@ export {
 	openQuestion,
 	ScoreOverlay,
 	ScoreComponent,
-	jeopardyColumn,
-	topBanner,
 };

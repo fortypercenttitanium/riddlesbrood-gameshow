@@ -10,8 +10,6 @@ import {
 	DailyDiv,
 	DailyImg,
 	DecorContainer,
-	TopContainer,
-	ColumnContainer,
 } from './gameComponentStyles/jeopardyStyles';
 import {
 	timeUpSound,
@@ -27,8 +25,6 @@ import {
 	openQuestion,
 	ScoreOverlay,
 	ScoreComponent,
-	jeopardyColumn,
-	topBanner,
 } from '../helpers/jeopardy/imports';
 
 const videos = importAll(
@@ -108,31 +104,7 @@ export default function Jeopardy({ windowInstance }) {
 				windowInstance={windowInstance}
 				score={state.gameController.score}
 			/>
-			<DecorContainer>
-				<ColumnContainer
-					windowInstance={windowInstance}
-					margin={
-						windowInstance === 'controlPanel'
-							? '41px auto auto 5px'
-							: '62px auto auto 8px'
-					}
-				>
-					<img src={jeopardyColumn} alt='' />
-				</ColumnContainer>
-				<TopContainer windowInstance={windowInstance}>
-					<img src={topBanner} alt='' />
-				</TopContainer>
-				<ColumnContainer
-					windowInstance={windowInstance}
-					margin={
-						windowInstance === 'controlPanel'
-							? '41px 0px auto auto'
-							: '62px 4px auto auto'
-					}
-				>
-					<img src={jeopardyColumn} alt='' />
-				</ColumnContainer>
-			</DecorContainer>
+			<DecorContainer />
 			<Modal display={state.gameController.display} onClick={handleClickModal}>
 				{state.gameController.display === 'daily-double' && (
 					<DailyDiv>

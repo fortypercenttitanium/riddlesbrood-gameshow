@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import jeopardyBackground from '../../../../assets/images/game_images/jeopardy/jeopardy-background.svg';
 
 const JeopardyContainer = styled.div`
 	height: 100%;
@@ -9,7 +10,7 @@ const JeopardyContainer = styled.div`
 `;
 
 const Board = styled.div`
-	margin: auto;
+	margin: 6.5% auto;
 	position: relative;
 	background: black;
 	height: 80%;
@@ -90,35 +91,7 @@ const DecorContainer = styled.div`
 	left: 0;
 	right: 0;
 	display: flex;
-	z-index: 0;
-`;
-
-const ColumnContainer = styled.div`
-	display: flex;
-	height: ${(props) =>
-		props.windowInstance === 'controlPanel' ? '350px' : '700px'};
-	margin: ${(props) => props.margin};
-	justify-content: center;
-	img {
-		height: ${(props) =>
-			props.windowInstance === 'controlPanel' ? '400px' : '550px'};
-	}
-`;
-
-const TopContainer = styled.div`
-	display: flex;
-	position: absolute;
-	justify-content: center;
-	top: 0;
-	left: 0;
-	right: 0;
-	margin: ${(props) =>
-		props.windowInstance === 'controlPanel' ? '-32px 0 0' : '-40px 0 0'};
-	z-index: -5;
-	width: 100%;
-	& > img {
-		width: 100%;
-	}
+	background: url(${jeopardyBackground}) center/cover;
 `;
 
 export {
@@ -132,6 +105,4 @@ export {
 	DailyDiv,
 	DailyImg,
 	DecorContainer,
-	TopContainer,
-	ColumnContainer,
 };

@@ -21,7 +21,6 @@ module.exports = function createGameWindows({ getWindow, setWindow }) {
 		y: projectorDisplay ? projectorDisplay.bounds.y + 50 : 0,
 		frame: false,
 		fullscreen: !!projectorDisplay,
-		focusable: false,
 		title: 'Gameboard',
 		show: true,
 		icon: iconPath,
