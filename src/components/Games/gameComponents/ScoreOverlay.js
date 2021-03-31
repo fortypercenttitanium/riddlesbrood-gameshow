@@ -42,9 +42,33 @@ const ScoreOverlayContainer = styled.div`
 		right: 0;
 		justify-content: center;
 	}
+
+	.top {
+		position: absolute;
+		top: 16px;
+		left: 0;
+		right: 0;
+		justify-content: center;
+	}
 `;
 
 function ScoreOverlay({ ScoreComponent, position, score }) {
+	const renderLinearScores = (scorePosition) => (
+		<ScoreOverlayContainer className='f pa'>
+			<div className={`f ${scorePosition}`}>
+				{score.scoreBoard.map((scoreNumber, index) => {
+					return (
+						<ScoreComponent
+							key={index}
+							player={index + 1}
+							score={scoreNumber}
+							type={score.type}
+						/>
+					);
+				})}
+			</div>
+		</ScoreOverlayContainer>
+	);
 	return position === 'corners' ? (
 		<ScoreOverlayContainer className='f pa'>
 			{score.scoreBoard.map((scoreNumber, index) => {
@@ -59,22 +83,9 @@ function ScoreOverlay({ ScoreComponent, position, score }) {
 				);
 			})}
 		</ScoreOverlayContainer>
-	) : position === 'bottom' ? (
-		<ScoreOverlayContainer className='f pa'>
-			<div className='f bottom'>
-				{score.scoreBoard.map((scoreNumber, index) => {
-					return (
-						<ScoreComponent
-							key={index}
-							player={index + 1}
-							score={scoreNumber}
-							type={score.type}
-						/>
-					);
-				})}
-			</div>
-		</ScoreOverlayContainer>
-	) : null;
+	) : (
+		renderLinearScores(position)
+	);
 }
 
 export default ScoreOverlay;

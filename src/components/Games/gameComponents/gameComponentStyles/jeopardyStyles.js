@@ -10,7 +10,7 @@ const JeopardyContainer = styled.div`
 `;
 
 const Board = styled.div`
-	margin: 6.5% auto;
+	margin: 7.5% auto;
 	position: relative;
 	background: black;
 	height: 80%;
@@ -46,7 +46,7 @@ const CatCell = styled.div`
 	text-align: center;
 	display: flex;
 	flex: 1;
-	font-size: 2rem;
+	font-size: 2.5rem;
 	font-family: impact;
 	color: #eee;
 	background: linear-gradient(to top left, #000088, #0000ff);

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const ComponentWrapper = styled.div`
 	display: flex;
 	flex: 1;
-	padding: 16px;
+	padding: 22px;
 	justify-content: space-around;
 	border-radius: 4px;
 	text-shadow: 3px 3px 3px black;
@@ -36,7 +36,7 @@ const ComponentWrapper = styled.div`
 			: null};
 
 	.score-text {
-		font-size: 2.8rem;
+		font-size: 4rem;
 	}
 `;
 

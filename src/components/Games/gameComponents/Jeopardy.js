@@ -100,7 +100,7 @@ export default function Jeopardy({ windowInstance }) {
 		<JeopardyContainer>
 			<ScoreOverlay
 				ScoreComponent={ScoreComponent}
-				position={'bottom'}
+				position={'top'}
 				score={state.gameController.score}
 			/>
 			<DecorContainer />
