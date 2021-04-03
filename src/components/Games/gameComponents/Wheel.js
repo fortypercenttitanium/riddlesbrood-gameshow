@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useRef, useCallback } from 'react';
 import {
 	WheelContainer,
-	Title,
 	CategoryContainer,
 	CategoryCard,
 	Board,
-	UnusedCell,
+	BoardWrapper,
 	LetterCell,
 	Span,
 	CategoryDisplay,
@@ -15,6 +14,7 @@ import {
 	ReturnButton,
 	SolvePuzzle,
 	CategoryH3,
+	CategoryDisplayText,
 } from './gameComponentStyles/wheelStyles';
 import {
 	renderPuzzle,
@@ -85,13 +85,17 @@ export default function Wheel({ windowInstance }) {
 		[dispatch]
 	);
 
-	const activateLetterCells = useCallback((letter, index = 0) => {
-		activateLetterCellsCallback(letter, index, {
-			sfxPlayer,
-			musicPlayer,
-			activateLetterCells,
-		});
-	}, []);
+	const activateLetterCells = useCallback(
+		(letter, index = 0) => {
+			activateLetterCellsCallback(letter, index, {
+				sfxPlayer,
+				musicPlayer,
+				activateLetterCells,
+				windowInstance,
+			});
+		},
+		[windowInstance]
+	);
 
 	const checkGuessedLetters = useCallback(
 		(letter) => checkLettersCallback(letter, { state }),
@@ -154,9 +158,6 @@ export default function Wheel({ windowInstance }) {
 
 	return state.gameController.gameStarted ? (
 		<WheelContainer>
-			<Title display={state.gameController.display}>
-				Please select puzzle:
-			</Title>
 			{windowInstance === 'controlPanel' && (
 				<CategoryContainer display={state.gameController.display}>
 					{state.gameController.board.map((item, index) => {
@@ -176,33 +177,33 @@ export default function Wheel({ windowInstance }) {
 			)}
 			{(state.gameController.display === 'board' ||
 				windowInstance === 'gameboard') && (
-				<Board>
-					{renderPuzzle(state).map((row) => {
-						return row.map((letter, index) => {
-							if (letter === ' ') {
-								return <UnusedCell key={index} />;
-							} else {
-								return (
-									<LetterCell key={index}>
-										<Span data-cell>{letter}</Span>
-									</LetterCell>
-								);
-							}
-						});
-					})}
-				</Board>
+				<BoardWrapper>
+					<Board>
+						{renderPuzzle(state).map((row) => {
+							return row.map((letter, index) => (
+								<LetterCell
+									className={!letter ? 'blank' : ''}
+									letter={letter}
+									key={index}
+								>
+									<Span data-cell>{letter}</Span>
+								</LetterCell>
+							));
+						})}
+					</Board>
+				</BoardWrapper>
 			)}
 			<CategoryDisplay display={state.gameController.display}>
-				<H2>{state.gameController.currentQuestion.category}</H2>
+				<CategoryDisplayText>
+					{state.gameController.currentQuestion.category.toUpperCase()}
+					<GuessedLettersDisplay>
+						Guessed Letters:
+						<LetterSpan>
+							{state.gameController.currentQuestion.guessedLetters.join(', ')}
+						</LetterSpan>
+					</GuessedLettersDisplay>
+				</CategoryDisplayText>
 			</CategoryDisplay>
-			{state.gameController.display === 'board' && (
-				<GuessedLettersDisplay>
-					Guessed Letters:
-					<LetterSpan>
-						{state.gameController.currentQuestion.guessedLetters.join(', ')}
-					</LetterSpan>
-				</GuessedLettersDisplay>
-			)}
 			{state.gameController.currentQuestion.solved &&
 				windowInstance === 'controlPanel' && (
 					<ReturnButton

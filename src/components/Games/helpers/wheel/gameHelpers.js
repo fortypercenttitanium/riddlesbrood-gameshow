@@ -2,13 +2,13 @@ import playSound from '../shared/audioHelpers';
 import { wheelBuzzer, wheelDing } from './imports';
 
 const renderPuzzle = (state) => {
-	let puzzle = state.gameController.currentQuestion.puzzle;
+	const puzzle = state.gameController.currentQuestion.puzzle;
 	// the four rows to be rendered on the game board
-	let rows = [[], [], [], []];
+	const rows = [[], [], [], []];
 	// split answer into array of words
-	let tempArr = puzzle.split(' ');
+	const puzzleSplit = puzzle.split(' ');
 	// add spaces after words except the last one
-	tempArr = tempArr.map((word) => {
+	const tempArr = puzzleSplit.map((word) => {
 		return `${word} `;
 	});
 	// one row answer
@@ -71,6 +71,10 @@ const renderPuzzle = (state) => {
 		}
 		return row;
 	});
+	rowsRender[0][13] = null;
+	rowsRender[0][0] = null;
+	rowsRender[3][13] = null;
+	rowsRender[3][0] = null;
 	return rowsRender;
 };
 
@@ -122,7 +126,7 @@ const guessLetterCallback = (
 const activateLetterCellsCallback = (
 	letter,
 	index = 0,
-	{ sfxPlayer, musicPlayer, activateLetterCells }
+	{ sfxPlayer, musicPlayer, activateLetterCells, windowInstance }
 ) => {
 	const spans = Array.from(document.querySelectorAll('[data-cell')).filter(
 		(span) => {
@@ -130,20 +134,26 @@ const activateLetterCellsCallback = (
 		}
 	);
 	if (spans.length === 0) {
-		playSound(wheelBuzzer, 'sfx', {
-			sfxPlayer,
-			musicPlayer,
-		});
+		// only play sounds from one window
+		if (windowInstance === 'controlPanel') {
+			playSound(wheelBuzzer, 'sfx', {
+				sfxPlayer,
+				musicPlayer,
+			});
+		}
 	} else {
 		if (index > 0) {
 			spans[index - 1].parentNode.classList.remove('active');
 			spans[index - 1].classList.add('reveal');
 		}
 		if (index < spans.length) {
-			playSound(wheelDing, 'sfx', {
-				sfxPlayer,
-				musicPlayer,
-			});
+			// only play sounds from one window
+			if (windowInstance === 'controlPanel') {
+				playSound(wheelDing, 'sfx', {
+					sfxPlayer,
+					musicPlayer,
+				});
+			}
 			spans[index].parentNode.classList.add('active');
 		}
 		setTimeout(() => {

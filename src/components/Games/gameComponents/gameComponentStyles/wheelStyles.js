@@ -5,17 +5,39 @@ export const WheelContainer = styled.div`
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	background: lightgrey;
+	background: rgb(30, 30, 30);
 	position: relative;
 `;
 
+export const BoardWrapper = styled.div`
+	margin: auto;
+	height: 660px;
+	width: 1620px;
+	padding: 20px;
+	display: flex;
+	border: 24px solid transparent;
+	border-image: linear-gradient(
+		90deg,
+		rgba(140, 254, 255, 1) 0%,
+		rgba(0, 18, 255, 1) 100%
+	);
+	border-image-slice: 1;
+`;
+
 export const Board = styled.div`
-	margin: 10% auto 0;
-	height: 50%;
-	width: 80%;
+	margin: auto;
 	display: grid;
 	grid-template: repeat(4, 1fr) / repeat(14, 1fr);
-	grid-gap: 2px;
+	gap: 1px;
+	padding: 8px 12px;
+	border-width: 32px;
+	border-style: solid;
+	border-image: linear-gradient(
+		90deg,
+		rgba(0, 18, 255, 1) 0%,
+		rgba(140, 254, 255, 1) 100%
+	);
+	border-image-slice: 1;
 `;
 
 export const Title = styled.h1`
@@ -33,11 +55,11 @@ export const CategoryContainer = styled.div`
 	margin: auto;
 `;
 
-export const CategoryCard = styled.div`
-	display: ${(props) => (props.done ? 'none' : 'flex')};
+export const CategoryCard = styled.button`
+	display: flex;
 	margin: auto;
 	text-align: center;
-	color: white;
+	color: ${(props) => (props.done ? 'grey' : 'white')};
 	padding: 2rem;
 	border: 1px solid black;
 	background: rgb(72, 95, 145);
@@ -61,15 +83,23 @@ export const CategoryCard = styled.div`
 `;
 
 export const LetterCell = styled.div`
-	background: white;
+	background: ${(props) =>
+		props.letter === ' '
+			? 'linear-gradient(120deg, rgba(58,179,136,1) 0%, rgba(46,150,113,1) 50%, rgba(38,136,102,1) 100%);'
+			: '#ddd'};
 	display: flex;
+	height: 120px;
+	width: 84px;
+	border: 12px solid rgb(30, 30, 30);
+	outline: 2px solid rgba(136, 182, 166, 1);
 	&.active {
 		background: blue;
 	}
-`;
-
-export const UnusedCell = styled.div`
-	background: darkgreen;
+	&.blank {
+		border: 12px solid transparent;
+		outline: 2px solid transparent;
+		background: transparent;
+	}
 `;
 
 export const Span = styled.span`
@@ -136,21 +166,38 @@ export const SolvePuzzle = styled.div`
 
 export const GuessedLettersDisplay = styled.div`
 	display: flex;
-	margin: 0 5%;
-	font-size: 1.5rem;
+	margin: auto;
+	font-size: 2.5rem;
 	font-weight: bold;
 `;
 
 export const CategoryDisplay = styled.div`
-	margin: 2rem auto;
-	padding: 1rem 0;
-	width: 100%;
-	background: linear-gradient(90deg, #444, darkblue, #444);
+	margin: auto;
+	display: flex;
+	width: 90%;
+	background: linear-gradient(
+		90deg,
+		rgba(133, 133, 133, 0) 0%,
+		rgba(133, 133, 133, 0.5046393557422969) 8%,
+		rgba(163, 163, 163, 0.5494572829131652) 50%,
+		rgba(130, 130, 130, 0.5354516806722689) 92%,
+		rgba(130, 130, 130, 0) 100%
+	);
 	color: white;
 	display: ${(props) => (props.display === 'board' ? 'flex' : 'none')};
+	border-top: 3px solid white;
+	border-bottom: 3px solid white;
 `;
 
 export const CategoryH3 = styled.h3`
 	margin: auto;
 	font-size: 3rem;
+`;
+
+export const CategoryDisplayText = styled.h1`
+	font-size: 6rem;
+	color: #eee;
+	margin: auto;
+	padding: 16px;
+	text-shadow: 4px 4px 4px black;
 `;

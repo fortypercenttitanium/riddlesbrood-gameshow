@@ -94,8 +94,8 @@ export function App() {
 	// 	dispatch({
 	// 		type: 'SET_GAME',
 	// 		payload: {
-	// 			title: 'Jeopardy',
-	// 			logo: 'JeopardyLogo.png',
+	// 			title: 'Wheel Of Fortune',
+	// 			logo: 'WheelOfFortuneLogo.jpeg',
 	// 			version: 0,
 	// 		},
 	// 	});
