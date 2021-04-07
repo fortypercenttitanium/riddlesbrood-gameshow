@@ -8,7 +8,6 @@ import {
 	LetterCell,
 	Span,
 	CategoryDisplay,
-	H2,
 	GuessedLettersDisplay,
 	LetterSpan,
 	ReturnButton,
@@ -31,6 +30,8 @@ import {
 	keyPressCallback,
 	solvePuzzle,
 	returnHandler,
+	ScoreOverlay,
+	ScoreComponent,
 } from '../helpers/wheel/imports';
 
 const { ipcRenderer } = window.require('electron');
@@ -64,7 +65,7 @@ export default function Wheel({ windowInstance }) {
 			let initState = {
 				...(await initGame(state, 'wheel', 'select')),
 				score: {
-					type: 'players',
+					type: 'player',
 					scoreBoard: [0, 0, 0, 0],
 				},
 			};
@@ -153,11 +154,20 @@ export default function Wheel({ windowInstance }) {
 			document.querySelectorAll('span').forEach((span) => {
 				span.classList.add('reveal');
 			});
+		} else {
+			document.querySelectorAll('span').forEach((span) => {
+				span.classList.remove('reveal');
+			});
 		}
-	});
+	}, [state.gameController.currentQuestion.solved]);
 
 	return state.gameController.gameStarted ? (
 		<WheelContainer>
+			<ScoreOverlay
+				ScoreComponent={ScoreComponent}
+				position={'top'}
+				score={state.gameController.score}
+			/>
 			{windowInstance === 'controlPanel' && (
 				<CategoryContainer display={state.gameController.display}>
 					{state.gameController.board.map((item, index) => {
@@ -211,7 +221,7 @@ export default function Wheel({ windowInstance }) {
 						display={state.gameController.display}
 						onClick={handleClickReturn}
 					>
-						<H2>Select New Puzzle</H2>
+						<p className='select-new'>Select New Puzzle</p>
 					</ReturnButton>
 				)}
 			<SolvePuzzle
@@ -219,7 +229,7 @@ export default function Wheel({ windowInstance }) {
 				screen={windowInstance}
 				onClick={handleClickSolve}
 			>
-				<H2>Solve puzzle</H2>
+				<p className='solve'>Solve puzzle</p>
 			</SolvePuzzle>
 			<ReactAudioPlayer
 				ref={musicPlayer}

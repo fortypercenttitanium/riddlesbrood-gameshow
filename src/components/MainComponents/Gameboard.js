@@ -21,6 +21,10 @@ export default function Gameboard() {
 		window.addEventListener('click', clickHandler);
 	}, []);
 
+	useEffect(() => {
+		window.state = state;
+	});
+
 	const clickHandler = (e) => {
 		e.stopPropagation();
 		e.preventDefault();

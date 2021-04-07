@@ -2,7 +2,7 @@ import playSound from '../shared/audioHelpers';
 import { wheelBuzzer, wheelDing } from './imports';
 
 const renderPuzzle = (state) => {
-	const puzzle = state.gameController.currentQuestion.puzzle;
+	const { puzzle } = state.gameController.currentQuestion;
 	// the four rows to be rendered on the game board
 	const rows = [[], [], [], []];
 	// split answer into array of words
@@ -71,6 +71,7 @@ const renderPuzzle = (state) => {
 		}
 		return row;
 	});
+	// add space to shape the gameboard properly
 	rowsRender[0][13] = null;
 	rowsRender[0][0] = null;
 	rowsRender[3][13] = null;

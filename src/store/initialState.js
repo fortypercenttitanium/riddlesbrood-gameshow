@@ -6,9 +6,9 @@ export const initialState = {
 	},
 	audio: {
 		volume: {
-			master: 75,
-			music: 75,
-			sfx: 75,
+			master: 50,
+			music: 50,
+			sfx: 50,
 		},
 	},
 	fxButtons: [],

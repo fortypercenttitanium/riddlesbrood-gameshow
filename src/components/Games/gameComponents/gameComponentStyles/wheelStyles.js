@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import wheelBackground from '../../../../assets/images/game_images/wheel/wheel-background2.svg';
 
 export const WheelContainer = styled.div`
 	height: 100%;
@@ -10,18 +11,14 @@ export const WheelContainer = styled.div`
 `;
 
 export const BoardWrapper = styled.div`
-	margin: auto;
-	height: 660px;
-	width: 1620px;
-	padding: 20px;
+	margin: 150px auto 12px;
+	height: 750px;
+	width: 1580px;
 	display: flex;
-	border: 24px solid transparent;
-	border-image: linear-gradient(
-		90deg,
-		rgba(140, 254, 255, 1) 0%,
-		rgba(0, 18, 255, 1) 100%
-	);
-	border-image-slice: 1;
+	background-image: url(${wheelBackground});
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
 `;
 
 export const Board = styled.div`
@@ -30,14 +27,6 @@ export const Board = styled.div`
 	grid-template: repeat(4, 1fr) / repeat(14, 1fr);
 	gap: 1px;
 	padding: 8px 12px;
-	border-width: 32px;
-	border-style: solid;
-	border-image: linear-gradient(
-		90deg,
-		rgba(0, 18, 255, 1) 0%,
-		rgba(140, 254, 255, 1) 100%
-	);
-	border-image-slice: 1;
 `;
 
 export const Title = styled.h1`
@@ -89,7 +78,7 @@ export const LetterCell = styled.div`
 			: '#ddd'};
 	display: flex;
 	height: 120px;
-	width: 84px;
+	width: 78px;
 	border: 12px solid rgb(30, 30, 30);
 	outline: 2px solid rgba(136, 182, 166, 1);
 	&.active {
@@ -110,25 +99,24 @@ export const Span = styled.span`
 	}
 	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif,
 		monospace;
-	font-size: 3rem;
+	font-size: 5rem;
 `;
 
 export const LetterSpan = styled.span`
 	margin: 0 10px;
 `;
 
-export const ReturnButton = styled.div`
-	padding: 1.4rem;
+export const ReturnButton = styled.button`
+	padding: 1rem;
 	position: absolute;
 	bottom: 40px;
-	left: 0;
-	right: 0;
-	width: 30%;
+	right: 100px;
 	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 	text-align: center;
 	margin: auto;
 	background: lightblue;
 	cursor: pointer;
+	border-radius: 10px;
 	&:hover {
 		background: white;
 	}
@@ -136,6 +124,11 @@ export const ReturnButton = styled.div`
 		props.display === 'board' && props.screen === 'controlPanel'
 			? 'flex'
 			: 'none'};
+
+	.select-new {
+		font-size: 2rem;
+		font-weight: bold;
+	}
 `;
 
 export const H2 = styled.h2`
@@ -144,23 +137,27 @@ export const H2 = styled.h2`
 	font-weight: bold;
 `;
 
-export const SolvePuzzle = styled.div`
+export const SolvePuzzle = styled.button`
 	display: ${(props) =>
 		props.display === 'board' && props.screen === 'controlPanel'
 			? 'flex'
 			: 'none'};
 	position: absolute;
-	top: 15px;
-	padding: 1.2rem;
+	bottom: 46px;
+	left: 100px;
+	padding: 14px;
 	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
-	left: 0;
-	right: 0;
-	width: 25%;
+	transition: 0.3s;
 	margin: auto;
 	background: lightblue;
 	cursor: pointer;
+	border-radius: 10px;
 	&:hover {
 		background: white;
+	}
+	.solve {
+		font-size: 2rem;
+		font-weight: bold;
 	}
 `;
 
@@ -172,7 +169,7 @@ export const GuessedLettersDisplay = styled.div`
 `;
 
 export const CategoryDisplay = styled.div`
-	margin: auto;
+	margin: auto auto 30px;
 	display: flex;
 	width: 90%;
 	background: linear-gradient(
@@ -195,7 +192,7 @@ export const CategoryH3 = styled.h3`
 `;
 
 export const CategoryDisplayText = styled.h1`
-	font-size: 6rem;
+	font-size: 4rem;
 	color: #eee;
 	margin: auto;
 	padding: 16px;

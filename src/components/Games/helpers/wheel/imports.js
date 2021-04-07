@@ -12,6 +12,8 @@ import {
 } from './gameHelpers';
 import initGame from '../shared/initGame';
 import playSound from '../shared/audioHelpers';
+import ScoreOverlay from '../../gameComponents/ScoreOverlay';
+import ScoreComponent from './ScoreComponent';
 import { StoreContext as StoreContextCP } from '../../../../store/context';
 import { StoreContext as StoreContextGB } from '../../../MainComponents/Gameboard';
 import { actions } from '../../../../store/actions';
@@ -38,4 +40,6 @@ export {
 	returnHandler,
 	wheelBuzzer,
 	wheelDing,
+	ScoreOverlay,
+	ScoreComponent,
 };
