@@ -1,17 +1,13 @@
-const mainWindowConfig = require('./mainWindowConfig');
-const path = require('path');
-const isDev = require('electron-is-dev');
-const { BrowserWindow, app, dialog } = require('electron');
+const { dialog } = require('electron');
 
-module.exports = function createStartScreen({ setWindow, autoUpdater }) {
+module.exports = function attachAutoUpdater({
+	startScreenWindow,
+	autoUpdater,
+}) {
 	function sendStatusToWindow(win, text) {
 		autoUpdater.logger.info(text);
 		win.webContents.send('message', text);
 	}
-
-	const startScreenConfig = { ...mainWindowConfig };
-	startScreenConfig.title = 'Riddlesbrood Gameshow App';
-	const startScreenWindow = new BrowserWindow(startScreenConfig);
 
 	startScreenWindow.once('ready-to-show', () => {
 		autoUpdater.checkForUpdatesAndNotify();
@@ -78,17 +74,5 @@ module.exports = function createStartScreen({ setWindow, autoUpdater }) {
 			'Update downloaded. Restarting app and installing...'
 		);
 		setTimeout(() => autoUpdater.quitAndInstall(), 2000);
-	});
-
-	startScreenWindow.loadURL(
-		isDev
-			? 'http://localhost:3000/'
-			: `file://${path.join(app.getAppPath(), 'build', 'index.html')}`
-	);
-
-	setWindow('start', startScreenWindow);
-
-	startScreenWindow.on('closed', () => {
-		setWindow('start', null);
 	});
 };

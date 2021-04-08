@@ -11,6 +11,11 @@ export const CouplesHomeScreen = styled.div`
 	display: flex;
 	position: relative;
 	flex-direction: column;
+	@font-face {
+		font-family: 'Dobkin';
+		src: url(${scoreFont});
+	}
+	font-family: Dobkin;
 	background: ${(props) =>
 		props.display === 'scores'
 			? `center/cover no-repeat url(${background})`
@@ -33,7 +38,8 @@ export const CouplesHomeScreen = styled.div`
 
 export const TitleContainer = styled.div`
 	display: block;
-	margin: 300px auto;
+	margin: 100px 200px 0;
+	line-height: 11rem;
 `;
 
 export const H1 = styled.h1`
@@ -43,7 +49,9 @@ export const H1 = styled.h1`
 
 export const Title = styled(H1)`
 	display: block;
-	text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.7);
+	color: lightgoldenrodyellow;
+	font-size: 10rem;
+	text-shadow: 4px 4px 4px rgba(0, 0, 0, 1);
 `;
 
 export const ScoreH1 = styled(H1)`
@@ -59,13 +67,16 @@ export const H3 = styled(H1)`
 	color: #ddd;
 	margin: auto;
 	padding: 3rem;
-	text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+	text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.9);
 `;
 
 export const Controls = styled.div`
 	display: flex;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	border-radius: 5px;
-	margin: auto 0 0;
 	justify-content: center;
 	z-index: 10;
 `;
@@ -83,6 +94,7 @@ export const Button = styled.div`
 		rgba(46, 61, 92, 1) 100%
 	);
 	text-align: center;
+	font-family: cursive;
 	cursor: pointer;
 	border-radius: 10px;
 	box-shadow: 2px 2px 2px rgba(40, 40, 40, 0.5);
@@ -109,11 +121,6 @@ export const ScoreCardDiv = styled.div`
 	text-align: center;
 	margin: auto;
 	pointer-events: none;
-	@font-face {
-		font-family: 'Dobkin';
-		src: url(${scoreFont});
-	}
-	font-family: Dobkin;
 	color: #fff000;
 	height: 480px;
 	width: 480px;

@@ -13,10 +13,10 @@ export const WheelContainer = styled.div`
 export const BoardWrapper = styled.div`
 	margin: 150px auto 12px;
 	height: 750px;
-	width: 1580px;
+	width: 1600px;
 	display: flex;
 	background-image: url(${wheelBackground});
-	background-size: cover;
+	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
 `;

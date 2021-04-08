@@ -58,10 +58,6 @@ export function App() {
 	let musicPlayer = useRef();
 	let sfxPlayer = useRef();
 
-	const toggleDevTools = () => {
-		ipcRenderer.send('TOGGLE_DEV_TOOLS');
-	};
-
 	const projectorMode = () => {
 		ipcRenderer.send('REQUEST_PROJECTOR_MODE');
 	};
@@ -112,7 +108,7 @@ export function App() {
 			<GameLogo logo={state.currentGame.logo} />
 			<VolumeControls />
 			<ShowControls projectorMode={projectorMode} />
-			<FxButtons toggleDevTools={toggleDevTools} changeFX={changeFX} />
+			<FxButtons changeFX={changeFX} />
 			<ControlScreenContainer>
 				<ControlScreen windowInstance='controlPanel' />
 			</ControlScreenContainer>

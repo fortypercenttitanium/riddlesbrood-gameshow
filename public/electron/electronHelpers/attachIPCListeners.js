@@ -1,11 +1,9 @@
-const createGameWindows = require('./createGameWindows');
 const storeFxButton = require('./storeFxButton');
 const fs = require('fs');
 const util = require('util');
 const { dialog, ipcMain, app } = require('electron');
 const { showErrorBox, showMessageBox } = require('./messageBoxes');
 const { getAllFxFiles, findFxFile } = require('./fxFiles');
-const projectorMode = require('./projectorMode');
 const getGameVersions = require('./getGameVersions');
 const storeGameVersion = require('./storeGameVersion');
 const deleteGameVersion = require('./deleteGameVersion');
@@ -13,11 +11,7 @@ const store = require('./electronStore');
 
 const readFilePromise = util.promisify(fs.readFile);
 
-module.exports = function attachIPCListeners({ getWindow, setWindow }) {
-	ipcMain.once('LAUNCH_GAME', () => {
-		createGameWindows({ getWindow, setWindow });
-		getWindow('start').close();
-	});
+module.exports = function attachIPCListeners() {
 	ipcMain.handle('GET_APP_VERSION', () => {
 		return app.getVersion();
 	});
@@ -116,34 +110,6 @@ module.exports = function attachIPCListeners({ getWindow, setWindow }) {
 
 	ipcMain.handle('GET_APP_DATA_PATH', () => {
 		return app.getPath('userData');
-	});
-
-	ipcMain.on('TOGGLE_DEV_TOOLS', () => {
-		const startScreenWindow = getWindow('start');
-		const mainWindow = getWindow('main');
-		const gameWindow = getWindow('game');
-
-		if (startScreenWindow) {
-			startScreenWindow.webContents.toggleDevTools();
-		} else {
-			mainWindow.webContents.toggleDevTools();
-			gameWindow.webContents.toggleDevTools();
-		}
-	});
-
-	ipcMain.on('REQUEST_PROJECTOR_MODE', () => {
-		projectorMode({ getWindow, setWindow });
-	});
-
-	ipcMain.on('DISPATCH', (e, state) => {
-		if (getWindow('game')) {
-			getWindow('game').webContents.send('SYNC_STATE', state);
-		}
-		// getWindow('main').webContents.send('SYNC_STATE', state);
-	});
-
-	ipcMain.on('WHEEL_GUESS_SEND', (e, key) => {
-		getWindow('game').webContents.send('WHEEL_GUESS_RECEIVE', key);
 	});
 
 	ipcMain.handle('GET_FX_BUTTONS', () => {

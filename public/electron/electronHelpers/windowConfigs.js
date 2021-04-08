@@ -1,11 +1,10 @@
 const path = require('path');
 const { nativeImage } = require('electron');
-
 const iconPath = nativeImage.createFromPath(
 	path.join(__dirname, '..', 'icons', 'icon.png')
 );
 
-module.exports = {
+const mainWindowConfig = {
 	width: 1353,
 	height: 902,
 	title: 'Riddlesbrood Gameshow - Control Panel',
@@ -15,3 +14,18 @@ module.exports = {
 	},
 	icon: iconPath,
 };
+
+const gameWindowConfig = {
+	width: 1200,
+	height: 900,
+	webPreferences: {
+		nodeIntegration: true,
+		contextIsolation: false,
+	},
+	frame: false,
+	title: 'Gameboard',
+	show: true,
+	icon: iconPath,
+};
+
+module.exports = { mainWindowConfig, gameWindowConfig };
