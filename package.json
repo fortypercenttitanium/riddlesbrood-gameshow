@@ -20,10 +20,9 @@
 			"icon": "public/electron/icons/icon.png",
 			"target": [
 				{
-					"target": "nsis-web",
+					"target": "zip",
 					"arch": [
-						"x64",
-						"ia32"
+						"x64"
 					]
 				}
 			]
