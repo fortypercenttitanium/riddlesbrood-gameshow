@@ -1,28 +1,39 @@
 import styled from 'styled-components';
+import background from '../../../../assets/images/game_images/couples/couples-conundrum-background.png';
+import sparkleOverlay from '../../../../assets/images/game_images/couples/sparkle-overlay.png';
+import redHeart from '../../../../assets/images/game_images/couples/red-heart.png';
+import blueHeart from '../../../../assets/images/game_images/couples/blue-heart.png';
+import greenHeart from '../../../../assets/images/game_images/couples/green-heart.png';
+import yellowHeart from '../../../../assets/images/game_images/couples/yellow-heart.png';
+import scoreFont from '../../../../assets/fonts/Dobkin/Dobkin.ttf';
 
 export const CouplesHomeScreen = styled.div`
 	display: flex;
 	position: relative;
 	flex-direction: column;
-	background: rgb(97, 25, 30);
-	background: radial-gradient(
-		circle,
-		rgba(97, 25, 30, 1) 0%,
-		rgba(108, 24, 24, 1) 31%,
-		rgba(89, 13, 19, 1) 56%,
-		rgba(71, 0, 0, 1) 100%
-	);
+	background: ${(props) =>
+		props.display === 'scores'
+			? `center/cover no-repeat url(${background})`
+			: 'radial-gradient(circle, rgba(139,139,139,1) 34%, rgba(32,32,32,1) 100%)'};
 	color: #ddd;
 	height: 100%;
 	width: 100%;
 	box-sizing: border-box;
+	.sparkle-overlay {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: center/cover no-repeat url(${sparkleOverlay});
+		z-index: 5;
+		pointer-events: none;
+	}
 `;
 
 export const TitleContainer = styled.div`
 	display: block;
-	height: 10%;
-	width: 85%;
-	margin: auto;
+	margin: 300px auto;
 `;
 
 export const H1 = styled.h1`
@@ -35,39 +46,28 @@ export const Title = styled(H1)`
 	text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.7);
 `;
 
-export const ScoreContainer = styled.div`
-	margin: auto;
-	display: flex;
-	flex-direction: column;
-	height: 180px;
-	transform: rotate(-45deg);
-	z-index: 1;
-`;
-
 export const ScoreH1 = styled(H1)`
-	margin: auto;
-	color: #111;
-	text-shadow: 3px 1px 2px rgba(0, 0, 0, 0.4);
-`;
-
-export const ScoreH2 = styled(ScoreH1)`
-	margin: 5px auto;
-	font-size: 2rem;
+	margin: 124px auto;
+	font-size: 12rem;
+	font-weight: normal;
+	text-shadow: 4px 4px 10px rgba(0, 0, 0, 1), -4px -4px 10px rgba(0, 0, 0, 1),
+		4px -4px 10px rgba(0, 0, 0, 1), -4px 4px 10px rgba(0, 0, 0, 1);
 `;
 
 export const H3 = styled(H1)`
-	font-size: 3rem;
+	font-size: 2.5rem;
 	color: #ddd;
 	margin: auto;
-	padding: 4rem;
+	padding: 3rem;
 	text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
 `;
 
 export const Controls = styled.div`
 	display: flex;
 	border-radius: 5px;
-	margin: auto;
-	width: 75%;
+	margin: auto 0 0;
+	justify-content: center;
+	z-index: 10;
 `;
 
 export const Button = styled.div`
@@ -105,47 +105,36 @@ export const ScoreBoardDiv = styled.div`
 export const ScoreCardDiv = styled.div`
 	display: flex;
 	flex-direction: column;
-	z-index: 0;
-	position: relative;
-	background: ${(props) =>
-		props.index === 0
-			? 'rgb(255,140,140)'
-			: props.index === 1
-			? 'rgb(255,254,140)'
-			: props.index === 2
-			? 'rgb(140,255,157)'
-			: props.index === 3
-			? 'rgb(140,146,255)'
-			: null};
+	position: absolute;
 	text-align: center;
 	margin: auto;
-	height: 180px;
-	width: 180px;
-	transform: rotate(45deg);
-	&:before,
-	&:after {
-		position: absolute;
-		width: 180px;
-		height: 180px;
-		content: '';
-		border-radius: 50%;
-		background-color: ${(props) =>
-			props.index === 0
-				? 'rgb(255,140,140)'
-				: props.index === 1
-				? 'rgb(255,254,140)'
-				: props.index === 2
-				? 'rgb(140,255,157)'
-				: props.index === 3
-				? 'rgb(140,146,255)'
-				: null};
+	pointer-events: none;
+	@font-face {
+		font-family: 'Dobkin';
+		src: url(${scoreFont});
 	}
-	&:before {
-		bottom: 0px;
-		left: -90px;
+	font-family: Dobkin;
+	color: #fff000;
+	height: 480px;
+	width: 480px;
+	&.index-0 {
+		background: no-repeat url(${redHeart});
+		top: 134px;
+		left: 192px;
 	}
-	&:after {
-		top: -90px;
-		right: 0px;
+	&.index-1 {
+		background: no-repeat url(${yellowHeart});
+		bottom: 6px;
+		left: 400px;
+	}
+	&.index-2 {
+		background: no-repeat url(${greenHeart});
+		bottom: 6px;
+		right: 430px;
+	}
+	&.index-3 {
+		background: no-repeat url(${blueHeart});
+		top: 130px;
+		right: 186px;
 	}
 `;

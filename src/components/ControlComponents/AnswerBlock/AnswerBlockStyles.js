@@ -16,7 +16,7 @@ const AnswerBlockDiv = styled.div`
 const TimerDiv = styled.div`
 	position: absolute;
 	left: 10px;
-	display: block;
+	display: ${(props) => props.display};
 	text-align: center;
 	line-height: 0.8;
 `;
@@ -27,7 +27,7 @@ const Timer = styled.h2`
 
 const AnswerText = styled.h1`
 	margin: auto;
-	font-size: ${(props) => (props.length >= 18 ? '1.7rem' : '4rem')};
+	font-size: ${(props) => (props.length >= 20 ? '1.3rem' : '4rem')};
 `;
 
 export { AnswerBlockDiv, Timer, TimerDiv, AnswerText };

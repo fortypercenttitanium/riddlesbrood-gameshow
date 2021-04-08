@@ -33,7 +33,7 @@ const openQuestion = (
 		} else if (question.type === 'video') {
 			dispatch({
 				type: actions.PLAY_VIDEO,
-				payload: question.question,
+				payload: { file: question.question },
 			});
 		} else {
 			dispatch({ type: actions.SET_TIMER, payload: 13 });
@@ -50,7 +50,7 @@ const modalClick = ({ state, dispatch, sfxPlayer, musicPlayer }) => {
 			dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: 'question' });
 			dispatch({
 				type: actions.PLAY_VIDEO,
-				payload: state.gameController.currentQuestion.question,
+				payload: { file: state.gameController.currentQuestion.question },
 			});
 		} else {
 			changeGameDisplay('question', { dispatch, actions });

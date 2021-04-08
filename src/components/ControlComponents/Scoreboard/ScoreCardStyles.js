@@ -58,11 +58,13 @@ const InactiveScoreCard = styled.div`
 	opacity: 0.7;
 `;
 
-const WinnerButton = styled.div`
+const WinnerButton = styled.button`
 	padding: 1.5rem;
+	border: none;
 	border-top: 1px solid black;
 	text-align: center;
 	cursor: pointer;
+	background: transparent;
 	&:hover h1 {
 		transform: scale(1.2);
 	}

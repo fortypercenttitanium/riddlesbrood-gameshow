@@ -30,6 +30,15 @@ export default function VideoPlayer({ windowInstance }) {
 		}
 	}, [state.VFX.playing]);
 
+	useEffect(() => {
+		if (state.VFX.callback && !state.VFX.playing) {
+			dispatch({
+				type: 'PLAY_VIDEO',
+				payload: { file: state.VFX.callback },
+			});
+		}
+	}, [state.VFX, dispatch]);
+
 	const handleClickContainer = () => {
 		// check if jeopardy video question is playing
 		if (
@@ -47,7 +56,7 @@ export default function VideoPlayer({ windowInstance }) {
 		<VideoContainer
 			onClick={handleClickContainer}
 			style={{ pointerEvents: state.VFX.playing ? 'auto' : 'none' }}
-			show={state.VFX.playing}
+			show={state.VFX.playing || state.VFX.callback}
 		>
 			<video
 				ref={video}

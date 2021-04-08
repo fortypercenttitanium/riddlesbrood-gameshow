@@ -3,13 +3,10 @@ import {
 	CouplesHomeScreen,
 	TitleContainer,
 	Title,
-	ScoreContainer,
 	ScoreH1,
-	ScoreH2,
 	H3,
 	Controls,
 	Button,
-	ScoreBoardDiv,
 	ScoreCardDiv,
 } from './gameComponentStyles/couplesStyles';
 import {
@@ -20,6 +17,7 @@ import {
 	ReactAudioPlayer,
 	nextQuestion,
 	previousQuestion,
+	toggleDisplay,
 } from '../helpers/couples/imports';
 
 export default function CouplesConundrum({ windowInstance }) {
@@ -32,7 +30,13 @@ export default function CouplesConundrum({ windowInstance }) {
 
 	const { state, dispatch } = useContext(StoreContext);
 	const { gameController } = state;
-	const { board, currentQuestion, score, gameStarted } = gameController;
+	const {
+		board,
+		currentQuestion,
+		score,
+		gameStarted,
+		display,
+	} = gameController;
 
 	let musicPlayer = useRef();
 	let sfxPlayer = useRef();
@@ -40,13 +44,14 @@ export default function CouplesConundrum({ windowInstance }) {
 	useEffect(() => {
 		async function initialize() {
 			const initState = {
-				...(await initGame(state, 'couples', 'board')),
+				...(await initGame(state, 'couples', 'scores')),
 				score: {
 					type: 'team',
 					scoreBoard: [0, 0, 0, 0],
 				},
 			};
 			initState.currentQuestion = initState.board[0];
+			initState.currentAnswer = initState.board[0];
 			dispatch({
 				type: actions.INIT_GAME,
 				payload: initState,
@@ -57,6 +62,24 @@ export default function CouplesConundrum({ windowInstance }) {
 		}
 	}, [dispatch, state, gameStarted]);
 
+	useEffect(() => {
+		if (
+			gameStarted &&
+			state.gameController.currentAnswer !==
+				state.gameController.currentQuestion
+		) {
+			dispatch({
+				type: actions.SET_ANSWER,
+				payload: state.gameController.currentQuestion,
+			});
+		}
+	}, [
+		gameStarted,
+		state.gameController.currentQuestion,
+		state.gameController.currentAnswer,
+		dispatch,
+	]);
+
 	const handleClickPrev = () => {
 		previousQuestion({ board, currentQuestion, dispatch, actions });
 	};
@@ -65,36 +88,40 @@ export default function CouplesConundrum({ windowInstance }) {
 		nextQuestion({ board, currentQuestion, dispatch, actions });
 	};
 
+	const handleClickDisplayToggle = () => {
+		toggleDisplay({ display: state.gameController.display, dispatch, actions });
+	};
+
 	return state.gameController.gameStarted ? (
-		<CouplesHomeScreen>
-			<TitleContainer>
-				<Title>{currentQuestion}</Title>
-			</TitleContainer>
+		<CouplesHomeScreen display={display}>
+			<div className='sparkle-overlay' />
+			{display === 'question' ? (
+				<TitleContainer>
+					<Title>{currentQuestion}</Title>
+				</TitleContainer>
+			) : (
+				score.scoreBoard.map((scoreNum, scoreIndex) => {
+					if (scoreNum !== null) {
+						return (
+							<ScoreCardDiv key={scoreIndex} className={`index-${scoreIndex}`}>
+								<ScoreH1>{scoreNum}</ScoreH1>
+							</ScoreCardDiv>
+						);
+					} else return null;
+				})
+			)}
 			{windowInstance === 'controlPanel' && (
 				<Controls>
 					<Button onClick={handleClickPrev}>
 						<H3>Previous question</H3>
 					</Button>
+					<Button onClick={handleClickDisplayToggle}>
+						<H3>Show {display === 'scores' ? 'question' : 'scores'}</H3>
+					</Button>
 					<Button onClick={handleClickNext}>
 						<H3>Next question</H3>
 					</Button>
 				</Controls>
-			)}
-			{windowInstance === 'gameboard' && (
-				<ScoreBoardDiv>
-					{score.scoreBoard.map((scoreNum, scoreIndex) => {
-						if (scoreNum !== null) {
-							return (
-								<ScoreCardDiv key={scoreIndex} index={scoreIndex}>
-									<ScoreContainer>
-										<ScoreH2>Team {scoreIndex + 1}</ScoreH2>
-										<ScoreH1>{scoreNum}</ScoreH1>
-									</ScoreContainer>
-								</ScoreCardDiv>
-							);
-						} else return null;
-					})}
-				</ScoreBoardDiv>
 			)}
 			<ReactAudioPlayer
 				ref={musicPlayer}

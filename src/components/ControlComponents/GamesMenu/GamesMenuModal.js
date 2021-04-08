@@ -64,7 +64,7 @@ export default function GamesMenuModal() {
 			dispatch({ type: 'CLOSE_GAMES_MENU' });
 			dispatch({
 				type: 'PLAY_VIDEO',
-				payload: selectedGame.video,
+				payload: { file: selectedGame.video },
 			});
 			setTimeout(() => {
 				dispatch({ type: 'SET_GAME', payload: selectedGame });
@@ -87,7 +87,7 @@ export default function GamesMenuModal() {
 		dispatch({ type: 'CLOSE_GAMES_MENU' });
 		dispatch({
 			type: 'PLAY_VIDEO',
-			payload: selectedGame.video,
+			payload: { file: selectedGame.video },
 		});
 		setTimeout(() => {
 			dispatch({ type: 'SET_GAME', payload: selectedGame });

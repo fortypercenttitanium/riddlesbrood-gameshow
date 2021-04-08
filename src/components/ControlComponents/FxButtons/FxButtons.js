@@ -69,10 +69,12 @@ export default function FxButtons() {
 			? dispatch({ type: actions.END_VIDEO })
 			: dispatch({
 					type: actions.PLAY_VIDEO,
-					payload:
-						button.file.slice(0, 6) === 'app://'
-							? button.file
-							: coreFiles[button.file],
+					payload: {
+						file:
+							button.file.slice(0, 6) === 'app://'
+								? button.file
+								: coreFiles[button.file],
+					},
 			  });
 	};
 

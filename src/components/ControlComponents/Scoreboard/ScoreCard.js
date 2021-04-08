@@ -17,9 +17,17 @@ import pyramidBell from '../../../assets/sound_fx/pyramid/pyramidbell.mp3';
 import { StoreContext } from '../../../store/context';
 import { actions } from '../../../store/actions';
 
-export default function ScoreCard(props) {
+export default function ScoreCard({
+	playSound,
+	index,
+	alt,
+	name,
+	toggleCardActive,
+	score,
+	active,
+	playVideo,
+}) {
 	const { dispatch } = useContext(StoreContext);
-	const { playSound } = props;
 	const handleChange = (direction, amount) => {
 		if (direction === 'down') {
 			amount = -amount;
@@ -29,7 +37,7 @@ export default function ScoreCard(props) {
 		}
 		dispatch({
 			type: 'CHANGE_SCORE',
-			payload: { playerIndex: props.index, amount },
+			payload: { playerIndex: index, amount },
 		});
 	};
 
@@ -37,11 +45,15 @@ export default function ScoreCard(props) {
 		dispatch({ type: actions.TOGGLE_SCORE_TYPE });
 	};
 
+	const handleWinnerClick = () => {
+		playVideo();
+	};
+
 	return (
-		<ScoreCardDiv index={props.index} altColor={props.alt}>
-			<H2 onContextMenu={handleContext}>{props.name}</H2>
+		<ScoreCardDiv index={index} altColor={alt}>
+			<H2 onContextMenu={handleContext}>{name}</H2>
 			<AddRemoveButton
-				onClick={() => props.toggleCardActive(props.index)}
+				onClick={() => toggleCardActive(index)}
 				src={minus}
 				alt=''
 			/>
@@ -53,7 +65,7 @@ export default function ScoreCard(props) {
 						handleChange('up', 1);
 					}}
 				/>
-				<H1>{props.score}</H1>
+				<H1>{score}</H1>
 				<ArrowImg
 					src={downArrow}
 					alt=''
@@ -62,7 +74,7 @@ export default function ScoreCard(props) {
 					}}
 				/>
 			</ScoreCardBody>
-			<WinnerButton>
+			<WinnerButton disabled={!active} onClick={handleWinnerClick}>
 				<H3>WINNER</H3>
 			</WinnerButton>
 		</ScoreCardDiv>

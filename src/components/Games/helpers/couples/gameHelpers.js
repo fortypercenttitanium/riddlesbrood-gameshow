@@ -18,4 +18,9 @@ const previousQuestion = ({ board, currentQuestion, dispatch, actions }) => {
 	}
 };
 
-export { nextQuestion, previousQuestion };
+const toggleDisplay = ({ display, dispatch, actions }) => {
+	const newDisplay = display === 'scores' ? 'question' : 'scores';
+	dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: newDisplay });
+};
+
+export { nextQuestion, previousQuestion, toggleDisplay };

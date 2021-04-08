@@ -27,7 +27,7 @@ export default function ShowControls({ projectorMode }) {
 			? dispatch({ type: actions.END_VIDEO })
 			: dispatch({
 					type: actions.PLAY_VIDEO,
-					payload: videos[e.currentTarget.dataset.video],
+					payload: { file: videos[e.currentTarget.dataset.video] },
 			  });
 	};
 	return (

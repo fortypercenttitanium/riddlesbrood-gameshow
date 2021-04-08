@@ -13,7 +13,7 @@ export default function AnswerBlock() {
 	const answer = state.gameController.currentAnswer;
 	return (
 		<AnswerBlockDiv>
-			<TimerDiv>
+			<TimerDiv display={time !== null ? 'block' : 'none'}>
 				<h3>Timer:</h3>
 				<Timer>{time}</Timer>
 			</TimerDiv>

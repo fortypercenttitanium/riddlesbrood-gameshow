@@ -126,13 +126,15 @@ export const reducer = (state, { type, payload }) => {
 				...state,
 				VFX: {
 					playing: true,
-					file: payload,
+					file: payload.file,
+					callback: payload.callback,
 				},
 			};
 		case 'END_VIDEO':
 			return {
 				...state,
 				VFX: {
+					...state.VFX,
 					playing: false,
 					file: '',
 				},

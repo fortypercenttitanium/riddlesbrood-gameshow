@@ -9,7 +9,7 @@ const ModalContainer = styled.div`
 	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: 6;
+	z-index: 100;
 `;
 
 const GamesMenuModalDiv = styled.div`
