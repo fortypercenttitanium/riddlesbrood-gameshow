@@ -17,7 +17,8 @@
 		"productName": "Riddlesbrood Gameshow",
 		"copyright": "Copyright 2021 Riddlesbrood Theatre Company",
 		"win": {
-			"icon": "public/electron/icons/icon.png"
+			"icon": "public/electron/icons/icon.png",
+			"target": "nsis-web"
 		},
 		"extends": null,
 		"files": [
