@@ -98,16 +98,26 @@ function createGameWindows() {
 	});
 
 	ipcMain.on('DISPATCH', (e, state) => {
-		if (getWindow('game')) {
-			getWindow('game').webContents.send('SYNC_STATE', state);
+		if (gameWindow) {
+			gameWindow.webContents.send('SYNC_STATE', state);
 		}
 	});
 
 	ipcMain.on('WHEEL_GUESS_SEND', (e, key) => {
-		getWindow('game').webContents.send('WHEEL_GUESS_RECEIVE', key);
+		gameWindow.webContents.send('WHEEL_GUESS_RECEIVE', key);
 	});
 
-	// if (isDev) gameWindow.webContents.openDevTools();
+	ipcMain.on('PLAY_VIDEO_SEND', (e, payload) => {
+		gameWindow.webContents.send('PLAY_VIDEO_RECEIVE', payload);
+		mainWindow.webContents.send('PLAY_VIDEO_RECEIVE', payload);
+	});
+
+	ipcMain.on('STOP_VIDEO_SEND', () => {
+		gameWindow.webContents.send('STOP_VIDEO_RECEIVE');
+		mainWindow.webContents.send('STOP_VIDEO_RECEIVE');
+	});
+
+	if (isDev) gameWindow.webContents.openDevTools();
 
 	gameWindow.on('maximize', (e) => {
 		gameWindow.setFullScreen(true);

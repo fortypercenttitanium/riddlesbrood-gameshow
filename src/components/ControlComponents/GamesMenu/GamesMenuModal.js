@@ -13,6 +13,7 @@ import { StoreContext } from '../../../store/context';
 import { gamesArray } from '../../Games/helpers/shared/gamesArray';
 import VersionSelection from './VersionSelection';
 import importAll from '../../Games/helpers/shared/importAll';
+const { ipcRenderer } = window.require('electron');
 
 const logos = importAll(
 	require.context('../../../assets/images/logos', false, /\.png$|.jpg$|.jpeg$/)
@@ -62,13 +63,10 @@ export default function GamesMenuModal() {
 		if (game.title === 'Card Sharks') {
 			selectedGame.version = 0;
 			dispatch({ type: 'CLOSE_GAMES_MENU' });
-			dispatch({
-				type: 'PLAY_VIDEO',
-				payload: { file: selectedGame.video },
-			});
+			ipcRenderer.send('PLAY_VIDEO_SEND', { file: selectedGame.video });
 			setTimeout(() => {
 				dispatch({ type: 'SET_GAME', payload: selectedGame });
-			}, 2000);
+			}, 1000);
 		} else {
 			dispatch({ type: 'RESET_GAME' });
 			dispatch({ type: 'GO_TO_VERSION_SELECT', payload: selectedGame });
@@ -85,10 +83,7 @@ export default function GamesMenuModal() {
 			video,
 		};
 		dispatch({ type: 'CLOSE_GAMES_MENU' });
-		dispatch({
-			type: 'PLAY_VIDEO',
-			payload: { file: selectedGame.video },
-		});
+		ipcRenderer.send('PLAY_VIDEO_SEND', { file: selectedGame.video });
 		setTimeout(() => {
 			dispatch({ type: 'SET_GAME', payload: selectedGame });
 		}, 2000);

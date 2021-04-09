@@ -121,24 +121,6 @@ export const reducer = (state, { type, payload }) => {
 					},
 				},
 			};
-		case 'PLAY_VIDEO':
-			return {
-				...state,
-				VFX: {
-					playing: true,
-					file: payload.file,
-					callback: payload.callback,
-				},
-			};
-		case 'END_VIDEO':
-			return {
-				...state,
-				VFX: {
-					...state.VFX,
-					playing: false,
-					file: '',
-				},
-			};
 		case 'OPEN_GAMES_MENU':
 			const openMenu = {
 				open: true,

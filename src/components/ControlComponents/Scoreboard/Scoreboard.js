@@ -5,19 +5,18 @@ import InactiveScoreCard from './InactiveScoreCard';
 import { StoreContext } from '../../../store/context';
 import { actions } from '../../../store/actions';
 import importAll from '../../Games/helpers/shared/importAll';
-
-const longVideos = Object.values(
-	importAll(
-		require.context(
-			'../../../assets/videos/winner_videos/long',
-			false,
-			/\.mp4$/
-		)
-	)
-);
+import winnerIntro from '../../../assets/videos/winner_videos/long/winner_intro.mp4';
+import winnerLoop from '../../../assets/videos/winner_videos/long/winner_loop.mp4';
+const { ipcRenderer } = window.require('electron');
 
 const shortVideos = importAll(
 	require.context('../../../assets/videos/winner_videos/short', false, /\.mp4$/)
+);
+
+const winnerSongs = Object.values(
+	importAll(
+		require.context('../../../assets/sound_fx/winner', false, /\.mp3|\.wav$/)
+	)
 );
 
 const ScoreBoardDiv = styled.div`
@@ -32,7 +31,7 @@ export default function ScoreBoard({ playSound }) {
 	const { state, dispatch } = useContext(StoreContext);
 	const { score } = state.gameController;
 
-	const [currentLongVideo, setCurrentLongVideo] = useState(0);
+	const [currentSong, setCurrentSong] = useState(0);
 
 	const toggleCardActive = (index) => {
 		let newScore = score;
@@ -50,16 +49,16 @@ export default function ScoreBoard({ playSound }) {
 	};
 
 	const playVideo = ({ index, type }) => {
-		dispatch({
-			type: 'PLAY_VIDEO',
-			payload: {
-				file: getVideo({ index, type }),
-				callback: longVideos[currentLongVideo],
-			},
+		ipcRenderer.send('PLAY_VIDEO_SEND', {
+			file: getVideo({ index, type }),
+			callbackQueue: [
+				{
+					file: winnerIntro,
+					song: winnerSongs[currentSong],
+				},
+				{ file: winnerLoop, loop: true },
+			],
 		});
-		setCurrentLongVideo(
-			currentLongVideo < longVideos.length ? currentLongVideo + 1 : 0
-		);
 	};
 
 	return (
@@ -75,7 +74,6 @@ export default function ScoreBoard({ playSound }) {
 							score={number}
 							playSound={playSound}
 							playVideo={() => playVideo({ index, type: score.type })}
-							setCurrentLongVideo={setCurrentLongVideo}
 							toggleCardActive={toggleCardActive}
 							alt={
 								score.type === 'team' &&

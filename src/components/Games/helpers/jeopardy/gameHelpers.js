@@ -4,6 +4,7 @@ import {
 	playSound,
 	actions,
 } from './imports';
+const { ipcRenderer } = window.require('electron');
 
 const changeGameDisplay = (display, { dispatch, actions }) => {
 	dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: display });
@@ -31,10 +32,7 @@ const openQuestion = (
 				musicPlayer,
 			});
 		} else if (question.type === 'video') {
-			dispatch({
-				type: actions.PLAY_VIDEO,
-				payload: { file: question.question },
-			});
+			ipcRenderer.send('PLAY_VIDEO_SEND', { file: question.question });
 		} else {
 			dispatch({ type: actions.SET_TIMER, payload: 13 });
 			dispatch({ type: actions.RUN_TIMER });
@@ -48,9 +46,8 @@ const modalClick = ({ state, dispatch, sfxPlayer, musicPlayer }) => {
 		if (state.gameController.currentQuestion.type === 'video') {
 			// changeGameDisplay('question', { dispatch, actions });
 			dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: 'question' });
-			dispatch({
-				type: actions.PLAY_VIDEO,
-				payload: { file: state.gameController.currentQuestion.question },
+			ipcRenderer.send('PLAY_VIDEO_SEND', {
+				file: state.gameController.currentQuestion.question,
 			});
 		} else {
 			changeGameDisplay('question', { dispatch, actions });

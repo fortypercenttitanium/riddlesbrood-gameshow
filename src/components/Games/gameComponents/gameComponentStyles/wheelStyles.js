@@ -109,7 +109,7 @@ export const LetterSpan = styled.span`
 export const ReturnButton = styled.button`
 	padding: 1rem;
 	position: absolute;
-	bottom: 40px;
+	bottom: 24px;
 	right: 100px;
 	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 	text-align: center;
@@ -143,7 +143,7 @@ export const SolvePuzzle = styled.button`
 			? 'flex'
 			: 'none'};
 	position: absolute;
-	bottom: 46px;
+	bottom: 24px;
 	left: 100px;
 	padding: 14px;
 	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
@@ -166,12 +166,15 @@ export const GuessedLettersDisplay = styled.div`
 	margin: auto;
 	font-size: 2.5rem;
 	font-weight: bold;
+	text-shadow: 4px 4px 4px black;
 `;
 
 export const CategoryDisplay = styled.div`
-	margin: auto auto 30px;
+	margin: auto auto 10px;
 	display: flex;
+	flex-direction: column;
 	width: 90%;
+	padding: 12px;
 	background: linear-gradient(
 		90deg,
 		rgba(133, 133, 133, 0) 0%,
@@ -193,8 +196,8 @@ export const CategoryH3 = styled.h3`
 
 export const CategoryDisplayText = styled.h1`
 	font-size: 4rem;
+	padding-bottom: 12px;
 	color: #eee;
 	margin: auto;
-	padding: 16px;
 	text-shadow: 4px 4px 4px black;
 `;

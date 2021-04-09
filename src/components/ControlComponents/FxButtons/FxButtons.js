@@ -65,17 +65,12 @@ export default function FxButtons() {
 	};
 
 	const clickHandlerVideo = (button) => {
-		VFX.playing
-			? dispatch({ type: actions.END_VIDEO })
-			: dispatch({
-					type: actions.PLAY_VIDEO,
-					payload: {
-						file:
-							button.file.slice(0, 6) === 'app://'
-								? button.file
-								: coreFiles[button.file],
-					},
-			  });
+		ipcRenderer.send('PLAY_VIDEO_SEND', {
+			file:
+				button.file.slice(0, 6) === 'app://'
+					? button.file
+					: coreFiles[button.file],
+		});
 	};
 
 	const contextHandler = (index) => {

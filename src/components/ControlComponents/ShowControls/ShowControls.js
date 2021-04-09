@@ -7,8 +7,8 @@ import {
 	ProjectorImage,
 } from './ShowControlsStyles';
 import { StoreContext } from '../../../store/context';
-import { actions } from '../../../store/actions';
 import importAll from '../../Games/helpers/shared/importAll';
+const { ipcRenderer } = window.require('electron');
 
 const videos = importAll(
 	require.context(
@@ -19,42 +19,32 @@ const videos = importAll(
 );
 
 export default function ShowControls({ projectorMode }) {
-	const { state, dispatch } = useContext(StoreContext);
-	const { VFX } = state;
-
 	const handleClickVideo = (e) => {
-		VFX.playing
-			? dispatch({ type: actions.END_VIDEO })
-			: dispatch({
-					type: actions.PLAY_VIDEO,
-					payload: { file: videos[e.currentTarget.dataset.video] },
-			  });
+		ipcRenderer.send('PLAY_VIDEO_SEND', {
+			file: videos[e.currentTarget.dataset.video],
+		});
 	};
 	return (
 		<ShowControlsDiv>
-			<Button area='1 / 1 / 2 / 2'>
+			<Button
+				area='1 / 1 / 2 / 2'
+				data-video='Riddlesbrood 10sec NO SPIN Animated LOGO.mp4'
+				onClick={handleClickVideo}
+			>
 				<Label>Preshow</Label>
 			</Button>
 			<Button area='2 / 1 / 3 / 2'>
-				<Label>5 mins</Label>
+				<Label>5 MIN INTRO</Label>
 			</Button>
 			<Button
-				data-video='Riddlesbrood 10sec NO SPIN Animated LOGO.mp4'
-				area='1 / 2 / 2 / 3'
+				data-video='quick_intro.mp4'
 				onClick={handleClickVideo}
+				area='1 / 2 / 2 / 3'
 			>
-				<Label>
-					START
-					<br />
-					SHOW
-				</Label>
+				<Label>QUICK INTRO</Label>
 			</Button>
 			<Button area='2 / 2 / 3 / 3'>
-				<Label>
-					END
-					<br />
-					SHOW
-				</Label>
+				<Label>END SHOW</Label>
 			</Button>
 			<Button area='1 / 3 / 2 / 4'>
 				<Label>
