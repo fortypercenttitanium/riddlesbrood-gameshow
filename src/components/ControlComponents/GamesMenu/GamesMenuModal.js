@@ -49,9 +49,11 @@ export default function GamesMenuModal() {
 	const handleOutsideClick = () => {
 		dispatch({ type: 'CLOSE_GAMES_MENU' });
 	};
+
 	const handleModalClick = (e) => {
 		e.stopPropagation();
 	};
+
 	const handleGameClick = (game) => {
 		const { title, logo, scoreType, video } = game;
 		const selectedGame = {
@@ -63,7 +65,7 @@ export default function GamesMenuModal() {
 		if (game.title === 'Card Sharks') {
 			selectedGame.version = 0;
 			dispatch({ type: 'CLOSE_GAMES_MENU' });
-			ipcRenderer.send('PLAY_VIDEO_SEND', { file: selectedGame.video });
+			ipcRenderer.send('PLAY_VIDEO_SEND', selectedGame.video);
 			setTimeout(() => {
 				dispatch({ type: 'SET_GAME', payload: selectedGame });
 			}, 1000);
@@ -83,7 +85,7 @@ export default function GamesMenuModal() {
 			video,
 		};
 		dispatch({ type: 'CLOSE_GAMES_MENU' });
-		ipcRenderer.send('PLAY_VIDEO_SEND', { file: selectedGame.video });
+		ipcRenderer.send('PLAY_VIDEO_SEND', selectedGame.video);
 		setTimeout(() => {
 			dispatch({ type: 'SET_GAME', payload: selectedGame });
 		}, 2000);
