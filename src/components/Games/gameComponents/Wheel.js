@@ -204,15 +204,15 @@ export default function Wheel({ windowInstance }) {
 				</BoardWrapper>
 			)}
 			<CategoryDisplay display={state.gameController.display}>
-				<CategoryDisplayText>
-					{state.gameController.currentQuestion.category.toUpperCase()}
-				</CategoryDisplayText>
 				<GuessedLettersDisplay>
-					Guessed Letters:
+					Guessed:
 					<LetterSpan>
 						{state.gameController.currentQuestion.guessedLetters.join(', ')}
 					</LetterSpan>
 				</GuessedLettersDisplay>
+				<CategoryDisplayText>
+					{state.gameController.currentQuestion.category.toUpperCase()}
+				</CategoryDisplayText>
 			</CategoryDisplay>
 			{state.gameController.currentQuestion.solved &&
 				windowInstance === 'controlPanel' && (

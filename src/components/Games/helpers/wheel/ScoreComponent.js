@@ -1,53 +1,56 @@
 import React from 'react';
 import styled from 'styled-components';
+import redScoreWrapper from '../../../../assets/images/game_images/wheel/red_score_wrapper.png';
+import yellowScoreWrapper from '../../../../assets/images/game_images/wheel/yellow_score_wrapper.png';
+import greenScoreWrapper from '../../../../assets/images/game_images/wheel/green_score_wrapper.png';
+import blueScoreWrapper from '../../../../assets/images/game_images/wheel/blue_score_wrapper.png';
 
 const ComponentWrapper = styled.div`
 	display: flex;
 	flex: 1;
-	padding: 22px;
-	justify-content: space-around;
+	justify-content: space-between;
+	padding: 0 14px 0 0;
+	height: 140px;
 	border-radius: 4px;
-	text-shadow: 3px 3px 3px black;
+	text-shadow: 4px 4px 4px rgba(0, 0, 0, 1), -4px -4px 4px rgba(0, 0, 0, 1),
+		4px -4px 4px rgba(0, 0, 0, 1), -4px 4px 4px rgba(0, 0, 0, 1);
 	margin: auto 12px 3px;
 	font-weight: bold;
-	background: ${(props) =>
-		props.index === 0
-			? 'rgb(255,140,140)'
-			: props.index === 1 && props.altColor
-			? 'rgb(140,146,255)'
-			: props.index === 1
-			? 'rgb(255,254,140)'
-			: props.index === 2
-			? 'rgb(140,255,157)'
-			: props.index === 3
-			? 'rgb(140,146,255)'
-			: null};
-	background: ${(props) =>
-		props.index === 0
-			? 'linear-gradient(149deg, rgba(255, 140, 140, 0.7959558823529411) 0%,rgba(255, 94, 94, 0.804359243697479) 31%,	rgba(255, 63, 63, 0.8015581232492998) 56%, rgba(242, 30, 30, 0.804359243697479) 100%)'
-			: props.index === 1 && props.altColor
-			? 'linear-gradient(149deg, rgba(140,146,255,0.7959558823529411) 0%, rgba(94,100,255,0.804359243697479) 31%, rgba(63,67,255,0.8015581232492998) 56%, rgba(40,30,242,0.804359243697479) 100%)'
-			: props.index === 1
-			? 'linear-gradient(149deg, rgba(255,254,140,0.7959558823529411) 0%, rgba(255,253,94,0.804359243697479) 31%, rgba(255,250,63,0.8015581232492998) 56%, rgba(242,236,30,0.804359243697479) 100%)'
-			: props.index === 2
-			? 'linear-gradient(149deg, rgba(140,255,157,0.7959558823529411) 0%, rgba(94,255,104,0.804359243697479) 31%, rgba(63,255,88,0.8015581232492998) 56%, rgba(30,242,51,0.804359243697479) 100%)'
-			: props.index === 3
-			? 'linear-gradient(149deg, rgba(140,146,255,0.7959558823529411) 0%, rgba(94,100,255,0.804359243697479) 31%, rgba(63,67,255,0.8015581232492998) 56%, rgba(40,30,242,0.804359243697479) 100%)'
-			: null};
-
-	.score-text {
+	background-image: ${({ player }) =>
+		player === 1
+			? `url(${redScoreWrapper})`
+			: player === 2
+			? `url(${yellowScoreWrapper})`
+			: player === 3
+			? `url(${greenScoreWrapper})`
+			: `url(${blueScoreWrapper})`};
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	.player-text {
 		font-size: 4rem;
+		padding: 20px;
+		margin: auto 0;
+		transform: perspective(220px) rotateY(-20deg);
+	}
+	.score-text {
+		font-size: 6rem;
+		padding: 0;
+		margin: auto 0;
 	}
 `;
 
 function ScoreComponent({ player, type, score, windowInstance }) {
 	const capitalizedType = type[0].toUpperCase() + type.slice(1);
 	return (
-		<ComponentWrapper windowInstance={windowInstance} index={player - 1}>
-			<span className='score-text'>
+		<ComponentWrapper
+			player={player}
+			windowInstance={windowInstance}
+			index={player - 1}
+		>
+			<p className='player-text'>
 				{capitalizedType} {player}:
-			</span>
-			<span className='score-text'>{score}</span>
+			</p>
+			<p className='score-text'>{score}</p>
 		</ComponentWrapper>
 	);
 }

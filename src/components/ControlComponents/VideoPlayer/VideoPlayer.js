@@ -55,7 +55,6 @@ export default function VideoPlayer({ windowInstance }) {
 				stopAllVideos();
 			} else {
 				const { file, callbackQueue, loop, song } = payload;
-				console.log(callbackQueue);
 				setIsVideoPlaying(true);
 				activeVideoPlayer.current.src = file;
 				activeVideoPlayer.current.play();
@@ -84,7 +83,6 @@ export default function VideoPlayer({ windowInstance }) {
 		});
 
 		function playNextVideo(callbackQueue, player, song) {
-			console.log(song);
 			if (callbackQueue.length) {
 				const nextPlayer = allVideos.find((vid) => vid !== player);
 				nextPlayer.current.src = callbackQueue[0].file;

@@ -1,24 +1,30 @@
 import styled from 'styled-components';
-import wheelBackground from '../../../../assets/images/game_images/wheel/wheel-background2.svg';
+import wheelBackground from '../../../../assets/images/game_images/wheel/wheel_background.png';
 
 export const WheelContainer = styled.div`
 	height: 100%;
 	width: 100%;
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	background: rgb(30, 30, 30);
 	position: relative;
+	background-image: url(${wheelBackground});
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
 `;
 
 export const BoardWrapper = styled.div`
-	margin: 150px auto 12px;
-	height: 750px;
-	width: 1600px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto 8px 18px auto;
+	height: 100%;
+	width: 100%;
 	display: flex;
-	background-image: url(${wheelBackground});
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center;
 `;
 
 export const Board = styled.div`
@@ -77,8 +83,8 @@ export const LetterCell = styled.div`
 			? 'linear-gradient(120deg, rgba(58,179,136,1) 0%, rgba(46,150,113,1) 50%, rgba(38,136,102,1) 100%);'
 			: '#ddd'};
 	display: flex;
-	height: 120px;
-	width: 78px;
+	height: 128px;
+	width: 84px;
 	border: 12px solid rgb(30, 30, 30);
 	outline: 2px solid rgba(136, 182, 166, 1);
 	&.active {
@@ -164,7 +170,7 @@ export const SolvePuzzle = styled.button`
 export const GuessedLettersDisplay = styled.div`
 	display: flex;
 	margin: auto;
-	font-size: 2.5rem;
+	font-size: 3.2rem;
 	font-weight: bold;
 	text-shadow: 4px 4px 4px black;
 `;
@@ -174,7 +180,7 @@ export const CategoryDisplay = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 90%;
-	padding: 12px;
+	padding: 12px 0 8px;
 	background: linear-gradient(
 		90deg,
 		rgba(133, 133, 133, 0) 0%,
@@ -195,8 +201,7 @@ export const CategoryH3 = styled.h3`
 `;
 
 export const CategoryDisplayText = styled.h1`
-	font-size: 4rem;
-	padding-bottom: 12px;
+	font-size: 5rem;
 	color: #eee;
 	margin: auto;
 	text-shadow: 4px 4px 4px black;
