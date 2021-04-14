@@ -36,8 +36,4 @@ export const initialState = {
 		board: [],
 		gameStarted: false,
 	},
-	VFX: {
-		playing: false,
-		file: '',
-	},
 };

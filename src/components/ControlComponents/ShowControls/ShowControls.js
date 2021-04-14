@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import projector from '../../../assets/images/icons/projector.png';
 import {
 	ShowControlsDiv,
@@ -6,7 +6,6 @@ import {
 	Label,
 	ProjectorImage,
 } from './ShowControlsStyles';
-import { StoreContext } from '../../../store/context';
 import importAll from '../../Games/helpers/shared/importAll';
 const { ipcRenderer } = window.require('electron');
 
@@ -22,18 +21,22 @@ export default function ShowControls({ projectorMode }) {
 	const handleClickVideo = (e) => {
 		ipcRenderer.send('PLAY_VIDEO_SEND', {
 			file: videos[e.currentTarget.dataset.video],
+			callbackQueue: e.currentTarget.dataset.callback
+				? [{ file: videos[e.currentTarget.dataset.callback] }]
+				: undefined,
 		});
 	};
 	return (
 		<ShowControlsDiv>
-			<Button
-				area='1 / 1 / 2 / 2'
-				data-video='Riddlesbrood 10sec NO SPIN Animated LOGO.mp4'
-				onClick={handleClickVideo}
-			>
+			<Button area='1 / 1 / 2 / 2'>
 				<Label>Preshow</Label>
 			</Button>
-			<Button area='2 / 1 / 3 / 2'>
+			<Button
+				data-video='five_min_intro.mp4'
+				data-callback='quick_intro.mp4'
+				onClick={handleClickVideo}
+				area='2 / 1 / 3 / 2'
+			>
 				<Label>5 MIN INTRO</Label>
 			</Button>
 			<Button
