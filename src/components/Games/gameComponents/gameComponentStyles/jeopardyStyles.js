@@ -34,6 +34,15 @@ const Modal = styled.div`
 	text-align: center;
 	cursor: pointer;
 	display: ${(props) => (props.display === 'board' ? 'none' : 'flex')};
+
+	.question-text {
+		margin: auto;
+		text-shadow: 3px 3px 3px black;
+		font-size: 6rem;
+		line-height: 10rem;
+		font-weight: 400;
+		padding: 200px;
+	}
 `;
 
 const CellContainer = styled.div`

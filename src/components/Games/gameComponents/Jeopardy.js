@@ -110,14 +110,14 @@ export default function Jeopardy({ windowInstance }) {
 						<DailyImg src={dailyDoubleImage} alt='' />
 					</DailyDiv>
 				)}
-				<StyledSpan questionType={state.gameController.currentQuestion.type}>
+				<h2 className='question-text'>
 					{state.gameController.display === 'question' &&
 					state.gameController.currentQuestion.type === 'text'
 						? state.gameController.currentQuestion.question
 						: state.gameController.display === 'answer'
 						? state.gameController.currentQuestion.answer
 						: ''}
-				</StyledSpan>
+				</h2>
 			</Modal>
 			<Board>
 				{state.gameController.board.map((block, index) => {
