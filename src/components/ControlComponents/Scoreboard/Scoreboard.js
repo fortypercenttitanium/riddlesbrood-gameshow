@@ -59,6 +59,10 @@ export default function ScoreBoard({ playSound }) {
 				{ file: winnerLoop, loop: true },
 			],
 		});
+
+		const nextSong =
+			currentSong >= winnerSongs.length - 1 ? 0 : currentSong + 1;
+		setCurrentSong(nextSong);
 	};
 
 	return (
