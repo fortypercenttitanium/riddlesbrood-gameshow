@@ -4,10 +4,12 @@ import importAll from './importAll';
 const videos = importAll(
 	require.context(
 		'../../../../assets/videos/game_intro_videos',
-		false,
-		/\.mp4|\.mov$/
+		true,
+		/\.mp4|\.mov|\.mp3$/
 	)
 );
+
+console.log(videos);
 
 export async function gamesArray() {
 	const gameVersions = await getGameVersions({ filtered: true });
@@ -20,6 +22,7 @@ export async function gamesArray() {
 			video: {
 				file: videos['jeopardy_intro.mp4'],
 				callbackQueue: [{ file: videos['jeopardy_loop.mp4'], loop: true }],
+				song: videos['songs/jeopardy_intro_song.mp3'],
 			},
 		},
 		{
@@ -37,6 +40,7 @@ export async function gamesArray() {
 			video: {
 				file: videos['family_intro.mp4'],
 				callbackQueue: [{ file: videos['family_loop.mp4'], loop: true }],
+				song: videos['songs/family_feud_intro_song.mp3'],
 			},
 		},
 		{
@@ -54,6 +58,7 @@ export async function gamesArray() {
 			video: {
 				file: videos['wheel_intro.mp4'],
 				callbackQueue: [{ file: videos['wheel_loop.mp4'], loop: true }],
+				song: videos['songs/wheel_intro_song.mp3'],
 			},
 		},
 		{
@@ -64,6 +69,7 @@ export async function gamesArray() {
 			video: {
 				file: videos['ponzi_intro.mp4'],
 				callbackQueue: [{ file: videos['ponzi_loop.mp4'], loop: true }],
+				song: videos['songs/pyramid_intro_song.mp3'],
 			},
 		},
 		{
@@ -74,6 +80,7 @@ export async function gamesArray() {
 			video: {
 				file: videos['couples_intro.mp4'],
 				callbackQueue: [{ file: videos['couples_loop.mp4'], loop: true }],
+				song: videos['songs/couples_intro_song.mp3'],
 			},
 		},
 		{
@@ -91,6 +98,7 @@ export async function gamesArray() {
 			video: {
 				file: videos['crazy_eights_intro.mp4'],
 				callbackQueue: [{ file: videos['crazy_eights_loop.mp4'], loop: true }],
+				song: videos['songs/crazy_eights_intro_song.mp3'],
 			},
 		},
 	];
