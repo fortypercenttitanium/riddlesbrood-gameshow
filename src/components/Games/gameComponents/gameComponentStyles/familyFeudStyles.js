@@ -43,7 +43,7 @@ const TopContainer = styled.div`
 const ScoreContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	height: calc(100% - 60px);
+	height: 364px;
 	width: 25%;
 	margin: auto;
 	background: rgb(230, 230, 230);
@@ -90,7 +90,9 @@ const WrongImg = styled.img`
 const H2 = styled.h2`
 	margin: auto;
 	padding: 0.2rem;
-	font-size: 3rem;
+	font-size: 7rem;
+	font-weight: bold;
+	text-shadow: 4px 4px 4px #333;
 `;
 
 const FlippableH3 = styled.h3`
@@ -104,8 +106,10 @@ const FlippableH3 = styled.h3`
 const Span = styled.span`
 	margin: auto;
 	padding: 3%;
-	font-size: 2.5rem;
-	line-height: 3.6rem;
+	font-size: 3.8rem;
+	line-height: 4.5rem;
+	font-weight: bold;
+	text-shadow: 2px 2px 2px #666;
 	color: #003c7b;
 `;
 
