@@ -46,7 +46,11 @@ export default function ShowControls({ projectorMode }) {
 			>
 				<Label>QUICK INTRO</Label>
 			</Button>
-			<Button area='2 / 2 / 3 / 3'>
+			<Button
+				data-video='end_of_show.mp4'
+				onClick={handleClickVideo}
+				area='2 / 2 / 3 / 3'
+			>
 				<Label>END SHOW</Label>
 			</Button>
 			<Button area='1 / 3 / 2 / 4'>
