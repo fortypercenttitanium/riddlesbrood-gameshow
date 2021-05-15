@@ -25,7 +25,7 @@ const coreFiles = importAll(
 
 export default function FxButtons() {
 	const { state, dispatch } = useContext(StoreContext);
-	const { audio, fxButtons, VFX } = state;
+	const { audio, fxButtons } = state;
 	const [buttonFiles, setButtonFiles] = useState([]);
 	const [selectionWindowOpen, setSelectionWindowOpen] = useState(-1);
 	const [selection, setSelection] = useState();
@@ -117,7 +117,7 @@ export default function FxButtons() {
 							}
 						}}
 					>
-						<Text>{button.name}</Text>
+						<Text>{button.name.replace(/[-_]/g, ' ')}</Text>
 						{button.type === 'audio' && (
 							<ReactAudioPlayer
 								src={

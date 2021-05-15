@@ -6,8 +6,8 @@ const FxButtonsDiv = styled.div`
 	width: 99%;
 	display: grid;
 	grid-gap: 5px;
-	grid-template-columns: repeat(3, 1fr);
-	grid-template-rows: repeat(3, 1fr);
+	grid-template-columns: repeat(3, 134px);
+	grid-template-rows: repeat(3, 104px);
 	margin: 2px 2px;
 `;
 
@@ -37,7 +37,9 @@ const FxButton = styled.div`
 
 const Text = styled.h3`
 	margin: auto;
+	width: 100%;
 	user-select: none;
+	overflow-wrap: break-word;
 	color: ${(props) => (props.color ? props.color : 'black')};
 `;
 
@@ -57,7 +59,7 @@ const FxSelectModal = styled.div`
 	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: 6;
+	z-index: 1000;
 `;
 
 const FxSelectContainer = styled.div`
