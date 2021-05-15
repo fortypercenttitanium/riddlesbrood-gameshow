@@ -97,10 +97,11 @@ const H2 = styled.h2`
 
 const FlippableH3 = styled.h3`
 	margin: auto;
-	font-size: 2.5rem;
+	font-size: ${(props) => (props.longAnswer ? '2rem' : '3rem')};
 	opacity: ${(props) => (props.revealed ? '1' : '0.4')};
 	transform: ${(props) =>
 		props.revealed ? 'rotateX(-180deg)' : 'rotateX(0deg)'};
+	color: yellow;
 `;
 
 const Span = styled.span`
@@ -124,7 +125,8 @@ const AnswerGrid = styled.div`
 
 const AnswerContainer = styled.div`
 	border: 2px solid #003c7b;
-	padding: 1.5rem;
+	height: 60px;
+	padding: 18px;
 	margin: 1%;
 	display: flex;
 	cursor: pointer;
@@ -165,7 +167,7 @@ const NumberButton = styled.span`
 	margin: auto;
 	height: 45px;
 	width: 45px;
-	font-size: 2rem;
+	font-size: 2.2rem;
 `;
 
 const XModal = styled.div`

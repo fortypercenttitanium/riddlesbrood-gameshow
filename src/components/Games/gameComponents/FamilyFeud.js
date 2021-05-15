@@ -175,7 +175,10 @@ export default function FamilyFeud({ windowInstance }) {
 									}}
 									side={word.revealed ? 'back' : 'front'}
 								>
-									<FlippableH3 revealed={word.revealed}>
+									<FlippableH3
+										longAnswer={word.answer.length > 23}
+										revealed={word.revealed}
+									>
 										{word.answer.toUpperCase()}
 									</FlippableH3>
 								</AnswerContainer>
@@ -189,7 +192,10 @@ export default function FamilyFeud({ windowInstance }) {
 									side={word.revealed ? 'back' : 'front'}
 								>
 									{word.revealed ? (
-										<FlippableH3 revealed={word.revealed}>
+										<FlippableH3
+											longAnswer={word.answer.length > 23}
+											revealed={word.revealed}
+										>
 											{word.answer.toUpperCase()}
 										</FlippableH3>
 									) : (
