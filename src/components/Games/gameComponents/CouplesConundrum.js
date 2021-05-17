@@ -30,13 +30,8 @@ export default function CouplesConundrum({ windowInstance }) {
 
 	const { state, dispatch } = useContext(StoreContext);
 	const { gameController } = state;
-	const {
-		board,
-		currentQuestion,
-		score,
-		gameStarted,
-		display,
-	} = gameController;
+	const { board, currentQuestion, score, gameStarted, display } =
+		gameController;
 
 	let musicPlayer = useRef();
 	let sfxPlayer = useRef();
@@ -92,6 +87,37 @@ export default function CouplesConundrum({ windowInstance }) {
 		toggleDisplay({ display: state.gameController.display, dispatch, actions });
 	};
 
+	function parseHeartClassNames(scoreBoard) {
+		const numberOfTeams = scoreBoard.filter((score) => score !== null).length;
+		let classNames = [];
+		for (let i = 0; i < scoreBoard.length; i++) {
+			classNames.push(`index-${i}`);
+		}
+		if (
+			numberOfTeams === 3 &&
+			scoreBoard[3] !== null &&
+			scoreBoard[0] !== null
+		) {
+			classNames[1] += ' alt-location';
+			classNames[2] += ' alt-location';
+		}
+		if (numberOfTeams === 2) {
+			classNames = [];
+			scoreBoard.forEach((score) => {
+				if (score !== null) {
+					classNames.push(
+						classNames.filter((className) => className).length
+							? 'index-0'
+							: 'index-3'
+					);
+				} else {
+					classNames.push('');
+				}
+			});
+		}
+		return classNames;
+	}
+
 	return state.gameController.gameStarted ? (
 		<CouplesHomeScreen display={display}>
 			<div className='sparkle-overlay' />
@@ -103,7 +129,10 @@ export default function CouplesConundrum({ windowInstance }) {
 				score.scoreBoard.map((scoreNum, scoreIndex) => {
 					if (scoreNum !== null) {
 						return (
-							<ScoreCardDiv key={scoreIndex} className={`index-${scoreIndex}`}>
+							<ScoreCardDiv
+								key={scoreIndex}
+								className={parseHeartClassNames(score.scoreBoard)[scoreIndex]}
+							>
 								<ScoreH1>{scoreNum}</ScoreH1>
 							</ScoreCardDiv>
 						);

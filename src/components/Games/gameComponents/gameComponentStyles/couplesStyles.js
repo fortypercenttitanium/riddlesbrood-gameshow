@@ -144,4 +144,8 @@ export const ScoreCardDiv = styled.div`
 		top: 130px;
 		right: 186px;
 	}
+	&.alt-location {
+		left: 0px;
+		right: 0px;
+	}
 `;
