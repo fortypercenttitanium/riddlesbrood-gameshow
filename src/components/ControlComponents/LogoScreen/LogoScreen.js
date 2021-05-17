@@ -1,11 +1,11 @@
 import React from 'react';
-import { LogoScreenDiv, LogoScreenImg } from './LogoScreenStyles';
-import RBLogo from '../../../assets/images/logos/RB Logo.jpg';
+import { LogoScreenDiv } from './LogoScreenStyles';
+import logoLoop from '../../../assets/videos/show_control_videos/logo_loop.mp4';
 
 export default function LogoScreen() {
 	return (
 		<LogoScreenDiv>
-			<LogoScreenImg src={RBLogo} alt='' />
+			<video autoPlay loop src={logoLoop}></video>
 		</LogoScreenDiv>
 	);
 }
