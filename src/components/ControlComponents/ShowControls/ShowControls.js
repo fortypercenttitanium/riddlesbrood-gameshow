@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import projector from '../../../assets/images/icons/projector.png';
 import {
 	ShowControlsDiv,
@@ -10,7 +10,7 @@ import { StoreContext } from '../../../store/context';
 import importAll from '../../Games/helpers/shared/importAll';
 const { ipcRenderer } = window.require('electron');
 
-const videos = importAll(
+const showControlVideos = importAll(
 	require.context(
 		'../../../assets/videos/show_control_videos',
 		false,
@@ -18,20 +18,38 @@ const videos = importAll(
 	)
 );
 
+const commercialVideos = Object.values(
+	importAll(require.context('../../../assets/videos/commercials'))
+);
+
 export default function ShowControls({ projectorMode }) {
 	const { dispatch } = useContext(StoreContext);
+	const [currentCommercial, setCurrentCommercial] = useState(0);
 
 	const handleClickVideo = (e) => {
 		ipcRenderer.send('PLAY_VIDEO_SEND', {
-			file: videos[e.currentTarget.dataset.video],
+			file: showControlVideos[e.currentTarget.dataset.video],
 			callbackQueue: e.currentTarget.dataset.callback
-				? [{ file: videos[e.currentTarget.dataset.callback] }]
+				? [{ file: showControlVideos[e.currentTarget.dataset.callback] }]
 				: undefined,
 		});
 	};
 
 	const handleClickPreshow = () => {
 		dispatch({ type: 'RESET_GAME' });
+	};
+
+	const handleClickCommercial = () => {
+		ipcRenderer.send('PLAY_VIDEO_SEND', {
+			file: showControlVideos['brb.mp4'],
+			callbackQueue: [{ file: commercialVideos[currentCommercial] }],
+		});
+
+		const nextCommercial =
+			currentCommercial >= commercialVideos.length - 1
+				? 0
+				: currentCommercial + 1;
+		setCurrentCommercial(nextCommercial);
 	};
 
 	return (
@@ -43,7 +61,7 @@ export default function ShowControls({ projectorMode }) {
 				data-video='five_min_intro.mp4'
 				data-callback='quick_intro.mp4'
 				onClick={handleClickVideo}
-				area='2 / 1 / 3 / 2'
+				area='1 / 3 / 2 / 4'
 			>
 				<Label>5 MIN INTRO</Label>
 			</Button>
@@ -61,12 +79,8 @@ export default function ShowControls({ projectorMode }) {
 			>
 				<Label>END SHOW</Label>
 			</Button>
-			<Button area='1 / 3 / 2 / 4'>
-				<Label>
-					INTER
-					<br />
-					MISSION
-				</Label>
+			<Button onClick={handleClickCommercial} area='2 / 1 / 3 / 2'>
+				<Label>COMMERCIAL BREAK</Label>
 			</Button>
 			<Button area='2 / 3 / 3 / 4'>
 				<ProjectorImage src={projector} alt='' onClick={projectorMode} />

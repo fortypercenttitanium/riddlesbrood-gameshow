@@ -6,8 +6,8 @@ const ShowControlsDiv = styled.div`
 	display: grid;
 	height: 98%;
 	width: 99%;
-	grid-template-columns: repeat(3, 1fr);
-	grid-template-rows: repeat(2, 1fr);
+	grid-template-columns: repeat(3, 134px);
+	grid-template-rows: repeat(2, 116px);
 	margin: 2px 2px;
 `;
 
@@ -37,8 +37,9 @@ const Button = styled.div`
 
 const Label = styled.h2`
 	margin: auto;
-	font-size: 22px;
+	font-size: 19px;
 	user-select: none;
+	overflow-wrap: break-word;
 `;
 
 const ProjectorImage = styled.img`
