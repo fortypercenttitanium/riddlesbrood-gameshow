@@ -9,7 +9,10 @@ const logos = importAll(
 export default function GameLogo({ logo }) {
 	return (
 		<GameLogoDiv>
-			<LogoImg src={logo ? logos[logo] : logos['RB Logo.jpg']} alt='' />
+			<LogoImg
+				src={logo ? logos[logo] : logos['Riddlesbrood LOGO.jpg']}
+				alt=''
+			/>
 		</GameLogoDiv>
 	);
 }

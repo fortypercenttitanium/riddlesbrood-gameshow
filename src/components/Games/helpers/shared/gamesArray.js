@@ -14,7 +14,7 @@ export async function gamesArray() {
 	return [
 		{
 			title: 'Jeopardy',
-			logo: 'JeopardyLogo.png',
+			logo: 'UR In Jeopardy Logo.jpg',
 			versions: gameVersions.jeopardy,
 			shortName: 'jeopardy',
 			video: {
@@ -25,14 +25,14 @@ export async function gamesArray() {
 		},
 		{
 			title: 'Name That Tune',
-			logo: 'NameThatTuneLogo.png',
+			logo: 'Same Old Tune Logo.jpg',
 			versions: gameVersions.nameThatTune,
 			shortName: 'nameThatTune',
 			video: { file: videos['tune_full.mp4'] },
 		},
 		{
 			title: 'Family Feud',
-			logo: 'FamilyFeudLogo.png',
+			logo: 'Is Your Family Rude Logo.jpg',
 			versions: gameVersions.familyFeud,
 			shortName: 'familyFeud',
 			video: {
@@ -43,14 +43,14 @@ export async function gamesArray() {
 		},
 		{
 			title: 'What The Hell Is It?',
-			logo: 'WhatTheHellIsItLogo.png',
+			logo: 'Secret Squares Logo.jpg',
 			versions: gameVersions.whatTheHellIsIt,
 			shortName: 'whatTheHellIsIt',
 			video: { file: videos['squares_full.mp4'] },
 		},
 		{
 			title: 'Wheel Of Fortune',
-			logo: 'WheelOfFortuneLogo.jpeg',
+			logo: 'Feel the Fortune Logo.jpg',
 			versions: gameVersions.wheel,
 			shortName: 'wheel',
 			video: {
@@ -61,7 +61,7 @@ export async function gamesArray() {
 		},
 		{
 			title: '$25,000 Pyramid',
-			logo: '25kPyramidLogo.png',
+			logo: 'Ponzi Scheme Logo.jpg',
 			versions: gameVersions.pyramid,
 			shortName: 'pyramid',
 			video: {
@@ -72,7 +72,7 @@ export async function gamesArray() {
 		},
 		{
 			title: 'Couples Conundrum',
-			logo: 'CouplesConundrumLogo.png',
+			logo: 'Couples Conundrum Logo.jpg',
 			versions: gameVersions.couples,
 			shortName: 'couples',
 			video: {
@@ -83,14 +83,14 @@ export async function gamesArray() {
 		},
 		{
 			title: 'ESP',
-			logo: 'ESPLogo.png',
+			logo: 'ESP Logo.jpg',
 			versions: gameVersions.esp,
 			shortName: 'esp',
 			video: { file: videos['esp_full.mp4'] },
 		},
 		{
 			title: 'Card Sharks',
-			logo: 'CardSharksLogo.png',
+			logo: 'Crazy Eights Logo.jpg',
 			versions: [],
 			shortName: 'cardSharks',
 			video: {
