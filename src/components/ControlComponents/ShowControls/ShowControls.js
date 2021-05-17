@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import projector from '../../../assets/images/icons/projector.png';
 import {
 	ShowControlsDiv,
@@ -6,6 +6,7 @@ import {
 	Label,
 	ProjectorImage,
 } from './ShowControlsStyles';
+import { StoreContext } from '../../../store/context';
 import importAll from '../../Games/helpers/shared/importAll';
 const { ipcRenderer } = window.require('electron');
 
@@ -18,6 +19,8 @@ const videos = importAll(
 );
 
 export default function ShowControls({ projectorMode }) {
+	const { dispatch } = useContext(StoreContext);
+
 	const handleClickVideo = (e) => {
 		ipcRenderer.send('PLAY_VIDEO_SEND', {
 			file: videos[e.currentTarget.dataset.video],
@@ -26,9 +29,14 @@ export default function ShowControls({ projectorMode }) {
 				: undefined,
 		});
 	};
+
+	const handleClickPreshow = () => {
+		dispatch({ type: 'RESET_GAME' });
+	};
+
 	return (
 		<ShowControlsDiv>
-			<Button area='1 / 1 / 2 / 2'>
+			<Button onClick={handleClickPreshow} area='1 / 1 / 2 / 2'>
 				<Label>Preshow</Label>
 			</Button>
 			<Button
