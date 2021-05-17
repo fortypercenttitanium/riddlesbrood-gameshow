@@ -117,7 +117,7 @@ export default function FxButtons() {
 							}
 						}}
 					>
-						<Text>{button.name.replace(/[-_]/g, ' ')}</Text>
+						<Text>{button.name?.replace(/[-_]/g, ' ')}</Text>
 						{button.type === 'audio' && (
 							<ReactAudioPlayer
 								src={
@@ -142,7 +142,7 @@ export default function FxButtons() {
 								return (
 									<option
 										onClick={() => handleSelectChange(file)}
-										key={file.name}
+										key={file.name + file.type}
 										style={{ padding: '5px' }}
 									>
 										{file.name} ({file.type})

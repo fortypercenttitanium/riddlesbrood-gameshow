@@ -9,8 +9,6 @@ const videos = importAll(
 	)
 );
 
-console.log(videos);
-
 export async function gamesArray() {
 	const gameVersions = await getGameVersions({ filtered: true });
 	return [

@@ -113,7 +113,15 @@ module.exports = function attachIPCListeners() {
 	});
 
 	ipcMain.handle('GET_FX_BUTTONS', () => {
-		return store.get('fx_buttons');
+		const availableFiles = getAllFxFiles('all').map((fxFile) => fxFile.name);
+
+		return store
+			.get('fx_buttons')
+			.map((fxObject) =>
+				availableFiles.includes(fxObject.name)
+					? fxObject
+					: { name: '', type: '', file: '' }
+			);
 	});
 
 	ipcMain.on('SET_FX_BUTTONS', (_, fx_buttons) => {
