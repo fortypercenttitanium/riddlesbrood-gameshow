@@ -4,15 +4,11 @@ import {
 	TitleContainer,
 	Title,
 	Artist,
-	ScoreH1,
-	ScoreH2,
 	H3,
 	PlayerContainer,
 	AudioImg,
 	Controls,
 	Button,
-	ScoreBoardDiv,
-	ScoreCardDiv,
 } from './gameComponentStyles/tuneStyles';
 import {
 	initGame,
@@ -24,10 +20,13 @@ import {
 	rewindHandler,
 	toggleReveal,
 	nextSong,
+	prevSong,
 	importAll,
 	playButton,
 	pauseButton,
 	rewindButton,
+	ScoreOverlay,
+	ScoreComponent,
 } from '../helpers/tune/imports';
 
 const songs = importAll(
@@ -95,6 +94,16 @@ export default function NameThatTune({ windowInstance }) {
 		});
 	};
 
+	const handleClickPrev = () => {
+		prevSong({
+			musicPlayer,
+			board,
+			currentQuestion,
+			dispatch,
+			actions,
+		});
+	};
+
 	return state.gameController.gameStarted ? (
 		<TuneHomeScreen>
 			<TitleContainer>
@@ -125,6 +134,9 @@ export default function NameThatTune({ windowInstance }) {
 			</PlayerContainer>
 			{windowInstance === 'controlPanel' && (
 				<Controls>
+					<Button onClick={handleClickPrev}>
+						<H3>Prev song</H3>
+					</Button>
 					<Button
 						onClick={() =>
 							toggleReveal(!state.gameController.answerRevealed, {
@@ -142,25 +154,6 @@ export default function NameThatTune({ windowInstance }) {
 					</Button>
 				</Controls>
 			)}
-			{windowInstance === 'gameboard' && (
-				<ScoreBoardDiv>
-					{score.scoreBoard.map((scoreNum, scoreIndex) => {
-						return (
-							<ScoreCardDiv key={scoreIndex} index={scoreIndex}>
-								<ScoreH2>Player {scoreIndex + 1}</ScoreH2>
-								<div
-									style={{
-										display: 'flex',
-										margin: 'auto 0',
-									}}
-								>
-									<ScoreH1>{scoreNum}</ScoreH1>
-								</div>
-							</ScoreCardDiv>
-						);
-					})}
-				</ScoreBoardDiv>
-			)}
 			<ReactAudioPlayer
 				ref={musicPlayer}
 				volume={
@@ -172,6 +165,11 @@ export default function NameThatTune({ windowInstance }) {
 				volume={
 					(state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
 				}
+			/>
+			<ScoreOverlay
+				position='top'
+				score={score}
+				ScoreComponent={ScoreComponent}
 			/>
 		</TuneHomeScreen>
 	) : (

@@ -13,9 +13,9 @@ const TuneHomeScreen = styled.div`
 
 const TitleContainer = styled.div`
 	display: block;
-	height: 30%;
-	width: 85%;
-	margin: 1% auto auto;
+	position: relative;
+	top: 100px;
+	margin: auto;
 `;
 
 const H1 = styled.h1`
@@ -35,17 +35,6 @@ const Artist = styled(H2)`
 	display: ${(props) => (props.show ? 'block' : 'none')};
 `;
 
-const ScoreH1 = styled(H1)`
-	margin: auto;
-	font-size: 4rem;
-	color: #ddd;
-	text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.9);
-`;
-
-const ScoreH2 = styled(ScoreH1)`
-	font-size: 3rem;
-`;
-
 const H3 = styled(H1)`
 	font-size: 3rem;
 	color: #ddd;
@@ -56,19 +45,17 @@ const H3 = styled(H1)`
 
 const PlayerContainer = styled.div`
 	display: flex;
-	border: 1px solid gold;
 	border-radius: 1px;
-	height: 20%;
-	width: 25%;
-	margin: auto;
-	padding: 2%;
+	margin: 0 auto;
+	position: relative;
+	bottom: 180px;
 `;
 
 const AudioImg = styled.img`
-	height: 50px;
-	width: 50px;
+	height: 150px;
+	width: 150px;
 	cursor: pointer;
-	margin: auto;
+	margin: auto 80px;
 	border: 1px solid #edd607;
 	border-radius: 15px;
 	padding: 20px;
@@ -78,10 +65,12 @@ const AudioImg = styled.img`
 `;
 
 const Controls = styled.div`
+	position: absolute;
+	bottom: 0;
 	display: flex;
 	border-radius: 5px;
 	margin: auto;
-	width: 75%;
+	width: 100%;
 `;
 
 const Button = styled.div`
@@ -108,46 +97,6 @@ const Button = styled.div`
 	}
 `;
 
-const ScoreBoardDiv = styled.div`
-	display: flex;
-	width: 80%;
-	margin: auto;
-	justify-content: center;
-`;
-
-const ScoreCardDiv = styled.div`
-	display: flex;
-	flex-direction: column;
-	flex-basis: 240px;
-	padding: 2rem;
-	background: ${(props) =>
-		props.index === 0
-			? 'rgb(255,140,140)'
-			: props.index === 1
-			? 'rgb(255,254,140)'
-			: props.index === 2
-			? 'rgb(140,255,157)'
-			: props.index === 3
-			? 'rgb(140,146,255)'
-			: null};
-	background: ${(props) =>
-		props.index === 0
-			? 'linear-gradient(149deg, rgba(255, 140, 140, 0.7959558823529411) 0%,rgba(255, 94, 94, 0.804359243697479) 31%,	rgba(255, 63, 63, 0.8015581232492998) 56%, rgba(242, 30, 30, 0.804359243697479) 100%)'
-			: props.index === 1
-			? 'linear-gradient(149deg, rgba(255,254,140,0.7959558823529411) 0%, rgba(255,253,94,0.804359243697479) 31%, rgba(255,250,63,0.8015581232492998) 56%, rgba(242,236,30,0.804359243697479) 100%)'
-			: props.index === 2
-			? 'linear-gradient(149deg, rgba(140,255,157,0.7959558823529411) 0%, rgba(94,255,104,0.804359243697479) 31%, rgba(63,255,88,0.8015581232492998) 56%, rgba(30,242,51,0.804359243697479) 100%)'
-			: props.index === 3
-			? 'linear-gradient(149deg, rgba(140,146,255,0.7959558823529411) 0%, rgba(94,100,255,0.804359243697479) 31%, rgba(63,67,255,0.8015581232492998) 56%, rgba(40,30,242,0.804359243697479) 100%)'
-			: null};
-
-	text-align: center;
-	border: 1px solid black;
-	border-radius: 10px;
-	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
-	margin: 0 60px;
-`;
-
 export {
 	TuneHomeScreen,
 	TitleContainer,
@@ -155,13 +104,9 @@ export {
 	Title,
 	H2,
 	Artist,
-	ScoreH1,
-	ScoreH2,
 	H3,
 	PlayerContainer,
 	AudioImg,
 	Controls,
 	Button,
-	ScoreBoardDiv,
-	ScoreCardDiv,
 };

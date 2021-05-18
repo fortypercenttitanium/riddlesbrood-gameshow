@@ -62,4 +62,28 @@ const nextSong = ({
 	}
 };
 
-export { playPauseHandler, rewindHandler, toggleReveal, nextSong };
+const prevSong = ({
+	musicPlayer,
+	board,
+	currentQuestion,
+	dispatch,
+	actions,
+}) => {
+	const player = musicPlayer.current.audioEl.current;
+	const prevQuestionIndex =
+		board.findIndex((song) => song.title === currentQuestion.title) - 1;
+	if (prevQuestionIndex >= 0) {
+		player.load();
+		toggleReveal(false, { dispatch, actions });
+		dispatch({
+			type: actions.SET_QUESTION,
+			payload: board[prevQuestionIndex],
+		});
+		dispatch({
+			type: actions.SET_ANSWER,
+			payload: `${board[prevQuestionIndex].title} - ${board[prevQuestionIndex].artist}`,
+		});
+	}
+};
+
+export { playPauseHandler, rewindHandler, toggleReveal, nextSong, prevSong };

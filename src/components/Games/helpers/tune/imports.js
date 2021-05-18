@@ -8,11 +8,14 @@ import {
 	rewindHandler,
 	toggleReveal,
 	nextSong,
+	prevSong,
 } from './gameHelpers';
 import importAll from '../shared/importAll';
 import playButton from '../../../../assets/images/game_images/shared/play-button.png';
 import pauseButton from '../../../../assets/images/game_images/shared/pause-button.png';
 import rewindButton from '../../../../assets/images/game_images/shared/rewind-button.png';
+import ScoreOverlay from '../../gameComponents/ScoreOverlay';
+import ScoreComponent from './ScoreComponent';
 
 export {
 	initGame,
@@ -24,8 +27,11 @@ export {
 	rewindHandler,
 	toggleReveal,
 	nextSong,
+	prevSong,
 	importAll,
 	playButton,
 	pauseButton,
 	rewindButton,
+	ScoreOverlay,
+	ScoreComponent,
 };

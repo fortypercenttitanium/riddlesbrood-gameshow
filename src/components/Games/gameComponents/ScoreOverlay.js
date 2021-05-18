@@ -69,6 +69,7 @@ function ScoreOverlay({ ScoreComponent, position, score }) {
 			</div>
 		</ScoreOverlayContainer>
 	);
+
 	return position === 'corners' ? (
 		<ScoreOverlayContainer className='f pa'>
 			{score.scoreBoard.map((scoreNumber, index) => {
