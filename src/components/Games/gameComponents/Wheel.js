@@ -238,17 +238,20 @@ export default function Wheel({ windowInstance }) {
 				}
 			/>
 			{/* If game gets backgrund music, fix this */}
-			{state.gameController.bgMusic && state.gameController.gameStarted && (
-				<ReactAudioPlayer
-					ref={musicPlayer}
-					volume={
-						(state.audio.volume.master / 100) * (state.audio.volume.music / 100)
-					}
-					src=''
-					autoPlay
-					loop
-				/>
-			)}
+			{state.gameController.bgMusic &&
+				state.gameController.gameStarted &&
+				windowInstance === 'controlPanel' && (
+					<ReactAudioPlayer
+						ref={musicPlayer}
+						volume={
+							(state.audio.volume.master / 100) *
+							(state.audio.volume.music / 100)
+						}
+						src=''
+						autoPlay
+						loop
+					/>
+				)}
 		</WheelContainer>
 	) : (
 		<div />
