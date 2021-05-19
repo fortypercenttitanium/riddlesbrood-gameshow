@@ -12,6 +12,7 @@ import { StoreContext as StoreContextGB } from '../../../MainComponents/Gameboar
 import { actions } from '../../../../store/actions';
 import ReactAudioPlayer from 'react-audio-player';
 import { modalClick, openQuestion } from './gameHelpers';
+import bgMusic from '../../../../assets/sound_fx/bg_music/jeopardy.mp3';
 
 export {
 	questionOpenSound,
@@ -29,4 +30,5 @@ export {
 	openQuestion,
 	ScoreOverlay,
 	ScoreComponent,
+	bgMusic,
 };

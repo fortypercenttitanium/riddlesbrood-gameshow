@@ -5,6 +5,7 @@ import { StoreContext as StoreContextGB } from '../../../MainComponents/Gameboar
 import { actions } from '../../../../store/actions';
 import ReactAudioPlayer from 'react-audio-player';
 import { correctHandler, incorrectHandler, revealAnswer } from './gameHelpers';
+import bgMusic from '../../../../assets/sound_fx/bg_music/feud.mp3';
 
 export {
 	playSound,
@@ -16,4 +17,5 @@ export {
 	correctHandler,
 	incorrectHandler,
 	revealAnswer,
+	bgMusic,
 };

@@ -22,7 +22,9 @@ export default function VideoPlayer({ windowInstance }) {
 
 	const [currentVideoPlayer, setCurrentVideoPlayer] = useState(0);
 	const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-	const { state } = useContext(StoreContext);
+	const [musicVolumeRef, setMusicVolumeRef] = useState(50);
+
+	const { state, dispatch } = useContext(StoreContext);
 	const { audio, gameController } = state;
 
 	const video = useRef();
@@ -30,10 +32,10 @@ export default function VideoPlayer({ windowInstance }) {
 	const musicPlayer = useRef();
 
 	const allVideos = useMemo(() => [video, video2], [video, video2]);
-	const activeVideoPlayer = useMemo(() => allVideos[currentVideoPlayer], [
-		allVideos,
-		currentVideoPlayer,
-	]);
+	const activeVideoPlayer = useMemo(
+		() => allVideos[currentVideoPlayer],
+		[allVideos, currentVideoPlayer]
+	);
 	const inactiveVideoPlayer = useMemo(
 		() => allVideos[currentVideoPlayer === 0 ? 1 : 0],
 		[allVideos, currentVideoPlayer]
@@ -47,7 +49,11 @@ export default function VideoPlayer({ windowInstance }) {
 		musicPlayer.current.audioEl.current.pause();
 		musicPlayer.current.audioEl.current.load();
 		setIsVideoPlaying(false);
-	}, [allVideos]);
+		dispatch({
+			type: 'CHANGE_VOLUME',
+			payload: { type: 'music', level: musicVolumeRef },
+		});
+	}, [allVideos, dispatch, musicVolumeRef]);
 
 	useEffect(() => {
 		ipcRenderer.on('PLAY_VIDEO_RECEIVE', (_, payload) => {
@@ -55,6 +61,13 @@ export default function VideoPlayer({ windowInstance }) {
 				stopAllVideos();
 			} else {
 				const { file, callbackQueue, loop, song } = payload;
+
+				setMusicVolumeRef(audio.volume.music);
+				dispatch({
+					type: 'CHANGE_VOLUME',
+					payload: { type: 'music', level: 0 },
+				});
+
 				setIsVideoPlaying(true);
 				activeVideoPlayer.current.src = file;
 				activeVideoPlayer.current.play();
@@ -109,8 +122,10 @@ export default function VideoPlayer({ windowInstance }) {
 		activeVideoPlayer,
 		allVideos,
 		currentVideoPlayer,
+		dispatch,
 		inactiveVideoPlayer,
 		isVideoPlaying,
+		audio.volume.music,
 		stopAllVideos,
 	]);
 
@@ -166,8 +181,7 @@ export default function VideoPlayer({ windowInstance }) {
 				ref={musicPlayer}
 				volume={
 					windowInstance === 'gameboard'
-						? (state.audio.volume.master / 100) *
-						  (state.audio.volume.music / 100)
+						? (state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
 						: 0
 				}
 			/>

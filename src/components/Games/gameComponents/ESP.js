@@ -104,17 +104,22 @@ export default function ESP({ windowInstance }) {
 				</ScoreBoardDiv>
 			)}
 			<ReactAudioPlayer
-				ref={musicPlayer}
-				volume={
-					(state.audio.volume.master / 100) * (state.audio.volume.music / 100)
-				}
-			/>
-			<ReactAudioPlayer
 				ref={sfxPlayer}
 				volume={
 					(state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
 				}
 			/>
+			{state.gameController.bgMusic && state.gameController.gameStarted && (
+				<ReactAudioPlayer
+					ref={musicPlayer}
+					volume={
+						(state.audio.volume.master / 100) * (state.audio.volume.music / 100)
+					}
+					src=''
+					autoPlay
+					loop
+				/>
+			)}
 		</ESPHomeScreen>
 	) : (
 		<div />

@@ -4,6 +4,7 @@ import { StoreContext as StoreContextGB } from '../../../MainComponents/Gameboar
 import { actions } from '../../../../store/actions';
 import ReactAudioPlayer from 'react-audio-player';
 import { nextQuestion, previousQuestion, toggleDisplay } from './gameHelpers';
+import bgMusic from '../../../../assets/sound_fx/bg_music/couples.mp3';
 
 export {
 	initGame,
@@ -14,4 +15,5 @@ export {
 	nextQuestion,
 	previousQuestion,
 	toggleDisplay,
+	bgMusic,
 };

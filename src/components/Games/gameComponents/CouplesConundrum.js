@@ -18,6 +18,7 @@ import {
 	nextQuestion,
 	previousQuestion,
 	toggleDisplay,
+	bgMusic,
 } from '../helpers/couples/imports';
 
 export default function CouplesConundrum({ windowInstance }) {
@@ -44,6 +45,7 @@ export default function CouplesConundrum({ windowInstance }) {
 					type: 'team',
 					scoreBoard: [0, 0, 0, 0],
 				},
+				bgMusic: true,
 			};
 			initState.currentQuestion = initState.board[0];
 			initState.currentAnswer = initState.board[0];
@@ -153,17 +155,22 @@ export default function CouplesConundrum({ windowInstance }) {
 				</Controls>
 			)}
 			<ReactAudioPlayer
-				ref={musicPlayer}
-				volume={
-					(state.audio.volume.master / 100) * (state.audio.volume.music / 100)
-				}
-			/>
-			<ReactAudioPlayer
 				ref={sfxPlayer}
 				volume={
 					(state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
 				}
 			/>
+			{state.gameController.bgMusic && state.gameController.gameStarted && (
+				<ReactAudioPlayer
+					volume={
+						(state.audio.volume.master / 100) * (state.audio.volume.music / 100)
+					}
+					ref={musicPlayer}
+					src={bgMusic}
+					autoPlay
+					loop
+				/>
+			)}
 		</CouplesHomeScreen>
 	) : (
 		<div />

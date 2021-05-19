@@ -25,6 +25,7 @@ import {
 	openQuestion,
 	ScoreOverlay,
 	ScoreComponent,
+	bgMusic,
 } from '../helpers/jeopardy/imports';
 
 const videos = importAll(
@@ -48,6 +49,7 @@ export default function Jeopardy({ windowInstance }) {
 	useEffect(() => {
 		async function initialize() {
 			const newBoard = await initGame(state, 'jeopardy', 'board');
+			newBoard.bgMusic = true;
 			newBoard.board.forEach((category) => {
 				category.questions = category.questions.map((question) => {
 					if (question.type !== 'video') {
@@ -145,17 +147,25 @@ export default function Jeopardy({ windowInstance }) {
 				})}
 			</Board>
 			<ReactAudioPlayer
-				ref={musicPlayer}
-				volume={
-					(state.audio.volume.master / 100) * (state.audio.volume.music / 100)
-				}
-			/>
-			<ReactAudioPlayer
 				ref={sfxPlayer}
 				volume={
 					(state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
 				}
 			/>
+			{state.gameController.bgMusic &&
+				state.gameController.gameStarted &&
+				windowInstance === 'controlPanel' && (
+					<ReactAudioPlayer
+						ref={musicPlayer}
+						volume={
+							(state.audio.volume.master / 100) *
+							(state.audio.volume.music / 100)
+						}
+						src={bgMusic}
+						autoPlay
+						loop
+					/>
+				)}
 		</JeopardyContainer>
 	) : (
 		<div />

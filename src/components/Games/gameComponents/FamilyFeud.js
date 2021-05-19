@@ -25,6 +25,7 @@ import {
 	ReactAudioPlayer,
 	correctHandler,
 	incorrectHandler,
+	bgMusic,
 } from '../helpers/familyFeud/imports';
 import blueWrongIcon from '../../../assets/images/game_images/family_feud/ff-wrong-blue.png';
 import redWrongIcon from '../../../assets/images/game_images/family_feud/ff-wrong-red.png';
@@ -57,6 +58,7 @@ export default function FamilyFeud({ windowInstance }) {
 					team: '',
 					array: [],
 				},
+				bgMusic: true,
 			};
 			dispatch({
 				type: actions.INIT_GAME,
@@ -208,17 +210,22 @@ export default function FamilyFeud({ windowInstance }) {
 			</GameBoard>
 
 			<ReactAudioPlayer
-				ref={musicPlayer}
-				volume={
-					(state.audio.volume.master / 100) * (state.audio.volume.music / 100)
-				}
-			/>
-			<ReactAudioPlayer
 				ref={sfxPlayer}
 				volume={
 					(state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
 				}
 			/>
+			{state.gameController.bgMusic && state.gameController.gameStarted && (
+				<ReactAudioPlayer
+					ref={musicPlayer}
+					volume={
+						(state.audio.volume.master / 100) * (state.audio.volume.music / 100)
+					}
+					src={bgMusic}
+					autoPlay
+					loop
+				/>
+			)}
 		</FamilyFeudHomeScreen>
 	) : (
 		<div />
