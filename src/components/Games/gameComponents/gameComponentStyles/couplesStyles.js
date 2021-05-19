@@ -38,8 +38,8 @@ export const CouplesHomeScreen = styled.div`
 
 export const TitleContainer = styled.div`
 	display: block;
-	margin: 100px 200px 0;
-	line-height: 11rem;
+	margin: auto 200px;
+	line-height: 10.5rem;
 `;
 
 export const H1 = styled.h1`
@@ -50,7 +50,7 @@ export const H1 = styled.h1`
 export const Title = styled(H1)`
 	display: block;
 	color: lightgoldenrodyellow;
-	font-size: 10rem;
+	font-size: 8rem;
 	text-shadow: 4px 4px 4px rgba(0, 0, 0, 1);
 `;
 
