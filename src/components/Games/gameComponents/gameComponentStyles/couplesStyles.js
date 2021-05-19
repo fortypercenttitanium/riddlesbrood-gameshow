@@ -79,10 +79,10 @@ export const ControlPanelOverlay = styled.div`
 	right: 0;
 	z-index: 10;
 	.left-button {
-		margin: auto auto auto 24px;
+		margin: 24px auto auto 24px;
 	}
 	.right-button {
-		margin: auto 24px auto auto;
+		margin: 24px 24px auto auto;
 	}
 	.round-title {
 		position: absolute;
