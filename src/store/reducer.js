@@ -253,6 +253,16 @@ export const reducer = (state, { type, payload }) => {
 			return {
 				...payload,
 			};
+		case 'SET_GAME_ROUND':
+			return {
+				...state,
+				gameController: {
+					...state.gameController,
+					round: payload,
+					currentQuestion: state.gameController.board[payload][0],
+					currentAnswer: state.gameController.board[payload][0],
+				},
+			};
 		default:
 			return state;
 	}

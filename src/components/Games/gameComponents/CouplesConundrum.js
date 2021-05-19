@@ -8,6 +8,7 @@ import {
 	Controls,
 	Button,
 	ScoreCardDiv,
+	ControlPanelOverlay,
 } from './gameComponentStyles/couplesStyles';
 import {
 	initGame,
@@ -19,6 +20,7 @@ import {
 	previousQuestion,
 	toggleDisplay,
 	bgMusic,
+	changeRound,
 } from '../helpers/couples/imports';
 
 export default function CouplesConundrum({ windowInstance }) {
@@ -31,7 +33,7 @@ export default function CouplesConundrum({ windowInstance }) {
 
 	const { state, dispatch } = useContext(StoreContext);
 	const { gameController } = state;
-	const { board, currentQuestion, score, gameStarted, display } =
+	const { board, currentQuestion, score, gameStarted, display, round } =
 		gameController;
 
 	let musicPlayer = useRef();
@@ -45,10 +47,11 @@ export default function CouplesConundrum({ windowInstance }) {
 					type: 'team',
 					scoreBoard: [0, 0, 0, 0],
 				},
+				round: 0,
 				bgMusic: true,
 			};
-			initState.currentQuestion = initState.board[0];
-			initState.currentAnswer = initState.board[0];
+			initState.currentQuestion = initState.board[0][0];
+			initState.currentAnswer = initState.board[0][0];
 			dispatch({
 				type: actions.INIT_GAME,
 				payload: initState,
@@ -78,15 +81,20 @@ export default function CouplesConundrum({ windowInstance }) {
 	]);
 
 	const handleClickPrev = () => {
-		previousQuestion({ board, currentQuestion, dispatch, actions });
+		previousQuestion({ board, currentQuestion, dispatch, actions, round });
 	};
 
 	const handleClickNext = () => {
-		nextQuestion({ board, currentQuestion, dispatch, actions });
+		nextQuestion({ board, currentQuestion, dispatch, actions, round });
 	};
 
 	const handleClickDisplayToggle = () => {
-		toggleDisplay({ display: state.gameController.display, dispatch, actions });
+		toggleDisplay({ display, dispatch, actions });
+	};
+
+	const handleClickRoundButton = (e) => {
+		const newRound = Number(e.currentTarget.dataset.round);
+		changeRound({ newRound, dispatch });
 	};
 
 	function parseHeartClassNames(scoreBoard) {
@@ -120,8 +128,17 @@ export default function CouplesConundrum({ windowInstance }) {
 		return classNames;
 	}
 
+	const getBackground = () => {
+		if (display !== 'scores') {
+			return board[round].indexOf(currentQuestion) < 3
+				? 'radial-gradient(circle, rgba(213,150,150,1) 34%, rgba(255,198,206,1) 100%)'
+				: 'radial-gradient(circle, rgba(61,73,233,1) 34%, rgba(114,136,255,1) 100%)';
+		}
+		return null;
+	};
+
 	return state.gameController.gameStarted ? (
-		<CouplesHomeScreen display={display}>
+		<CouplesHomeScreen background={getBackground()}>
 			<div className='sparkle-overlay' />
 			{display === 'question' ? (
 				<TitleContainer>
@@ -142,17 +159,40 @@ export default function CouplesConundrum({ windowInstance }) {
 				})
 			)}
 			{windowInstance === 'controlPanel' && (
-				<Controls>
-					<Button onClick={handleClickPrev}>
-						<H3>Previous question</H3>
+				<ControlPanelOverlay>
+					<h1 className='round-title'>Round {round + 1}</h1>
+					<Button
+						onClick={handleClickRoundButton}
+						className='left-button'
+						data-round='0'
+					>
+						<H3>Round 1</H3>
 					</Button>
-					<Button onClick={handleClickDisplayToggle}>
-						<H3>Show {display === 'scores' ? 'question' : 'scores'}</H3>
+					<Button
+						onClick={handleClickRoundButton}
+						className='right-button'
+						data-round='1'
+					>
+						<H3>Round 2</H3>
 					</Button>
-					<Button onClick={handleClickNext}>
-						<H3>Next question</H3>
-					</Button>
-				</Controls>
+					<Controls>
+						<Button onClick={handleClickPrev}>
+							<H3>Previous question</H3>
+						</Button>
+						<Button onClick={handleClickDisplayToggle}>
+							<H3>Show {display === 'scores' ? 'question' : 'scores'}</H3>
+						</Button>
+						<Button onClick={handleClickNext}>
+							<H3>
+								{board[round].indexOf(currentQuestion) ===
+								board[round].length - 1
+									? 'Back to first'
+									: 'Next'}{' '}
+								question
+							</H3>
+						</Button>
+					</Controls>
+				</ControlPanelOverlay>
 			)}
 			<ReactAudioPlayer
 				ref={sfxPlayer}
@@ -160,17 +200,20 @@ export default function CouplesConundrum({ windowInstance }) {
 					(state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
 				}
 			/>
-			{state.gameController.bgMusic && state.gameController.gameStarted && (
-				<ReactAudioPlayer
-					volume={
-						(state.audio.volume.master / 100) * (state.audio.volume.music / 100)
-					}
-					ref={musicPlayer}
-					src={bgMusic}
-					autoPlay
-					loop
-				/>
-			)}
+			{state.gameController.bgMusic &&
+				state.gameController.gameStarted &&
+				windowInstance === 'controlPanel' && (
+					<ReactAudioPlayer
+						volume={
+							(state.audio.volume.master / 100) *
+							(state.audio.volume.music / 100)
+						}
+						ref={musicPlayer}
+						src={bgMusic}
+						autoPlay
+						loop
+					/>
+				)}
 		</CouplesHomeScreen>
 	) : (
 		<div />

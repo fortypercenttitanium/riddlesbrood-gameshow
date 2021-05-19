@@ -17,9 +17,9 @@ export const CouplesHomeScreen = styled.div`
 	}
 	font-family: Dobkin;
 	background: ${(props) =>
-		props.display === 'scores'
-			? `center/cover no-repeat url(${background})`
-			: 'radial-gradient(circle, rgba(139,139,139,1) 34%, rgba(32,32,32,1) 100%)'};
+		props.background
+			? props.background
+			: `center/cover no-repeat url(${background})`};
 	color: #ddd;
 	height: 100%;
 	width: 100%;
@@ -70,20 +70,58 @@ export const H3 = styled(H1)`
 	text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.9);
 `;
 
+export const ControlPanelOverlay = styled.div`
+	display: flex;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
+	.left-button {
+		margin: auto auto auto 24px;
+	}
+	.right-button {
+		margin: auto 24px auto auto;
+	}
+	.round-title {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		font-size: 6rem;
+		margin-top: 12px;
+		text-shadow: 4px 4px 4px black;
+	}
+`;
+
 export const Controls = styled.div`
 	display: flex;
 	position: absolute;
 	bottom: 0;
 	left: 0;
 	right: 0;
-	border-radius: 5px;
-	justify-content: center;
-	z-index: 10;
+	button {
+		position: absolute;
+		bottom: 0;
+	}
+	button:first-child {
+		left: 24px;
+		right: auto;
+	}
+	button:last-child {
+		left: auto;
+		right: 24px;
+	}
+	button:nth-child(2) {
+		margin: auto;
+		left: 0;
+		right: 0;
+	}
 `;
 
-export const Button = styled.div`
+export const Button = styled.button`
 	display: flex;
-	margin: auto;
 	border: 1px solid black;
 	background: rgb(72, 95, 145);
 	background: linear-gradient(
