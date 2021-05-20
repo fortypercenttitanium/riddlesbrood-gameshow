@@ -3,7 +3,6 @@ import {
 	TuneHomeScreen,
 	TitleContainer,
 	Title,
-	Artist,
 	H3,
 	PlayerContainer,
 	AudioImg,
@@ -32,7 +31,7 @@ import {
 const songs = importAll(
 	require.context(
 		'../../../assets/sound_fx/name_that_tune',
-		false,
+		true,
 		/\.mp3$|.wav$/
 	)
 );
@@ -56,7 +55,7 @@ export default function NameThatTune({ windowInstance }) {
 			initState = {
 				...initState,
 				currentQuestion: initState.board[0],
-				currentAnswer: `${initState.board[0].title} - ${initState.board[0].artist}`,
+				currentAnswer: initState.board[0].name,
 			};
 			dispatch({
 				type: actions.INIT_GAME,
@@ -113,16 +112,8 @@ export default function NameThatTune({ windowInstance }) {
 							windowInstance === 'controlPanel'
 					)}
 				>
-					{currentQuestion.title}
+					{currentQuestion.name}
 				</Title>
-				<Artist
-					show={Boolean(
-						state.gameController.answerRevealed ||
-							windowInstance === 'controlPanel'
-					)}
-				>
-					{currentQuestion.artist}
-				</Artist>
 			</TitleContainer>
 			<PlayerContainer>
 				<AudioImg onClick={handleClickRewind} src={rewindButton} alt='' />

@@ -31,10 +31,6 @@ const H2 = styled.h2`
 	font-size: 3.5rem;
 `;
 
-const Artist = styled(H2)`
-	display: ${(props) => (props.show ? 'block' : 'none')};
-`;
-
 const H3 = styled(H1)`
 	font-size: 3rem;
 	color: #ddd;
@@ -61,6 +57,9 @@ const AudioImg = styled.img`
 	padding: 20px;
 	&:hover {
 		background-color: #444;
+	}
+	&:active {
+		transform: scale(0.97);
 	}
 `;
 
@@ -103,7 +102,6 @@ export {
 	H1,
 	Title,
 	H2,
-	Artist,
 	H3,
 	PlayerContainer,
 	AudioImg,

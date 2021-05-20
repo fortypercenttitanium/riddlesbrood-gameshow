@@ -47,7 +47,7 @@ const nextSong = ({
 }) => {
 	const player = musicPlayer.current.audioEl.current;
 	const nextQuestionIndex =
-		board.findIndex((song) => song.title === currentQuestion.title) + 1;
+		board.findIndex((song) => song.name === currentQuestion.name) + 1;
 	if (nextQuestionIndex <= board.length - 1) {
 		player.load();
 		toggleReveal(false, { dispatch, actions });
@@ -57,7 +57,7 @@ const nextSong = ({
 		});
 		dispatch({
 			type: actions.SET_ANSWER,
-			payload: `${board[nextQuestionIndex].title} - ${board[nextQuestionIndex].artist}`,
+			payload: board[nextQuestionIndex].name,
 		});
 	}
 };
@@ -71,7 +71,7 @@ const prevSong = ({
 }) => {
 	const player = musicPlayer.current.audioEl.current;
 	const prevQuestionIndex =
-		board.findIndex((song) => song.title === currentQuestion.title) - 1;
+		board.findIndex((song) => song.name === currentQuestion.name) - 1;
 	if (prevQuestionIndex >= 0) {
 		player.load();
 		toggleReveal(false, { dispatch, actions });
@@ -81,7 +81,7 @@ const prevSong = ({
 		});
 		dispatch({
 			type: actions.SET_ANSWER,
-			payload: `${board[prevQuestionIndex].title} - ${board[prevQuestionIndex].artist}`,
+			payload: board[prevQuestionIndex].name,
 		});
 	}
 };
