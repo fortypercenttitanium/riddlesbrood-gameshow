@@ -23,10 +23,12 @@ const Board = styled.div`
 `;
 
 const Modal = styled.div`
-	height: 100%;
-	width: 100%;
 	z-index: 20;
 	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	font-family: impact;
 	color: #ddd;
 	background: linear-gradient(to top left, #000088, #0000ff);
@@ -81,13 +83,8 @@ const StyledSpan = styled.span`
 	display: ${(props) => props.display};
 `;
 
-const DailyDiv = styled.div`
-	height: 100%;
-	width: 100%;
-`;
-
 const DailyImg = styled.img`
-	width: 100%;
+	width: 1920px;
 `;
 
 const DecorContainer = styled.div`
@@ -109,7 +106,6 @@ export {
 	CatCell,
 	QCell,
 	StyledSpan,
-	DailyDiv,
 	DailyImg,
 	DecorContainer,
 };

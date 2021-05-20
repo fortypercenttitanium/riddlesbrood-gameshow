@@ -7,7 +7,6 @@ import {
 	CellContainer,
 	CatCell,
 	QCell,
-	DailyDiv,
 	DailyImg,
 	DecorContainer,
 } from './gameComponentStyles/jeopardyStyles';
@@ -108,9 +107,9 @@ export default function Jeopardy({ windowInstance }) {
 			<DecorContainer />
 			<Modal display={state.gameController.display} onClick={handleClickModal}>
 				{state.gameController.display === 'daily-double' && (
-					<DailyDiv>
+					<div>
 						<DailyImg src={dailyDoubleImage} alt='' />
-					</DailyDiv>
+					</div>
 				)}
 				<h2 className='question-text'>
 					{state.gameController.display === 'question' &&
