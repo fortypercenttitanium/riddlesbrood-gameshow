@@ -19,17 +19,14 @@ function NameThatTune({ setAssets, assets, handleSubmitAdd }) {
 	useEffect(() => {
 		// initialize content format
 		if (!isContentInitialized) {
-			setContent([{ title: '', artist: '', file: '', isPlaying: false }]);
+			setContent([{ name: '', file: '', isPlaying: false }]);
 			setAssets([]);
 			setIsContentInitialized(true);
 		}
 	}, [setContent, isContentInitialized, setAssets]);
 
 	const addSong = () => {
-		setContent([
-			...content,
-			{ title: '', artist: '', file: '', isPlaying: false },
-		]);
+		setContent([...content, { name: '', file: '', isPlaying: false }]);
 	};
 
 	const removeSong = (index) => {
@@ -40,15 +37,9 @@ function NameThatTune({ setAssets, assets, handleSubmitAdd }) {
 		}
 	};
 
-	const handleChangeTitle = (e, index) => {
+	const handleChangeName = (e, index) => {
 		const newContent = [...content];
-		newContent[index].title = e.target.value;
-		setContent(newContent);
-	};
-
-	const handleChangeArtist = (e, index) => {
-		const newContent = [...content];
-		newContent[index].artist = e.target.value;
+		newContent[index].name = e.target.value;
 		setContent(newContent);
 	};
 
@@ -88,32 +79,30 @@ function NameThatTune({ setAssets, assets, handleSubmitAdd }) {
 								</Fab>
 								<TextField
 									id='outlined-basic'
-									label={`Song #${index + 1} Artist`}
-									variant='outlined'
-									value={song.artist}
-									style={{ width: '15rem' }}
-									required
-									onChange={(e) => {
-										handleChangeArtist(e, index);
-									}}
-								/>
-								<TextField
-									id='outlined-basic'
-									label={`Song #${index + 1} Title`}
+									label={`Song #${index + 1} Name`}
 									variant='outlined'
 									value={song.title}
 									style={{ width: '15rem', margin: 'auto 2rem 0' }}
 									required
 									onChange={(e) => {
-										handleChangeTitle(e, index);
+										handleChangeName(e, index);
 									}}
 								/>
 							</CenteredDiv>
-							<CenteredDiv style={{ padding: 0 }}>
+							<CenteredDiv
+								style={{
+									padding: 0,
+								}}
+							>
 								<input
 									type='file'
 									label='Upload song file'
-									style={{ width: '30rem', margin: 'auto' }}
+									style={{
+										width: '400px',
+										margin: 'auto',
+										padding: '16px 32px',
+										borderBottom: '1px solid black',
+									}}
 									required
 									accept='.mp3,.wav'
 									onChange={(e) => handleChangeFile(e, index)}
