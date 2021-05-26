@@ -61,14 +61,14 @@ export default function ShowControls({ projectorMode }) {
 				data-video='five_min_intro.mp4'
 				data-callback='quick_intro.mp4'
 				onClick={handleClickVideo}
-				area='1 / 3 / 2 / 4'
+				area='1 / 2 / 2 / 3'
 			>
 				<Label>5 MIN INTRO</Label>
 			</Button>
 			<Button
 				data-video='quick_intro.mp4'
 				onClick={handleClickVideo}
-				area='1 / 2 / 2 / 3'
+				area='1 / 3 / 2 / 4'
 			>
 				<Label>QUICK INTRO</Label>
 			</Button>
