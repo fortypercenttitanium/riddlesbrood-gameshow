@@ -26,6 +26,7 @@ import {
 	rewindButton,
 	ScoreOverlay,
 	ScoreComponent,
+	shuffleArray,
 } from '../helpers/tune/imports';
 
 const songs = importAll(
@@ -52,14 +53,23 @@ export default function NameThatTune({ windowInstance }) {
 	useEffect(() => {
 		async function initialize() {
 			let initState = { ...(await initGame(state, 'nameThatTune', 'board')) };
+
+			// shuffle the board
+			initState.board = shuffleArray(initState.board);
+
 			initState = {
 				...initState,
 				currentQuestion: initState.board[0],
 				currentAnswer: initState.board[0].name,
 			};
+
 			dispatch({
 				type: actions.INIT_GAME,
 				payload: initState,
+			});
+			dispatch({
+				type: actions.CHANGE_VOLUME,
+				payload: { type: 'music', level: 50 },
 			});
 		}
 		if (!state.gameController.gameStarted) {

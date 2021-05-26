@@ -10,6 +10,7 @@ import {
 	nextSong,
 	prevSong,
 } from './gameHelpers';
+import shuffleArray from './shuffleArray';
 import importAll from '../shared/importAll';
 import playButton from '../../../../assets/images/game_images/shared/play-button.png';
 import pauseButton from '../../../../assets/images/game_images/shared/pause-button.png';
@@ -34,4 +35,5 @@ export {
 	rewindButton,
 	ScoreOverlay,
 	ScoreComponent,
+	shuffleArray,
 };
