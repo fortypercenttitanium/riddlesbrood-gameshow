@@ -34,7 +34,7 @@ const openQuestion = (
 		} else if (question.type === 'video') {
 			ipcRenderer.send('PLAY_VIDEO_SEND', { file: question.question });
 		} else {
-			dispatch({ type: actions.SET_TIMER, payload: 13 });
+			dispatch({ type: actions.SET_TIMER, payload: 17 });
 			dispatch({ type: actions.RUN_TIMER });
 			playSound(questionOpenSound, 'sfx', { sfxPlayer, musicPlayer });
 		}
@@ -52,7 +52,7 @@ const modalClick = ({ state, dispatch, sfxPlayer, musicPlayer }) => {
 		} else {
 			changeGameDisplay('question', { dispatch, actions });
 			playSound(questionOpenSound, 'sfx', { sfxPlayer, musicPlayer });
-			dispatch({ type: actions.SET_TIMER, payload: 13 });
+			dispatch({ type: actions.SET_TIMER, payload: 17 });
 			dispatch({ type: actions.RUN_TIMER });
 		}
 	} else if (state.gameController.display === 'question') {

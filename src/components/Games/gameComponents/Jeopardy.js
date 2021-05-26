@@ -93,6 +93,21 @@ export default function Jeopardy({ windowInstance }) {
 		});
 	};
 
+	// duck music volume
+	useEffect(() => {
+		if (state.gameController.display === 'board') {
+			return dispatch({
+				type: 'CHANGE_VOLUME',
+				payload: { type: 'music', level: 20 },
+			});
+		}
+
+		return dispatch({
+			type: 'CHANGE_VOLUME',
+			payload: { type: 'music', level: 50 },
+		});
+	}, [state.gameController.display, dispatch]);
+
 	const handleClickModal = () => {
 		modalClick({ state, dispatch, sfxPlayer, musicPlayer });
 	};
