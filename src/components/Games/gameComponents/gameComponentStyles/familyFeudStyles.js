@@ -107,7 +107,7 @@ const FlippableH3 = styled.h3`
 const Span = styled.span`
 	margin: auto;
 	padding: 3%;
-	font-size: 3.8rem;
+	font-size: 3.6rem;
 	line-height: 4.5rem;
 	font-weight: bold;
 	text-shadow: 2px 2px 2px #666;
