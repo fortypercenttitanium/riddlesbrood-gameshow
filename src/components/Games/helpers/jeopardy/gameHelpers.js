@@ -32,7 +32,10 @@ const openQuestion = (
 				musicPlayer,
 			});
 		} else if (question.type === 'video') {
-			ipcRenderer.send('PLAY_VIDEO_SEND', { file: question.question });
+			ipcRenderer.send('PLAY_VIDEO_SEND', {
+				file: question.question,
+				isJeopardyQuestion: true,
+			});
 		} else {
 			dispatch({ type: actions.SET_TIMER, payload: 17 });
 			dispatch({ type: actions.RUN_TIMER });
@@ -48,6 +51,7 @@ const modalClick = ({ state, dispatch, sfxPlayer, musicPlayer }) => {
 			dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: 'question' });
 			ipcRenderer.send('PLAY_VIDEO_SEND', {
 				file: state.gameController.currentQuestion.question,
+				isJeopardyQuestion: true,
 			});
 		} else {
 			changeGameDisplay('question', { dispatch, actions });

@@ -60,7 +60,7 @@ export default function VideoPlayer({ windowInstance }) {
 			if (isVideoPlaying) {
 				stopAllVideos();
 			} else {
-				const { file, callbackQueue, loop, song } = payload;
+				const { file, callbackQueue, loop, song, isJeopardyQuestion } = payload;
 
 				setMusicVolumeRef(audio.volume.music);
 				dispatch({
@@ -73,13 +73,19 @@ export default function VideoPlayer({ windowInstance }) {
 				activeVideoPlayer.current.play();
 				activeVideoPlayer.current.loop = loop;
 				activeVideoPlayer.current.onended = () => {
-					callbackQueue
-						? playNextVideo(
-								callbackQueue.slice(1),
-								inactiveVideoPlayer,
-								callbackQueue[0].song
-						  )
-						: stopAllVideos();
+					if (callbackQueue && callbackQueue.length) {
+						return playNextVideo(
+							callbackQueue.slice(1),
+							inactiveVideoPlayer,
+							callbackQueue[0].song
+						);
+					}
+
+					if (isJeopardyQuestion) {
+						dispatch({ type: 'SET_TIMER', payload: 17 });
+						dispatch({ type: 'RUN_TIMER' });
+					}
+					stopAllVideos();
 				};
 
 				if (callbackQueue && callbackQueue.length) {
