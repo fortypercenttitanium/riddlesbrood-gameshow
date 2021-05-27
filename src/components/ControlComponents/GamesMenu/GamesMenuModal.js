@@ -70,6 +70,7 @@ export default function GamesMenuModal() {
 				dispatch({ type: 'SET_GAME', payload: selectedGame });
 			}, 1000);
 		} else {
+			ipcRenderer.send('STOP_VIDEO_SEND');
 			dispatch({ type: 'RESET_GAME' });
 			dispatch({ type: 'GO_TO_VERSION_SELECT', payload: selectedGame });
 		}
