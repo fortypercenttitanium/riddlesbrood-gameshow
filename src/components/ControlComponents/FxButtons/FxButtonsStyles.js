@@ -7,7 +7,7 @@ const FxButtonsDiv = styled.div`
 	display: grid;
 	grid-gap: 5px;
 	grid-template-columns: repeat(3, 134px);
-	grid-template-rows: repeat(3, 104px);
+	grid-template-rows: repeat(3, 102px);
 	margin: 2px 2px;
 `;
 
