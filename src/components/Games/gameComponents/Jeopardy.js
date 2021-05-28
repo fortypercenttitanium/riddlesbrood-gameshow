@@ -94,8 +94,9 @@ export default function Jeopardy({ windowInstance }) {
 	};
 
 	// duck music volume
+
 	useEffect(() => {
-		if (state.gameController.display === 'board') {
+		if (state.gameController.display !== 'board') {
 			return dispatch({
 				type: 'CHANGE_VOLUME',
 				payload: { type: 'music', level: 20 },
