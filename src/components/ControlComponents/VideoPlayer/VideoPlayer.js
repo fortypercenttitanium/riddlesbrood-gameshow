@@ -31,6 +31,27 @@ export default function VideoPlayer({ windowInstance }) {
 	const video2 = useRef();
 	const musicPlayer = useRef();
 
+	useEffect(() => {
+		console.log(musicVolumeRef);
+	}, [musicVolumeRef]);
+
+	const duckVolume = useCallback(() => {
+		return dispatch({
+			type: 'CHANGE_VOLUME',
+			payload: { type: 'music', level: 0 },
+		});
+	}, [dispatch]);
+
+	const restoreVolume = useCallback(
+		(volumeRef = musicVolumeRef) => {
+			return dispatch({
+				type: 'CHANGE_VOLUME',
+				payload: { type: 'music', level: volumeRef },
+			});
+		},
+		[musicVolumeRef, dispatch]
+	);
+
 	const allVideos = useMemo(() => [video, video2], [video, video2]);
 	const activeVideoPlayer = useMemo(
 		() => allVideos[currentVideoPlayer],
@@ -41,19 +62,19 @@ export default function VideoPlayer({ windowInstance }) {
 		[allVideos, currentVideoPlayer]
 	);
 
-	const stopAllVideos = useCallback(() => {
-		allVideos.forEach((video) => {
-			video.current.pause();
-			video.current.load();
-		});
-		musicPlayer.current.audioEl.current.pause();
-		musicPlayer.current.audioEl.current.load();
-		setIsVideoPlaying(false);
-		dispatch({
-			type: 'CHANGE_VOLUME',
-			payload: { type: 'music', level: musicVolumeRef },
-		});
-	}, [allVideos, dispatch, musicVolumeRef]);
+	const stopAllVideos = useCallback(
+		(volumeRef) => {
+			allVideos.forEach((video) => {
+				video.current.pause();
+				video.current.load();
+			});
+			musicPlayer.current.audioEl.current.pause();
+			musicPlayer.current.audioEl.current.load();
+			setIsVideoPlaying(false);
+			restoreVolume(volumeRef);
+		},
+		[allVideos, restoreVolume]
+	);
 
 	useEffect(() => {
 		ipcRenderer.on('PLAY_VIDEO_RECEIVE', (_, payload) => {
@@ -62,12 +83,11 @@ export default function VideoPlayer({ windowInstance }) {
 			} else {
 				const { file, callbackQueue, loop, song, isJeopardyQuestion } = payload;
 
-				setMusicVolumeRef(audio.volume.music);
-				dispatch({
-					type: 'CHANGE_VOLUME',
-					payload: { type: 'music', level: 0 },
-				});
+				const currentMusicVolume = audio.volume.music;
 
+				// to update the STOP_VIDEO_RECEIVE callback
+				setMusicVolumeRef(currentMusicVolume);
+				duckVolume();
 				setIsVideoPlaying(true);
 				activeVideoPlayer.current.src = file;
 				activeVideoPlayer.current.play();
@@ -85,7 +105,7 @@ export default function VideoPlayer({ windowInstance }) {
 						dispatch({ type: 'SET_TIMER', payload: 17 });
 						dispatch({ type: 'RUN_TIMER' });
 					}
-					stopAllVideos();
+					stopAllVideos(currentMusicVolume);
 				};
 
 				if (callbackQueue && callbackQueue.length) {
@@ -133,6 +153,7 @@ export default function VideoPlayer({ windowInstance }) {
 		isVideoPlaying,
 		audio.volume.music,
 		stopAllVideos,
+		duckVolume,
 	]);
 
 	useEffect(() => {

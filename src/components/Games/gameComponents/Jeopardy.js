@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
 	JeopardyContainer,
 	Modal,
@@ -83,6 +83,26 @@ export default function Jeopardy({ windowInstance }) {
 		}
 	}, [state.gameController.timer.time, dispatch]);
 
+	// duck music volume
+
+	const [musicVolumeRef, setMusicVolumeRef] = useState(50);
+
+	const duckVolume = () => {
+		setMusicVolumeRef(state.audio.volume.music);
+
+		return dispatch({
+			type: 'CHANGE_VOLUME',
+			payload: { type: 'music', level: 0 },
+		});
+	};
+
+	const restoreVolume = () => {
+		return dispatch({
+			type: 'CHANGE_VOLUME',
+			payload: { type: 'music', level: musicVolumeRef },
+		});
+	};
+
 	const handleClickBoard = (question, categoryIndex, questionIndex) => {
 		openQuestion(question, categoryIndex, questionIndex, {
 			state,
@@ -90,27 +110,18 @@ export default function Jeopardy({ windowInstance }) {
 			actions,
 			sfxPlayer,
 			musicPlayer,
+			duckVolume,
 		});
 	};
 
-	// duck music volume
-
-	useEffect(() => {
-		if (state.gameController.display !== 'board') {
-			return dispatch({
-				type: 'CHANGE_VOLUME',
-				payload: { type: 'music', level: 0 },
-			});
-		}
-
-		return dispatch({
-			type: 'CHANGE_VOLUME',
-			payload: { type: 'music', level: 50 },
-		});
-	}, [state.gameController.display, dispatch]);
-
 	const handleClickModal = () => {
-		modalClick({ state, dispatch, sfxPlayer, musicPlayer });
+		modalClick({
+			state,
+			dispatch,
+			sfxPlayer,
+			musicPlayer,
+			restoreVolume,
+		});
 	};
 
 	return state.gameController.gameStarted ? (

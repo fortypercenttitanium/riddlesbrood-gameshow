@@ -14,9 +14,10 @@ const openQuestion = (
 	question,
 	categoryIndex,
 	questionIndex,
-	{ state, dispatch, actions, sfxPlayer, musicPlayer }
+	{ state, dispatch, actions, sfxPlayer, musicPlayer, duckVolume }
 ) => {
 	if (!question.completed) {
+		duckVolume();
 		const board = [...state.gameController.board];
 		board[categoryIndex].questions[questionIndex].completed = true;
 		dispatch({ type: actions.SET_QUESTION, payload: question });
@@ -44,10 +45,15 @@ const openQuestion = (
 	}
 };
 
-const modalClick = ({ state, dispatch, sfxPlayer, musicPlayer }) => {
+const modalClick = ({
+	state,
+	dispatch,
+	sfxPlayer,
+	musicPlayer,
+	restoreVolume,
+}) => {
 	if (state.gameController.display === 'daily-double') {
 		if (state.gameController.currentQuestion.type === 'video') {
-			// changeGameDisplay('question', { dispatch, actions });
 			dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: 'question' });
 			ipcRenderer.send('PLAY_VIDEO_SEND', {
 				file: state.gameController.currentQuestion.question,
@@ -63,6 +69,7 @@ const modalClick = ({ state, dispatch, sfxPlayer, musicPlayer }) => {
 		dispatch({ type: actions.KILL_TIMER });
 		changeGameDisplay('answer', { dispatch, actions });
 	} else {
+		restoreVolume();
 		changeGameDisplay('board', { dispatch, actions });
 	}
 };
