@@ -31,10 +31,6 @@ export default function VideoPlayer({ windowInstance }) {
 	const video2 = useRef();
 	const musicPlayer = useRef();
 
-	useEffect(() => {
-		console.log(musicVolumeRef);
-	}, [musicVolumeRef]);
-
 	const duckVolume = useCallback(() => {
 		return dispatch({
 			type: 'CHANGE_VOLUME',
@@ -43,10 +39,16 @@ export default function VideoPlayer({ windowInstance }) {
 	}, [dispatch]);
 
 	const restoreVolume = useCallback(
-		(volumeRef = musicVolumeRef) => {
+		(volumeRef) => {
+			const volumeLevel =
+				typeof volumeRef === 'number' ? volumeRef : musicVolumeRef;
+
 			return dispatch({
 				type: 'CHANGE_VOLUME',
-				payload: { type: 'music', level: volumeRef },
+				payload: {
+					type: 'music',
+					level: volumeLevel,
+				},
 			});
 		},
 		[musicVolumeRef, dispatch]
@@ -97,7 +99,8 @@ export default function VideoPlayer({ windowInstance }) {
 						return playNextVideo(
 							callbackQueue.slice(1),
 							inactiveVideoPlayer,
-							callbackQueue[0].song
+							callbackQueue[0].song,
+							currentMusicVolume
 						);
 					}
 
@@ -121,7 +124,7 @@ export default function VideoPlayer({ windowInstance }) {
 			}
 		});
 
-		function playNextVideo(callbackQueue, player, song) {
+		function playNextVideo(callbackQueue, player, song, currentMusicVolume) {
 			if (callbackQueue.length) {
 				const nextPlayer = allVideos.find((vid) => vid !== player);
 				nextPlayer.current.src = callbackQueue[0].file;
@@ -130,10 +133,11 @@ export default function VideoPlayer({ windowInstance }) {
 					playNextVideo(
 						callbackQueue.slice(1),
 						nextPlayer,
-						callbackQueue[0].song
+						callbackQueue[0].song,
+						currentMusicVolume
 					);
 			} else {
-				player.current.onended = stopAllVideos;
+				player.current.onended = () => stopAllVideos(currentMusicVolume);
 			}
 			player.current.play();
 			if (song) {
