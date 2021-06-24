@@ -38,7 +38,7 @@ const openQuestion = (
 				isJeopardyQuestion: true,
 			});
 		} else {
-			dispatch({ type: actions.SET_TIMER, payload: 17 });
+			dispatch({ type: actions.SET_TIMER, payload: 15 });
 			dispatch({ type: actions.RUN_TIMER });
 			playSound(questionOpenSound, 'sfx', { sfxPlayer, musicPlayer });
 		}
@@ -62,7 +62,7 @@ const modalClick = ({
 		} else {
 			changeGameDisplay('question', { dispatch, actions });
 			playSound(questionOpenSound, 'sfx', { sfxPlayer, musicPlayer });
-			dispatch({ type: actions.SET_TIMER, payload: 17 });
+			dispatch({ type: actions.SET_TIMER, payload: 15 });
 			dispatch({ type: actions.RUN_TIMER });
 		}
 	} else if (state.gameController.display === 'question') {
