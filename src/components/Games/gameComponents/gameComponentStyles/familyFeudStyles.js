@@ -102,6 +102,7 @@ const FlippableH3 = styled.h3`
 	transform: ${(props) =>
 		props.revealed ? 'rotateX(-180deg)' : 'rotateX(0deg)'};
 	color: yellow;
+	text-shadow: 3px 3px 3px #000;
 `;
 
 const Span = styled.span`
@@ -131,17 +132,7 @@ const AnswerContainer = styled.div`
 	display: flex;
 	cursor: pointer;
 	transform-style: preserve-3d;
-	background: linear-gradient(
-		to bottom,
-		#cedbe9 0%,
-		#aac5de 17%,
-		#6199c7 50%,
-		#3a84c3 51%,
-		#419ad6 59%,
-		#4bb8f0 71%,
-		#3a8bc2 84%,
-		#26558b 100%
-	);
+	background: radial-gradient(#26558b 0%, #4bb8f0 100%);
 	transform: ${(props) =>
 		props.side === 'front'
 			? 'perspective(200px) rotateX(0deg)'
