@@ -49,8 +49,9 @@ export const H1 = styled.h1`
 
 export const Title = styled(H1)`
 	display: block;
+	margin: 0 auto;
 	color: lightgoldenrodyellow;
-	font-size: 8rem;
+	font-size: 7rem;
 	text-shadow: 4px 4px 4px rgba(0, 0, 0, 1);
 `;
 
@@ -136,6 +137,7 @@ export const Button = styled.button`
 	cursor: pointer;
 	border-radius: 10px;
 	box-shadow: 2px 2px 2px rgba(40, 40, 40, 0.5);
+	z-index: 9999;
 	&:active {
 		transform: scale(0.95);
 	}

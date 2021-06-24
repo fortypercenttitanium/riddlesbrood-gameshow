@@ -33,8 +33,15 @@ export default function CouplesConundrum({ windowInstance }) {
 
 	const { state, dispatch } = useContext(StoreContext);
 	const { gameController } = state;
-	const { board, currentQuestion, score, gameStarted, display, round } =
-		gameController;
+	const {
+		board,
+		currentQuestion,
+		currentAnswer,
+		score,
+		gameStarted,
+		display,
+		round,
+	} = gameController;
 
 	let musicPlayer = useRef();
 	let sfxPlayer = useRef();
@@ -63,22 +70,13 @@ export default function CouplesConundrum({ windowInstance }) {
 	}, [dispatch, state, gameStarted]);
 
 	useEffect(() => {
-		if (
-			gameStarted &&
-			state.gameController.currentAnswer !==
-				state.gameController.currentQuestion
-		) {
+		if (gameStarted && currentAnswer !== currentQuestion) {
 			dispatch({
 				type: actions.SET_ANSWER,
-				payload: state.gameController.currentQuestion,
+				payload: currentQuestion,
 			});
 		}
-	}, [
-		gameStarted,
-		state.gameController.currentQuestion,
-		state.gameController.currentAnswer,
-		dispatch,
-	]);
+	}, [gameStarted, currentQuestion, currentAnswer, dispatch, board, round]);
 
 	const handleClickPrev = () => {
 		previousQuestion({ board, currentQuestion, dispatch, actions, round });
@@ -130,19 +128,27 @@ export default function CouplesConundrum({ windowInstance }) {
 
 	const getBackground = () => {
 		if (display !== 'scores') {
-			return board[round].indexOf(currentQuestion) < 3
+			return board[round].indexOf(currentQuestion) < board[round].length / 2
 				? 'radial-gradient(circle, rgba(213,150,150,1) 34%, rgba(255,198,206,1) 100%)'
 				: 'radial-gradient(circle, rgba(61,73,233,1) 34%, rgba(114,136,255,1) 100%)';
 		}
 		return null;
 	};
 
+	const getQuestionNumber = ({ board, round, currentQuestion }) =>
+		board[round].indexOf(currentQuestion) + 1 <= board[round].length / 2
+			? board[round].indexOf(currentQuestion) + 1
+			: board[round].indexOf(currentQuestion) + 1 - board[round].length / 2;
+
 	return state.gameController.gameStarted ? (
 		<CouplesHomeScreen background={getBackground()}>
 			<div className='sparkle-overlay' />
 			{display === 'question' ? (
 				<TitleContainer>
-					<Title>{currentQuestion}</Title>
+					<Title style={{ marginBottom: '0' }}>
+						Question #{getQuestionNumber({ board, round, currentQuestion })}
+					</Title>
+					<Title style={{ marginTop: '0' }}>{currentQuestion}</Title>
 				</TitleContainer>
 			) : (
 				score.scoreBoard.map((scoreNum, scoreIndex) => {
