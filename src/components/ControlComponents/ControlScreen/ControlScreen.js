@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
 import LogoScreen from '../LogoScreen/LogoScreen';
+import CustomMessageScreen from '../CustomMessageScreen/CustomMessageScreen';
 import { ControlScreenContainer } from './ControlScreenStyles';
 import * as Games from '../../Games/helpers/shared/gamesArray';
 import { StoreContext as StoreContextCP } from '../../../store/context';
@@ -16,7 +17,7 @@ export default function ControlScreen({ windowInstance }) {
 	}
 
 	const { state } = useContext(StoreContext);
-	const { currentGame, timeline } = state;
+	const { currentGame, timeline, customPreshowMessage } = state;
 
 	const {
 		Jeopardy,
@@ -47,6 +48,9 @@ export default function ControlScreen({ windowInstance }) {
 			className={windowInstance === 'controlPanel' && 'preview-screen'}
 		>
 			{timeline === 'app-open' ? <LogoScreen /> : null}
+			{timeline === 'custom-message-preshow' && (
+				<CustomMessageScreen message={customPreshowMessage} />
+			)}
 			{timeline === 'in-game' ? components[currentGame.title] : null}
 			<VideoPlayer windowInstance={windowInstance} />
 		</ControlScreenContainer>

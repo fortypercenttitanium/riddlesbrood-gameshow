@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import projector from '../../../assets/images/icons/projector.png';
 import {
 	ShowControlsDiv,
@@ -27,6 +27,16 @@ const commercialVideos = Object.values(
 export default function ShowControls({ projectorMode }) {
 	const { state, dispatch } = useContext(StoreContext);
 	const [currentCommercial, setCurrentCommercial] = useState(0);
+
+	// set preloaded custom message
+	useEffect(() => {
+		ipcRenderer
+			.invoke('GET_CUSTOM_PRESHOW_MESSAGE')
+			.then((message) =>
+				dispatch({ type: 'SET_CUSTOM_PRESHOW_MESSAGE', payload: message })
+			)
+			.catch((err) => console.error(err));
+	}, [dispatch]);
 
 	const handleClickVideo = (e) => {
 		ipcRenderer.send('PLAY_VIDEO_SEND', {
@@ -68,11 +78,16 @@ export default function ShowControls({ projectorMode }) {
 
 			// if prompt cancelled, leave message as-is
 			if (message !== null) {
+				ipcRenderer.send('SET_CUSTOM_PRESHOW_MESSAGE', message);
 				dispatch({ type: 'SET_CUSTOM_PRESHOW_MESSAGE', payload: message });
 			}
 		} catch (err) {
 			console.error(err);
 		}
+	};
+
+	const handleCustomMessageClick = () => {
+		dispatch({ type: 'SHOW_CUSTOM_MESSAGE' });
 	};
 
 	return (
@@ -81,7 +96,10 @@ export default function ShowControls({ projectorMode }) {
 				<HalfButton onClick={handleClickPreshow}>
 					<Label>Preshow</Label>
 				</HalfButton>
-				<HalfButton onClick={() => {}} onContextMenu={handleContext}>
+				<HalfButton
+					onClick={handleCustomMessageClick}
+					onContextMenu={handleContext}
+				>
 					<AltLabel>
 						{state.customPreshowMessage ||
 							'Right-click to set custom preshow message'}

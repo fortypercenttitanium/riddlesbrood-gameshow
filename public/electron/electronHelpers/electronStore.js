@@ -49,6 +49,7 @@ const store = new Store({
 				type: null,
 			},
 		],
+		custom_preshow_message: '',
 	},
 });
 

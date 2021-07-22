@@ -268,6 +268,11 @@ export const reducer = (state, { type, payload }) => {
 				...state,
 				customPreshowMessage: payload,
 			};
+		case 'SHOW_CUSTOM_MESSAGE':
+			return {
+				...state,
+				timeline: 'custom-message-preshow',
+			};
 		default:
 			return state;
 	}

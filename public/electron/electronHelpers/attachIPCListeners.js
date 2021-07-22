@@ -135,4 +135,12 @@ module.exports = function attachIPCListeners() {
 	ipcMain.on('SET_FX_BUTTONS', (_, fx_buttons) => {
 		store.set('fx_buttons', fx_buttons);
 	});
+
+	ipcMain.handle('GET_CUSTOM_PRESHOW_MESSAGE', () => {
+		return store.get('custom_preshow_message');
+	});
+
+	ipcMain.on('SET_CUSTOM_PRESHOW_MESSAGE', (_, message) => {
+		store.set('custom_preshow_message', message);
+	});
 };
