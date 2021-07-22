@@ -116,12 +116,7 @@ export default function NameThatTune({ windowInstance }) {
 	return state.gameController.gameStarted ? (
 		<TuneHomeScreen>
 			<TitleContainer>
-				<Title
-					show={Boolean(
-						state.gameController.answerRevealed ||
-							windowInstance === 'controlPanel'
-					)}
-				>
+				<Title show={Boolean(state.gameController.answerRevealed)}>
 					{currentQuestion.name}
 				</Title>
 			</TitleContainer>
@@ -146,9 +141,7 @@ export default function NameThatTune({ windowInstance }) {
 							})
 						}
 					>
-						<H3>
-							{state.gameController.answerRevealed ? 'Unreveal' : 'Reveal'}
-						</H3>
+						<H3>{state.gameController.answerRevealed ? 'Hide' : 'Reveal'}</H3>
 					</Button>
 					<Button onClick={handleClickNext}>
 						<H3>Next song</H3>
