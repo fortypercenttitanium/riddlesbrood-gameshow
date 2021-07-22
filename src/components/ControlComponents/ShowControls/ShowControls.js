@@ -6,6 +6,7 @@ import {
 	Label,
 	ProjectorImage,
 	HalfButton,
+	AltLabel,
 } from './ShowControlsStyles';
 import { StoreContext } from '../../../store/context';
 import importAll from '../../Games/helpers/shared/importAll';
@@ -24,7 +25,7 @@ const commercialVideos = Object.values(
 );
 
 export default function ShowControls({ projectorMode }) {
-	const { dispatch } = useContext(StoreContext);
+	const { state, dispatch } = useContext(StoreContext);
 	const [currentCommercial, setCurrentCommercial] = useState(0);
 
 	const handleClickVideo = (e) => {
@@ -53,14 +54,38 @@ export default function ShowControls({ projectorMode }) {
 		setCurrentCommercial(nextCommercial);
 	};
 
+	const handleContext = async () => {
+		try {
+			const options = {
+				title: 'Enter custom message',
+				label: 'Cancel button will leave message as is.',
+				value: state.customPreshowMessage || '',
+				height: 200,
+				width: 400,
+			};
+
+			const message = await ipcRenderer.invoke('PROMPT', { options });
+
+			// if prompt cancelled, leave message as-is
+			if (message !== null) {
+				dispatch({ type: 'SET_CUSTOM_PRESHOW_MESSAGE', payload: message });
+			}
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
 	return (
 		<ShowControlsDiv>
 			<div className='split-button'>
 				<HalfButton onClick={handleClickPreshow}>
 					<Label>Preshow</Label>
 				</HalfButton>
-				<HalfButton onClick={handleClickPreshow}>
-					<Label>Preshow</Label>
+				<HalfButton onClick={() => {}} onContextMenu={handleContext}>
+					<AltLabel>
+						{state.customPreshowMessage ||
+							'Right-click to set custom preshow message'}
+					</AltLabel>
 				</HalfButton>
 			</div>
 			<Button

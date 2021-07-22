@@ -74,10 +74,14 @@ const Label = styled.h2`
 	overflow-wrap: break-word;
 `;
 
+const AltLabel = styled(Label)`
+	font-size: 12px;
+`;
+
 const ProjectorImage = styled.img`
 	height: 80px;
 	margin: auto;
 	user-select: none;
 `;
 
-export { ShowControlsDiv, Button, Label, ProjectorImage, HalfButton };
+export { ShowControlsDiv, Button, Label, ProjectorImage, HalfButton, AltLabel };

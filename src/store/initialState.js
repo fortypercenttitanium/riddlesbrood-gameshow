@@ -36,4 +36,5 @@ export const initialState = {
 		board: [],
 		gameStarted: false,
 	},
+	customPreshowMessage: '',
 };

@@ -8,6 +8,7 @@ const getGameVersions = require('./getGameVersions');
 const storeGameVersion = require('./storeGameVersion');
 const deleteGameVersion = require('./deleteGameVersion');
 const store = require('./electronStore');
+const prompt = require('electron-prompt');
 
 const readFilePromise = util.promisify(fs.readFile);
 
@@ -20,6 +21,13 @@ module.exports = function attachIPCListeners() {
 	});
 	ipcMain.on('ERROR_BOX', (e, payload) => {
 		showErrorBox(payload.title, payload.message);
+	});
+	ipcMain.handle('PROMPT', async (e, payload) => {
+		try {
+			return await prompt(payload.options);
+		} catch (err) {
+			console.error(err);
+		}
 	});
 	ipcMain.handle('NEW_FX_BUTTON', async (e, { name, filePath, ext }) => {
 		try {

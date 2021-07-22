@@ -263,6 +263,11 @@ export const reducer = (state, { type, payload }) => {
 					currentAnswer: state.gameController.board[payload][0],
 				},
 			};
+		case 'SET_CUSTOM_PRESHOW_MESSAGE':
+			return {
+				...state,
+				customPreshowMessage: payload,
+			};
 		default:
 			return state;
 	}
