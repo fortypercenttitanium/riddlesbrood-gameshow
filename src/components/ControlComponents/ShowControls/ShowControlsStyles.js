@@ -9,6 +9,24 @@ const ShowControlsDiv = styled.div`
 	grid-template-columns: repeat(3, 134px);
 	grid-template-rows: repeat(2, 116px);
 	margin: 2px 2px;
+
+	.split-button {
+		display: flex;
+		flex-direction: column;
+		grid-area: 1 / 1 / 2 / 2;
+		background: rgb(254, 147, 147);
+		background: radial-gradient(
+			circle,
+			rgba(254, 147, 147, 1) 0%,
+			rgba(237, 127, 127, 1) 31%,
+			rgba(219, 113, 113, 1) 56%,
+			rgba(200, 96, 96, 1) 100%
+		);
+		border: 1px solid black;
+		text-align: center;
+		border-radius: 3px;
+		box-shadow: 2px 2px 2px rgba(40, 40, 40, 0.5);
+	}
 `;
 
 const Button = styled.div`
@@ -35,6 +53,20 @@ const Button = styled.div`
 	}
 `;
 
+const HalfButton = styled(Button)`
+	border-radius: 0px;
+	border-color: transparent;
+	flex: 1;
+	box-shadow: 2px 2px 2px rgba(40, 40, 40, 0.5);
+	grid-area: initial;
+	&:first-of-type {
+		border-bottom: 1px solid black;
+		&:hover {
+			border-bottom-color: white;
+		}
+	}
+`;
+
 const Label = styled.h2`
 	margin: auto;
 	font-size: 19px;
@@ -48,4 +80,4 @@ const ProjectorImage = styled.img`
 	user-select: none;
 `;
 
-export { ShowControlsDiv, Button, Label, ProjectorImage };
+export { ShowControlsDiv, Button, Label, ProjectorImage, HalfButton };

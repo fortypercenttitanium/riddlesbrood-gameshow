@@ -5,6 +5,7 @@ import {
 	Button,
 	Label,
 	ProjectorImage,
+	HalfButton,
 } from './ShowControlsStyles';
 import { StoreContext } from '../../../store/context';
 import importAll from '../../Games/helpers/shared/importAll';
@@ -54,9 +55,14 @@ export default function ShowControls({ projectorMode }) {
 
 	return (
 		<ShowControlsDiv>
-			<Button onClick={handleClickPreshow} area='1 / 1 / 2 / 2'>
-				<Label>Preshow</Label>
-			</Button>
+			<div className='split-button'>
+				<HalfButton onClick={handleClickPreshow}>
+					<Label>Preshow</Label>
+				</HalfButton>
+				<HalfButton onClick={handleClickPreshow}>
+					<Label>Preshow</Label>
+				</HalfButton>
+			</div>
 			<Button
 				data-video='five_min_intro.mp4'
 				data-callback='quick_intro.mp4'
