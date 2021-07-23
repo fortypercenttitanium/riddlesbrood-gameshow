@@ -35,6 +35,15 @@ const FxButton = styled.div`
 	}
 `;
 
+const FxButtonAlt = styled(FxButton)`
+	background: rgb(246, 246, 246);
+	background: radial-gradient(
+		circle,
+		rgba(246, 246, 246, 1) 44%,
+		rgba(203, 203, 203, 1) 100%
+	);
+`;
+
 const Text = styled.h3`
 	margin: auto;
 	width: 100%;
@@ -102,6 +111,7 @@ const SelectButton = styled.button`
 
 export {
 	FxButton,
+	FxButtonAlt,
 	FxButtonsDiv,
 	Text,
 	BigText,

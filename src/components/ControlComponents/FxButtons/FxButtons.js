@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import {
 	FxButton,
+	FxButtonAlt,
 	FxButtonsDiv,
 	Text,
 	BigText,
@@ -29,6 +30,7 @@ export default function FxButtons() {
 	const [buttonFiles, setButtonFiles] = useState([]);
 	const [selectionWindowOpen, setSelectionWindowOpen] = useState(-1);
 	const [selection, setSelection] = useState();
+	const [buttonPage, setButtonPage] = useState(1);
 
 	useEffect(() => {
 		async function setAvailableFxButtons() {
@@ -45,6 +47,18 @@ export default function FxButtons() {
 	useEffect(() => {
 		async function getFxButtons() {
 			const buttons = await ipcRenderer.invoke('GET_FX_BUTTONS');
+
+			// fill in remainder of buttons
+			const numberOfButtons = 24;
+			for (let i = 0; i < numberOfButtons; i++) {
+				if (!buttons[i]) {
+					buttons[i] = {
+						name: null,
+						file: null,
+						type: null,
+					};
+				}
+			}
 			dispatch({ type: actions.CHANGE_FX_BUTTONS, payload: buttons });
 		}
 		!fxButtons.length && getFxButtons();
@@ -102,13 +116,29 @@ export default function FxButtons() {
 		handleOutsideClick();
 	};
 
+	const handlePageClick = () => {
+		setButtonPage(buttonPage < 3 ? buttonPage + 1 : 1);
+	};
+
+	const paginateButtons = () => {
+		const buttons = [...fxButtons];
+		const buttonsPerPage = 8;
+		const startingIndex = (buttonPage - 1) * buttonsPerPage;
+		const buttonsOnCurrentPage = buttons.filter(
+			(_, index) => index >= startingIndex && index < startingIndex + 8
+		);
+
+		return buttonsOnCurrentPage;
+	};
+
 	return (
 		<FxButtonsDiv>
-			{fxButtons.map((button, index) => {
+			{paginateButtons().map((button, pageIndex) => {
+				const masterIndex = fxButtons.indexOf(button);
 				return (
 					<FxButton
-						key={index}
-						onContextMenu={() => contextHandler(index)}
+						key={pageIndex}
+						onContextMenu={() => contextHandler(masterIndex)}
 						onClick={(e) => {
 							if (button.type === 'audio') {
 								clickHandlerAudio(e);
@@ -131,6 +161,9 @@ export default function FxButtons() {
 					</FxButton>
 				);
 			})}
+			<FxButtonAlt onClick={handlePageClick}>
+				<Text>PAGE {buttonPage}</Text>
+			</FxButtonAlt>
 			{selectionWindowOpen >= 0 && (
 				<FxSelectModal onClick={handleOutsideClick}>
 					<FxSelectContainer onClick={(e) => e.stopPropagation()}>

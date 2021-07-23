@@ -123,13 +123,12 @@ module.exports = function attachIPCListeners() {
 	ipcMain.handle('GET_FX_BUTTONS', () => {
 		const availableFiles = getAllFxFiles('all').map((fxFile) => fxFile.name);
 
-		return store
-			.get('fx_buttons')
-			.map((fxObject) =>
-				availableFiles.includes(fxObject.name)
-					? fxObject
-					: { name: '', type: '', file: '' }
-			);
+		return store.get('fx_buttons').map((fxObject) =>
+			// check if the file still exists
+			availableFiles.includes(fxObject.name)
+				? fxObject
+				: { name: '', type: '', file: '' }
+		);
 	});
 
 	ipcMain.on('SET_FX_BUTTONS', (_, fx_buttons) => {
