@@ -7,52 +7,84 @@ import * as Games from '../../Games/helpers/shared/gamesArray';
 import { StoreContext as StoreContextCP } from '../../../store/context';
 import { StoreContext as StoreContextGB } from '../../MainComponents/Gameboard';
 
+const {
+  Jeopardy,
+  FamilyFeud,
+  Pyramid,
+  Wheel,
+  NameThatTune,
+  WhatTheHellIsIt,
+  CouplesConundrum,
+  ESP,
+  CardSharks,
+} = Games;
+
+const getComponent = (game, windowInstance) => {
+  switch (game) {
+    case 'Jeopardy':
+      return <Jeopardy windowInstance={windowInstance} />;
+    case 'Family Feud':
+      return <FamilyFeud windowInstance={windowInstance} />;
+    case '$25,000 Pyramid':
+      return <Pyramid windowInstance={windowInstance} />;
+    case 'Wheel Of Fortune':
+      return <Wheel windowInstance={windowInstance} />;
+    case 'Name That Tune':
+      return <NameThatTune windowInstance={windowInstance} />;
+    case 'What The Hell Is It?':
+      return <WhatTheHellIsIt windowInstance={windowInstance} />;
+    case 'Couples Conundrum':
+      return <CouplesConundrum windowInstance={windowInstance} />;
+    case 'ESP':
+      return <ESP windowInstance={windowInstance} />;
+    case 'Card Sharks':
+      return <CardSharks windowInstance={windowInstance} />;
+    default:
+      return null;
+  }
+};
+
+const TimelineController = ({
+  timeline,
+  gameTitle,
+  customPreshowMessage,
+  windowInstance,
+}) => {
+  switch (timeline) {
+    case 'app-open':
+      return <LogoScreen />;
+    case 'custom-message-preshow':
+      return <CustomMessageScreen message={customPreshowMessage} />;
+    case 'in-game':
+      return getComponent(gameTitle, windowInstance);
+    default:
+      return null;
+  }
+};
+
 export default function ControlScreen({ windowInstance }) {
-	let StoreContext;
+  let StoreContext;
 
-	if (windowInstance === 'controlPanel') {
-		StoreContext = StoreContextCP;
-	} else if (windowInstance === 'gameboard') {
-		StoreContext = StoreContextGB;
-	}
+  if (windowInstance === 'controlPanel') {
+    StoreContext = StoreContextCP;
+  } else if (windowInstance === 'gameboard') {
+    StoreContext = StoreContextGB;
+  }
 
-	const { state } = useContext(StoreContext);
-	const { currentGame, timeline, customPreshowMessage } = state;
+  const { state } = useContext(StoreContext);
+  const { currentGame, timeline, customPreshowMessage } = state;
 
-	const {
-		Jeopardy,
-		FamilyFeud,
-		Pyramid,
-		Wheel,
-		NameThatTune,
-		WhatTheHellIsIt,
-		CouplesConundrum,
-		ESP,
-		CardSharks,
-	} = Games;
-
-	const components = {
-		Jeopardy: <Jeopardy windowInstance={windowInstance} />,
-		'Family Feud': <FamilyFeud windowInstance={windowInstance} />,
-		'$25,000 Pyramid': <Pyramid windowInstance={windowInstance} />,
-		'Wheel Of Fortune': <Wheel windowInstance={windowInstance} />,
-		'Name That Tune': <NameThatTune windowInstance={windowInstance} />,
-		'What The Hell Is It?': <WhatTheHellIsIt windowInstance={windowInstance} />,
-		'Couples Conundrum': <CouplesConundrum windowInstance={windowInstance} />,
-		ESP: <ESP windowInstance={windowInstance} />,
-		'Card Sharks': <CardSharks />,
-	};
-
-	return (
-		<ControlScreenContainer
-			className={windowInstance === 'controlPanel' && 'preview-screen'}
-		>
-			{timeline === 'app-open' ? <LogoScreen /> : null}
-			{timeline === 'custom-message-preshow' && (
-				<CustomMessageScreen message={customPreshowMessage} />
-			)}
-			{timeline === 'in-game' ? components[currentGame.title] : null}
-			<VideoPlayer windowInstance={windowInstance} />
-		</ControlScreenContainer>
-	);
+  return (
+    <ControlScreenContainer
+      className={windowInstance === 'controlPanel' && 'preview-screen'}
+    >
+      <TimelineController
+        timeline={timeline}
+        gameTitle={currentGame.title}
+        customPreshowMessage={customPreshowMessage}
+        windowInstance={windowInstance}
+      />
+      <VideoPlayer windowInstance={windowInstance} />
+    </ControlScreenContainer>
+  );
 }
