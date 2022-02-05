@@ -17,117 +17,117 @@ import ReactAudioPlayer from 'react-audio-player';
 const { ipcRenderer } = window.require('electron');
 
 export function App() {
-	const { state, dispatch } = useContext(StoreContext);
+  const { state, dispatch } = useContext(StoreContext);
 
-	useEffect(() => {
-		projectorMode();
-	}, []);
+  useEffect(() => {
+    projectorMode();
+  }, []);
 
-	useEffect(() => {
-		window.state = state;
-	}, [state]);
+  useEffect(() => {
+    window.state = state;
+  }, [state]);
 
-	useEffect(() => {
-		ipcRenderer.on('FX_BUTTON_RECEIVE', (e, fxFile) => {
-			const { index, name, file, type } = fxFile;
-			const button = {
-				name,
-				file,
-				type,
-			};
-			const newButtons = state.fxButtons;
-			newButtons[index] = button;
-			dispatch({ type: actions.CHANGE_FX_BUTTONS, payload: newButtons });
-		});
+  useEffect(() => {
+    ipcRenderer.on('FX_BUTTON_RECEIVE', (e, fxFile) => {
+      const { index, name, file, type } = fxFile;
+      const button = {
+        name,
+        file,
+        type,
+      };
+      const newButtons = state.fxButtons;
+      newButtons[index] = button;
+      dispatch({ type: actions.CHANGE_FX_BUTTONS, payload: newButtons });
+    });
 
-		return () => {
-			ipcRenderer.removeAllListeners('FX_BUTTON_RECEIVE');
-		};
-	}, [dispatch, state.fxButtons]);
+    return () => {
+      ipcRenderer.removeAllListeners('FX_BUTTON_RECEIVE');
+    };
+  }, [dispatch, state.fxButtons]);
 
-	useInterval(
-		() => {
-			dispatch({ type: actions.TICK_TIMER });
-			if (state.gameController.timer.tickSound) {
-				playSound(state.gameController.timer.tickSound);
-			}
-		},
-		state.gameController.timer.running ? 1000 : null
-	);
+  useInterval(
+    () => {
+      dispatch({ type: actions.TICK_TIMER });
+      if (state.gameController.timer.tickSound) {
+        playSound(state.gameController.timer.tickSound);
+      }
+    },
+    state.gameController.timer.running ? 1000 : null,
+  );
 
-	let musicPlayer = useRef();
-	let sfxPlayer = useRef();
+  let musicPlayer = useRef();
+  let sfxPlayer = useRef();
 
-	const projectorMode = () => {
-		ipcRenderer.send('REQUEST_PROJECTOR_MODE');
-	};
+  const projectorMode = () => {
+    ipcRenderer.send('REQUEST_PROJECTOR_MODE');
+  };
 
-	const changeFX = (index) => {
-		ipcRenderer.send('FX_BUTTON_SELECT', index);
-	};
+  const changeFX = (index) => {
+    ipcRenderer.send('FX_BUTTON_SELECT', index);
+  };
 
-	const playSound = (file, type = 'sfx') => {
-		const player =
-			type === 'sfx'
-				? sfxPlayer.current.audioEl.current
-				: musicPlayer.current.audioEl.current;
-		player.src = file;
-		player.play().catch((err) => {
-			console.log(err);
-		});
-	};
+  const playSound = (file, type = 'sfx') => {
+    const player =
+      type === 'sfx'
+        ? sfxPlayer.current.audioEl.current
+        : musicPlayer.current.audioEl.current;
+    player.src = file;
+    player.play().catch((err) => {
+      console.log(err);
+    });
+  };
 
-	// const stopSound = () => {
-	// 	const player = musicPlayer.current.audioEl.current.paused
-	// 		? sfxPlayer.current.audioEl.current
-	// 		: musicPlayer.current.audioEl.current;
-	// 	player.pause();
-	// 	player.load();
-	// };
+  // const stopSound = () => {
+  // 	const player = musicPlayer.current.audioEl.current.paused
+  // 		? sfxPlayer.current.audioEl.current
+  // 		: musicPlayer.current.audioEl.current;
+  // 	player.pause();
+  // 	player.load();
+  // };
 
-	//	dev to work on game
-	// useEffect(() => {
-	// 	dispatch({
-	// 		type: 'SET_GAME',
-	// 		payload: {
-	// 			title: 'Wheel Of Fortune',
-	// 			logo: 'WheelOfFortuneLogo.jpeg',
-	// 			version: 0,
-	// 		},
-	// 	});
-	// }, []);
+  //	dev to work on game
+  useEffect(() => {
+    dispatch({
+      type: 'SET_GAME',
+      payload: {
+        title: '$25,000 Ponzi Scheme',
+        logo: 'Ponzi Scheme Logo.jpg',
+        version: 0,
+      },
+    });
+  }, []);
 
-	return (
-		<StyledApp>
-			<GamesMenu
-				open={() => {
-					dispatch({ type: 'OPEN_GAMES_MENU' });
-				}}
-			/>
-			{state.gamesMenu.open && <GamesMenuModal />}
-			<GameLogo logo={state.currentGame.logo} />
-			<VolumeControls />
-			<ShowControls projectorMode={projectorMode} />
-			<FxButtons changeFX={changeFX} />
-			<ControlScreenContainer>
-				<ControlScreen windowInstance='controlPanel' />
-			</ControlScreenContainer>
-			<AnswerBlock />
-			<Scoreboard playSound={playSound} />
-			<ReactAudioPlayer
-				ref={musicPlayer}
-				volume={
-					(state.audio.volume.master / 100) * (state.audio.volume.music / 100)
-				}
-			/>
-			<ReactAudioPlayer
-				ref={sfxPlayer}
-				volume={
-					(state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
-				}
-			/>
-		</StyledApp>
-	);
+  return (
+    <StyledApp>
+      <GamesMenu
+        open={() => {
+          dispatch({ type: 'OPEN_GAMES_MENU' });
+        }}
+      />
+      {state.gamesMenu.open && <GamesMenuModal />}
+      <GameLogo logo={state.currentGame.logo} />
+      <VolumeControls />
+      <ShowControls projectorMode={projectorMode} />
+      <FxButtons changeFX={changeFX} />
+      <ControlScreenContainer>
+        <ControlScreen windowInstance="controlPanel" />
+      </ControlScreenContainer>
+      <AnswerBlock />
+      <Scoreboard playSound={playSound} />
+      <ReactAudioPlayer
+        ref={musicPlayer}
+        volume={
+          (state.audio.volume.master / 100) * (state.audio.volume.music / 100)
+        }
+      />
+      <ReactAudioPlayer
+        ref={sfxPlayer}
+        volume={
+          (state.audio.volume.master / 100) * (state.audio.volume.sfx / 100)
+        }
+      />
+    </StyledApp>
+  );
 }
 
 export default App;

@@ -9,11 +9,11 @@ import { StoreContext as StoreContextGB } from '../../MainComponents/Gameboard';
 
 const {
   Jeopardy,
-  FamilyFeud,
-  Pyramid,
+  PonziScheme,
+  FamilyRude,
   Wheel,
-  NameThatTune,
-  WhatTheHellIsIt,
+  SameOldTune,
+  SecretSquares,
   CouplesConundrum,
   ESP,
   CardSharks,
@@ -23,16 +23,16 @@ const getComponent = (game, windowInstance) => {
   switch (game) {
     case 'Jeopardy':
       return <Jeopardy windowInstance={windowInstance} />;
-    case 'Family Feud':
-      return <FamilyFeud windowInstance={windowInstance} />;
-    case '$25,000 Pyramid':
-      return <Pyramid windowInstance={windowInstance} />;
-    case 'Wheel Of Fortune':
+    case 'Is Your Family Rude?':
+      return <FamilyRude windowInstance={windowInstance} />;
+    case '$25,000 Ponzi Scheme':
+      return <PonziScheme windowInstance={windowInstance} />;
+    case 'Feel The Fortune':
       return <Wheel windowInstance={windowInstance} />;
-    case 'Name That Tune':
-      return <NameThatTune windowInstance={windowInstance} />;
-    case 'What The Hell Is It?':
-      return <WhatTheHellIsIt windowInstance={windowInstance} />;
+    case 'Same Old Tune':
+      return <SameOldTune windowInstance={windowInstance} />;
+    case 'Secret Squares':
+      return <SecretSquares windowInstance={windowInstance} />;
     case 'Couples Conundrum':
       return <CouplesConundrum windowInstance={windowInstance} />;
     case 'ESP':
