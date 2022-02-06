@@ -15,7 +15,7 @@ function PonziCategories({ categories, activeCategory, onClickCategory }) {
     <PonziCategoryContainer>
       {categories.map((category, index) => (
         <PonziCategory
-          category={category}
+          key={category.category}
           status={
             activeCategory === category
               ? 'active'

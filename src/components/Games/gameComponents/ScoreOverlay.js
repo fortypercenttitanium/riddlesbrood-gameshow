@@ -52,7 +52,7 @@ const ScoreOverlayContainer = styled.div`
   }
 `;
 
-function ScoreOverlay({ ScoreComponent, position, score }) {
+function ScoreOverlay({ ScoreComponent, position, score, clickHandler }) {
   const renderLinearScores = (scorePosition) => (
     <ScoreOverlayContainer className="f pa">
       <div className={`f ${scorePosition}`}>
@@ -64,6 +64,7 @@ function ScoreOverlay({ ScoreComponent, position, score }) {
                 player={index + 1}
                 score={scoreNumber}
                 type={score.type}
+                clickHandler={clickHandler}
               />
             )
           );
@@ -82,6 +83,7 @@ function ScoreOverlay({ ScoreComponent, position, score }) {
                 player={index + 1}
                 score={scoreNumber}
                 type={score.type}
+                clickHandler={clickHandler}
               />
             </div>
           )

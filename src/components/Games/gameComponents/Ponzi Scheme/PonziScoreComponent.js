@@ -13,6 +13,7 @@ const ScoreContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin: 72px 48px;
+  cursor: pointer;
 
   .score-number {
     padding-top: 30px;
@@ -21,13 +22,14 @@ const ScoreContainer = styled.div`
   }
 `;
 
-function PonziScoreComponent({ player, score, type }) {
+function PonziScoreComponent({ player, score, clickHandler }) {
   return (
     <ScoreContainer
       player={player}
       backgroundImage={
         player === 1 ? playerOneScoreContainer : playerTwoScoreContainer
       }
+      onClick={() => clickHandler(player)}
     >
       <h1 className="score-number">{score}</h1>
     </ScoreContainer>

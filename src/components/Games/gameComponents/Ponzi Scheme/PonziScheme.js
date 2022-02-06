@@ -31,7 +31,7 @@ export default function PonziScheme({ windowInstance }) {
 
   const { state, dispatch } = useContext(StoreContext);
   const { gameController } = state;
-  const { currentAnswer, timer } = gameController;
+  const { currentAnswer, timer, activeTeam } = gameController;
 
   let musicRef = useRef();
   let sfxRef = useRef();
@@ -82,7 +82,7 @@ export default function PonziScheme({ windowInstance }) {
     });
   };
 
-  const handleClickIncorrect = () => {
+  const handleClickPass = () => {
     incorrectHandler({
       sfxPlayer: sfxRef,
       musicPlayer: musicRef,
@@ -90,10 +90,6 @@ export default function PonziScheme({ windowInstance }) {
       dispatch,
       actions,
     });
-  };
-
-  const handleClickReturn = () => {
-    changeGameDisplay('board', { dispatch, actions });
   };
 
   const handleClickSetActive = (teamNumber) => {
@@ -106,11 +102,12 @@ export default function PonziScheme({ windowInstance }) {
 
   return (
     state.gameController.gameStarted && (
-      <PonziContainer>
+      <PonziContainer activeTeam={activeTeam}>
         <ScoreOverlay
           ScoreComponent={PonziScoreComponent}
           score={state.gameController.score}
           position="corners"
+          clickHandler={handleClickSetActive}
         />
         <PonziAnswerBlock answer={currentAnswer} />
         <PonziTimer time={timer.time} display={timer.running} />
