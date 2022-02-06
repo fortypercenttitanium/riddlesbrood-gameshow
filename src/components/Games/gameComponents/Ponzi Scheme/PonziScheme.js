@@ -10,7 +10,6 @@ import {
   buzzer,
   correctHandler,
   incorrectHandler,
-  changeGameDisplay,
   setActiveTeam,
   clickHandlerCategory,
 } from '../../helpers/ponziScheme/imports';
@@ -20,6 +19,7 @@ import ScoreOverlay from '../ScoreOverlay';
 import PonziAnswerBlock from './PonziAnswerBlock';
 import PonziTimer from './PonziTimer';
 import PonziCategories from './PonziCategories';
+import PonziControlButtons from './PonziControlButtons';
 
 export default function PonziScheme({ windowInstance }) {
   let StoreContext;
@@ -67,37 +67,41 @@ export default function PonziScheme({ windowInstance }) {
         sfxPlayer: sfxRef,
         musicPlayer: musicRef,
       });
-      dispatch({ type: actions.KILL_TIMER });
-      dispatch({ type: actions.CHANGE_GAME_DISPLAY, payload: 'roundOver' });
+      dispatch({ type: 'END_PONZI_ROUND' });
     }
   }, [state.gameController.timer.time, dispatch]);
 
   const handleClickCorrect = () => {
-    correctHandler(state.gameController.activeTeam, {
-      dispatch,
-      actions,
-      state,
-      sfxPlayer: sfxRef,
-      musicPlayer: musicRef,
-    });
+    if (state.gameController.currentQuestion) {
+      correctHandler(state.gameController.activeTeam, {
+        dispatch,
+        actions,
+        state,
+        sfxPlayer: sfxRef,
+        musicPlayer: musicRef,
+      });
+    }
   };
 
   const handleClickPass = () => {
-    incorrectHandler({
-      sfxPlayer: sfxRef,
-      musicPlayer: musicRef,
-      state,
-      dispatch,
-      actions,
-    });
+    if (state.gameController.currentQuestion) {
+      incorrectHandler({
+        sfxPlayer: sfxRef,
+        musicPlayer: musicRef,
+        state,
+        dispatch,
+        actions,
+      });
+    }
   };
 
   const handleClickSetActive = (teamNumber) => {
     setActiveTeam(teamNumber, { dispatch, actions });
   };
 
-  const handleClickCategory = (item, index) => {
-    clickHandlerCategory(item, index, { state, dispatch, actions });
+  const handleClickCategory = (item) => {
+    if (item.completed) return;
+    clickHandlerCategory(item, { state, dispatch, actions });
   };
 
   return (
@@ -109,13 +113,26 @@ export default function PonziScheme({ windowInstance }) {
           position="corners"
           clickHandler={handleClickSetActive}
         />
-        <PonziAnswerBlock answer={currentAnswer} />
+        <PonziAnswerBlock
+          answer={currentAnswer}
+          windowInstance={windowInstance}
+          wordsLeft={
+            state.gameController.currentQuestion?.words.length -
+            state.gameController.currentQuestion?.index
+          }
+        />
         <PonziTimer time={timer.time} display={timer.running} />
         <PonziCategories
           categories={gameController.board}
           activeCategory={gameController.currentQuestion}
           onClickCategory={handleClickCategory}
         />
+        {windowInstance === 'controlPanel' && (
+          <PonziControlButtons
+            onClickCorrect={handleClickCorrect}
+            onClickPass={handleClickPass}
+          />
+        )}
         {/* music player */}
         {state.gameController.bgMusic &&
           state.gameController.gameStarted &&
@@ -139,116 +156,6 @@ export default function PonziScheme({ windowInstance }) {
           }
         />
       </PonziContainer>
-      // <PyramidHomeScreen team={state.gameController.activeTeam}>
-      //   <Modal display={state.gameController.display}>
-      //     <ModalDiv>
-      //       <H1>{state.gameController.currentQuestion.category}</H1>
-      //     </ModalDiv>
-      //     <ModalContainer>
-      //       <ScoreContainer team={1}>
-      //         <H2>Team 1 Score</H2>
-      //         <H2>{state.gameController.score.scoreBoard[0]}</H2>
-      //       </ScoreContainer>
-      //       <VerticalStack>
-      //         <ModalDiv>
-      //           <H2>Timer:</H2>
-      //           <H2>
-      //             {state.gameController.display === 'question'
-      //               ? state.gameController.timer.time
-      //               : 'Round over'}
-      //           </H2>
-      //         </ModalDiv>
-      //         <ModalDiv>
-      //           <H2>POINTS SCORED: {state.gameController.correctCounter}</H2>
-      //         </ModalDiv>
-      //       </VerticalStack>
-      //       <ScoreContainer team={2}>
-      //         <H2>Team 2 Score</H2>
-      //         <H2>{state.gameController.score.scoreBoard[1]}</H2>
-      //       </ScoreContainer>
-      //     </ModalContainer>
-
-      //     <ModalContainer>
-      //       {state.gameController.display === 'question' ? (
-      //         <ModalContainer>
-      //           {windowInstance === 'controlPanel' && (
-      //             <Button onClick={handleClickCorrect} type="correct">
-      //               <H2>Correct</H2>
-      //             </Button>
-      //           )}
-      //           <H2>
-      //             {
-      //               state.gameController.currentQuestion.words[
-      //                 state.gameController.currentQuestion.index
-      //               ]
-      //             }
-      //           </H2>
-      //           {windowInstance === 'controlPanel' && (
-      //             <Button onClick={handleClickIncorrect} type="incorrect">
-      //               <H2>Wrong/Pass</H2>
-      //             </Button>
-      //           )}
-      //         </ModalContainer>
-      //       ) : (
-      //         <ModalContainer>
-      //           <Button onClick={handleClickReturn}>Return To Categories</Button>
-      //         </ModalContainer>
-      //       )}
-      //     </ModalContainer>
-      //   </Modal>
-      //   <Title>TURN:</Title>
-      //   <TurnContainer>
-      //     <ScoreContainer team={1}>
-      //       <H2>Team 1 Score</H2>
-      //       <H2>{state.gameController.score.scoreBoard[0]}</H2>
-      //     </ScoreContainer>
-      //     <TeamButton
-      //       team={1}
-      //       activeTeam={state.gameController.activeTeam}
-      //       onClick={() => {
-      //         handleClickSetActive(1);
-      //       }}
-      //     >
-      //       <H2>Team 1</H2>
-      //     </TeamButton>
-      //     <TeamButton
-      //       team={2}
-      //       activeTeam={state.gameController.activeTeam}
-      //       onClick={() => {
-      //         handleClickSetActive(2);
-      //       }}
-      //     >
-      //       <H2>Team 2</H2>
-      //     </TeamButton>
-      //     <ScoreContainer team={2}>
-      //       <H2>Team 2 Score</H2>
-      //       <H2>{state.gameController.score.scoreBoard[1]}</H2>
-      //     </ScoreContainer>
-      //   </TurnContainer>
-
-      //   <Title>Categories</Title>
-      //   <Container>
-      //     <CategoryContainer>
-      //       {state.gameController.board.map((item, index) => {
-      //         return (
-      //           <CategoryCard
-      //             key={index}
-      //             gridArea={`cat${index + 1}`}
-      //             done={item.completed}
-      //             onClick={() => {
-      //               handleClickCategory(item, index);
-      //             }}
-      //           >
-      //             <Span>{item.category}</Span>
-      //           </CategoryCard>
-      //         );
-      //       })}
-      //     </CategoryContainer>
-      //   </Container>
-
-      //   {/* If game gets backgrund music, fix this */}
-
-      // </PyramidHomeScreen>
     )
   );
 }

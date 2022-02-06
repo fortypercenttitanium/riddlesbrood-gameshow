@@ -4,12 +4,7 @@ export default async function initGame(state, game, initialDisplay = 'init') {
   const games = await getAllVersions();
   const initState = {
     display: initialDisplay,
-    currentQuestion: {
-      category: '',
-      puzzle: ' ',
-      guessedLetters: [],
-      solved: false,
-    },
+    currentQuestion: null,
     board: games[game][state.currentGame.version].content,
     currentAnswer: '',
     timer: {

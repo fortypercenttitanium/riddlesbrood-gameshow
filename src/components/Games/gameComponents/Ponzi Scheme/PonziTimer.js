@@ -9,7 +9,7 @@ const TimerContainer = styled.div`
   background: #eee;
   height: 120px;
   width: 260px;
-  margin: 120px auto 0;
+  margin: 0 auto;
 
   h1 {
     font-family: 'Digital Dream', Helvetica, sans-serif;

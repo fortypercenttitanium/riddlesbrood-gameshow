@@ -68,6 +68,12 @@ export default function Wheel({ windowInstance }) {
           type: 'player',
           scoreBoard: [0, 0, 0, 0],
         },
+        currentQuestion: {
+          category: '',
+          puzzle: ' ',
+          guessedLetters: [],
+          solved: false,
+        },
       };
       dispatch({
         type: actions.INIT_GAME,

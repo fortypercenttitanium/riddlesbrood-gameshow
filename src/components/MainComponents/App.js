@@ -48,7 +48,10 @@ export function App() {
   useInterval(
     () => {
       dispatch({ type: actions.TICK_TIMER });
-      if (state.gameController.timer.tickSound) {
+      if (
+        state.gameController.timer.tickSound &&
+        state.gameController.timer.time > 1
+      ) {
         playSound(state.gameController.timer.tickSound);
       }
     },
