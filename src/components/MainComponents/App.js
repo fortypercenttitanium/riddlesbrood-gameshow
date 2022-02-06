@@ -89,16 +89,16 @@ export function App() {
   // };
 
   //	dev to work on game
-  useEffect(() => {
-    dispatch({
-      type: 'SET_GAME',
-      payload: {
-        title: '$25,000 Ponzi Scheme',
-        logo: 'Ponzi Scheme Logo.jpg',
-        version: 0,
-      },
-    });
-  }, []);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: 'SET_GAME',
+  //     payload: {
+  //       title: '$25,000 Ponzi Scheme',
+  //       logo: 'Ponzi Scheme Logo.jpg',
+  //       version: 0,
+  //     },
+  //   });
+  // }, []);
 
   return (
     <StyledApp>
