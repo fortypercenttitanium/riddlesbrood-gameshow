@@ -1,8 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import {
-  ESPHomeScreen,
-  TitleContainer,
-  Title,
   ScoreH1,
   ScoreH2,
   H3,
@@ -11,6 +8,7 @@ import {
   ScoreBoardDiv,
   ScoreCardDiv,
 } from '../gameComponentStyles/espStyles';
+import ESPScoreComponent from './ESPScoreComponent';
 import {
   initGame,
   StoreContextCP,
@@ -20,6 +18,21 @@ import {
   nextPrompt,
   previousPrompt,
 } from '../../helpers/esp/imports';
+import ESPTitle from './ESPTitle';
+import ESPContainer from './ESPContainer';
+import ScoreOverlay from '../ScoreOverlay';
+import ESPControls from './ESPControls';
+
+const scorePositions = [
+  { top: '', bottom: '200px', left: '50px', right: '' },
+  { top: '', bottom: '0', left: '340px', right: '' },
+  { top: '', bottom: '0', left: '', right: '340px' },
+  { top: '', bottom: '200px', left: '', right: '50px' },
+];
+
+const altScorePositions = scorePositions.filter(
+  (pos, index) => index !== 1 && index !== 2,
+);
 
 export default function ESP({ windowInstance }) {
   let StoreContext;
@@ -55,6 +68,9 @@ export default function ESP({ windowInstance }) {
   }, [dispatch, state]);
 
   const { board, currentQuestion, score } = state.gameController;
+  const numTeams = score.scoreBoard.filter((score) =>
+    Number.isInteger(score),
+  ).length;
 
   const handleClickNext = () => {
     nextPrompt({ board, currentQuestion, dispatch, actions });
@@ -65,44 +81,24 @@ export default function ESP({ windowInstance }) {
   };
 
   return state.gameController.gameStarted ? (
-    <ESPHomeScreen>
-      <TitleContainer>
-        <Title>{currentQuestion}</Title>
-      </TitleContainer>
+    <ESPContainer>
+      <ESPTitle title={currentQuestion} />
       {windowInstance === 'controlPanel' && (
-        <Controls>
-          <Button onClick={handleClickPrev}>
-            <H3>Previous prompt</H3>
-          </Button>
-          <Button onClick={handleClickNext}>
-            <H3>Next prompt</H3>
-          </Button>
-        </Controls>
+        <ESPControls
+          handleClickPrev={handleClickPrev}
+          handleClickNext={handleClickNext}
+        />
       )}
-      {windowInstance === 'gameboard' && (
-        <ScoreBoardDiv>
-          {score.scoreBoard.map((scoreNum, scoreIndex) => {
-            if (scoreNum !== null) {
-              return (
-                <ScoreCardDiv key={scoreIndex} index={scoreIndex}>
-                  <ScoreH2>
-                    {score.type === 'player' ? 'Player' : 'Team'}{' '}
-                    {scoreIndex + 1}
-                  </ScoreH2>
-                  <div
-                    style={{
-                      display: 'flex',
-                      margin: 'auto 0',
-                    }}
-                  >
-                    <ScoreH1>{scoreNum}</ScoreH1>
-                  </div>
-                </ScoreCardDiv>
-              );
-            } else return null;
-          })}
-        </ScoreBoardDiv>
-      )}
+      <ScoreOverlay
+        ScoreComponent={ESPScoreComponent}
+        position={
+          score.type === 'team' && numTeams === 2
+            ? altScorePositions
+            : scorePositions
+        }
+        score={score}
+      />
+
       <ReactAudioPlayer
         ref={sfxPlayer}
         volume={
@@ -123,7 +119,7 @@ export default function ESP({ windowInstance }) {
             loop
           />
         )}
-    </ESPHomeScreen>
+    </ESPContainer>
   ) : (
     <div />
   );

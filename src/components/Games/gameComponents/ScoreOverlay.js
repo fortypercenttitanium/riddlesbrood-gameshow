@@ -7,6 +7,9 @@ const ScoreOverlayContainer = styled.div`
   right: 0;
   bottom: 0;
   color: white;
+  height: 100%;
+  position: absolute;
+  display: flex;
 
   .pa {
     position: absolute;
@@ -53,15 +56,24 @@ const ScoreOverlayContainer = styled.div`
 `;
 
 function ScoreOverlay({ ScoreComponent, position, score, clickHandler }) {
+  let newScoreboard = [...score.scoreBoard];
+  if (
+    score.type === 'team' &&
+    newScoreboard.filter((score) => Number.isInteger(score)).length === 2
+  ) {
+    newScoreboard = newScoreboard.filter((score) => Number.isInteger(score));
+  }
+
   const renderLinearScores = (scorePosition) => (
-    <ScoreOverlayContainer className="f pa">
+    <ScoreOverlayContainer>
       <div className={`f ${scorePosition}`}>
-        {score.scoreBoard.map((scoreNumber, index) => {
+        {newScoreboard.map((scoreNumber, index) => {
           return (
             Number.isInteger(scoreNumber) && (
               <ScoreComponent
                 key={index}
                 player={index + 1}
+                numTeams={newScoreboard.length}
                 score={scoreNumber}
                 type={score.type}
                 clickHandler={clickHandler}
@@ -73,9 +85,31 @@ function ScoreOverlay({ ScoreComponent, position, score, clickHandler }) {
     </ScoreOverlayContainer>
   );
 
+  if (Array.isArray(position)) {
+    return (
+      <ScoreOverlayContainer>
+        {newScoreboard.map((scoreNumber, index) => {
+          return (
+            Number.isInteger(scoreNumber) && (
+              <ScoreComponent
+                position={position[index]}
+                player={index + 1}
+                score={scoreNumber}
+                type={score.type}
+                clickHandler={clickHandler}
+                numTeams={newScoreboard.length}
+                key={index}
+              />
+            )
+          );
+        })}
+      </ScoreOverlayContainer>
+    );
+  }
+
   return position === 'corners' ? (
-    <ScoreOverlayContainer className="f pa">
-      {score.scoreBoard.map((scoreNumber, index) => {
+    <ScoreOverlayContainer>
+      {newScoreboard.map((scoreNumber, index) => {
         return (
           Number.isInteger(scoreNumber) && (
             <div key={index} className={`a${index} pa f`}>
