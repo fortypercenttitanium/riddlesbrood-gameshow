@@ -1,104 +1,104 @@
 {
-	"main": "public/electron/electron.js",
-	"name": "riddlesbrood-gameshow",
-	"version": "1.1.0",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/fortypercenttitanium/riddlesbrood-gameshow"
-	},
-	"description": "Gameshow presentation app for Riddlesbrood Theatre Company",
-	"author": "Alex Younger",
-	"private": false,
-	"publish": {
-		"provider": "github"
-	},
-	"build": {
-		"appId": "riddlesbrood.gameshow",
-		"productName": "Riddlesbrood Gameshow",
-		"copyright": "Copyright 2021 Riddlesbrood Theatre Company",
-		"win": {
-			"icon": "public/electron/icons/icon.png",
-			"target": [
-				{
-					"target": "nsis",
-					"arch": [
-						"x64"
-					]
-				}
-			]
-		},
-		"extends": null,
-		"files": [
-			"./build/**/*"
-		],
-		"extraResources": [
-			{
-				"from": "./src/assets/fx_buttons",
-				"to": "./fx_buttons"
-			},
-			{
-				"from": "./src/assets/game_versions",
-				"to": "./game_versions"
-			}
-		]
-	},
-	"homepage": "./",
-	"dependencies": {
-		"@material-ui/core": "^4.11.0",
-		"@material-ui/icons": "^4.11.2",
-		"@material/slider": "^7.0.0",
-		"@testing-library/jest-dom": "^4.2.4",
-		"@testing-library/react": "^9.5.0",
-		"@testing-library/user-event": "^7.2.1",
-		"cross-env": "^7.0.2",
-		"electron-is-dev": "^1.2.0",
-		"electron-log": "^4.3.2",
-		"electron-prompt": "^1.6.2",
-		"electron-store": "^5.2.0",
-		"electron-updater": "^4.3.8",
-		"nanoid": "^3.1.20",
-		"react": "^16.13.1",
-		"react-audio-player": "^0.13.0",
-		"react-dom": "^16.13.1",
-		"react-router-dom": "^5.2.0",
-		"react-scripts": "^4.0.3",
-		"styled-components": "^5.1.1"
-	},
-	"resolutions": {
-		"styled-components": "^5"
-	},
-	"scripts": {
-		"react-start": "react-scripts start",
-		"react-build": "react-scripts build",
-		"react-test": "react-scripts test",
-		"react-eject": "react-scripts eject",
-		"build": "electron-builder -c.extraMetadata.main=build/electron/electron.js -p never",
-		"dev": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
-		"prebuild": "npm run react-build",
-		"deploy": "electron-builder -c.extraMetadata.main=build/electron/electron.js -p always",
-		"predeploy": "npm run react-build"
-	},
-	"eslintConfig": {
-		"extends": "react-app"
-	},
-	"browserslist": {
-		"production": [
-			">0.2%",
-			"not dead",
-			"not op_mini all"
-		],
-		"development": [
-			"last 1 chrome version",
-			"last 1 firefox version",
-			"last 1 safari version"
-		]
-	},
-	"devDependencies": {
-		"concurrently": "^5.2.0",
-		"electron": "^12.0.0",
-		"electron-builder": "^22.7.0",
-		"electron-devtools-installer": "^3.2.0",
-		"electron-react-devtools": "^0.5.3",
-		"wait-on": "^5.2.1"
-	}
+  "main": "public/electron/electron.js",
+  "name": "riddlesbrood-gameshow",
+  "version": "1.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fortypercenttitanium/riddlesbrood-gameshow"
+  },
+  "description": "Gameshow presentation app for Riddlesbrood Theatre Company",
+  "author": "Alex Younger",
+  "private": false,
+  "publish": {
+    "provider": "github"
+  },
+  "build": {
+    "appId": "riddlesbrood.gameshow",
+    "productName": "Riddlesbrood Gameshow",
+    "copyright": "Copyright 2021 Riddlesbrood Theatre Company",
+    "win": {
+      "icon": "public/electron/icons/icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "extends": null,
+    "files": [
+      "./build/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "./src/assets/fx_buttons",
+        "to": "./fx_buttons"
+      },
+      {
+        "from": "./src/assets/game_versions",
+        "to": "./game_versions"
+      }
+    ]
+  },
+  "homepage": "./",
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.11.2",
+    "@material/slider": "^7.0.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "cross-env": "^7.0.2",
+    "electron-is-dev": "^1.2.0",
+    "electron-log": "^4.3.2",
+    "electron-prompt": "^1.6.2",
+    "electron-store": "^5.2.0",
+    "electron-updater": "^4.3.8",
+    "nanoid": "^3.1.20",
+    "react": "^16.13.1",
+    "react-audio-player": "^0.13.0",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^4.0.3",
+    "styled-components": "^5.1.1"
+  },
+  "resolutions": {
+    "styled-components": "^5"
+  },
+  "scripts": {
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "react-test": "react-scripts test",
+    "react-eject": "react-scripts eject",
+    "build": "electron-builder -c.extraMetadata.main=build/electron/electron.js -p never",
+    "dev": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
+    "prebuild": "npm run react-build",
+    "deploy": "electron-builder -c.extraMetadata.main=build/electron/electron.js -p always",
+    "predeploy": "npm run react-build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "electron": "^12.0.0",
+    "electron-builder": "^22.7.0",
+    "electron-devtools-installer": "^3.2.0",
+    "electron-react-devtools": "^0.5.3",
+    "wait-on": "^5.2.1"
+  }
 }
