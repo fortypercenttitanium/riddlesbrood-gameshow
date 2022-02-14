@@ -7,78 +7,127 @@ import TextField from '@material-ui/core/TextField';
 import AddVersionButton from '../styles/AddVersionButton';
 
 function Couples({ setAssets, handleSubmitAdd }) {
-	const [content, setContent] = useState([]);
-	const [isContentInitialized, setIsContentInitialized] = useState(false);
+  const [roundOne, setRoundOne] = useState([]);
+  const [roundTwo, setRoundTwo] = useState([]);
+  const [isContentInitialized, setIsContentInitialized] = useState(false);
 
-	useEffect(() => {
-		// initialize content format
-		if (!isContentInitialized) {
-			setContent(['']);
-			setAssets([]);
-			setIsContentInitialized(true);
-		}
-	}, [isContentInitialized, setAssets]);
+  useEffect(() => {
+    // initialize content format
+    if (!isContentInitialized) {
+      setRoundOne(['']);
+      setRoundTwo(['']);
+      setAssets([]);
+      setIsContentInitialized(true);
+    }
+  }, [isContentInitialized, setAssets]);
 
-	const addQuestion = () => {
-		setContent([...content, '']);
-	};
+  const rounds = [roundOne, roundTwo];
+  const setRounds = [setRoundOne, setRoundTwo];
 
-	const removeQuestion = (index) => {
-		if (content.length > 1) {
-			let newContent = [...content];
-			newContent.splice(index, 1);
-			setContent(newContent);
-		}
-	};
+  const addQuestion = (round) => {
+    const newContent = [...rounds[round], ''];
+    setRounds[round](newContent);
+  };
 
-	const handleChange = (e, index) => {
-		const newContent = [...content];
-		newContent[index] = e.target.value;
-		setContent(newContent);
-	};
+  const removeQuestion = (index, round) => {
+    if (rounds[round].length > 1) {
+      let newContent = [...rounds[round]];
+      newContent.splice(index, 1);
+      setRounds[round](newContent);
+    }
+  };
 
-	return (
-		<FlexContainer>
-			{content.length > 0 &&
-				content.map((question, index) => {
-					return (
-						<CenteredDiv key={index}>
-							<Fab
-								size='small'
-								color='secondary'
-								aria-label='delete'
-								onClick={() => removeQuestion(index)}
-								style={{ margin: 'auto 1rem auto 0' }}
-							>
-								<DeleteIcon />
-							</Fab>
-							<TextField
-								id='outlined-basic'
-								label={`Question #${index + 1}`}
-								variant='outlined'
-								value={question}
-								style={{ width: '40rem' }}
-								required
-								onChange={(e) => {
-									handleChange(e, index);
-								}}
-							/>
-						</CenteredDiv>
-					);
-				})}
-			<CenteredDiv>
-				<Fab
-					size='small'
-					color='primary'
-					aria-label='add'
-					onClick={addQuestion}
-				>
-					<AddIcon />
-				</Fab>
-			</CenteredDiv>
-			<AddVersionButton onSubmit={() => handleSubmitAdd(content)} />
-		</FlexContainer>
-	);
+  const handleChange = (e, index, round) => {
+    const newContent = [...rounds[round]];
+    newContent[index] = e.target.value;
+    setRounds[round](newContent);
+  };
+
+  return (
+    <FlexContainer>
+      <h1>Round 1</h1>
+      {roundOne.length > 0 &&
+        roundOne.map((question, index) => {
+          const round = 0;
+          return (
+            <CenteredDiv key={index}>
+              <Fab
+                size="small"
+                color="secondary"
+                aria-label="delete"
+                onClick={() => removeQuestion(index, round)}
+                style={{ margin: 'auto 1rem auto 0' }}
+              >
+                <DeleteIcon />
+              </Fab>
+              <TextField
+                id="outlined-basic"
+                label={`Question #${index + 1}`}
+                variant="outlined"
+                value={question}
+                style={{ width: '40rem' }}
+                required
+                onChange={(e) => {
+                  handleChange(e, index, round);
+                }}
+              />
+            </CenteredDiv>
+          );
+        })}
+      <CenteredDiv>
+        <Fab
+          size="small"
+          color="primary"
+          aria-label="add"
+          onClick={() => addQuestion(0)}
+        >
+          <AddIcon />
+        </Fab>
+      </CenteredDiv>
+      <h1>Round 2</h1>
+      {roundTwo.length > 0 &&
+        roundTwo.map((question, index) => {
+          const round = 1;
+          return (
+            <CenteredDiv key={index}>
+              <Fab
+                size="small"
+                color="secondary"
+                aria-label="delete"
+                onClick={() => removeQuestion(index, round)}
+                style={{ margin: 'auto 1rem auto 0' }}
+              >
+                <DeleteIcon />
+              </Fab>
+              <TextField
+                id="outlined-basic"
+                label={`Question #${index + 1}`}
+                variant="outlined"
+                value={question}
+                style={{ width: '40rem' }}
+                required
+                onChange={(e) => {
+                  handleChange(e, index, round);
+                }}
+              />
+            </CenteredDiv>
+          );
+        })}
+      <CenteredDiv>
+        <Fab
+          size="small"
+          color="primary"
+          aria-label="add"
+          onClick={() => addQuestion(1)}
+        >
+          <AddIcon />
+        </Fab>
+      </CenteredDiv>
+      <AddVersionButton
+        onSubmit={() => handleSubmitAdd([roundOne, roundTwo])}
+      />
+    </FlexContainer>
+  );
 }
 
 export default Couples;
