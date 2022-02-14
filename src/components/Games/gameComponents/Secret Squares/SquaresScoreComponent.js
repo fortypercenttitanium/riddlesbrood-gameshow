@@ -35,9 +35,11 @@ const ScoreComponentContainer = styled.div`
   }
 `;
 
-function SquaresScoreComponent({ player, score }) {
+function SquaresScoreComponent({ player, score, numTeams }) {
+  const componentNumber = numTeams === 2 && player > 1 ? 4 : player;
+
   return (
-    <ScoreComponentContainer bg={backgrounds[player]}>
+    <ScoreComponentContainer bg={backgrounds[componentNumber]}>
       <div className="score-container">
         <h1>{score}</h1>
       </div>

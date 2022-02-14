@@ -93,6 +93,9 @@ export default function CouplesConundrum({ windowInstance }) {
   const handleClickRoundButton = (e) => {
     const newRound = Number(e.currentTarget.dataset.round);
     changeRound({ newRound, dispatch });
+    if (display === 'question') {
+      handleClickDisplayToggle();
+    }
   };
 
   function parseHeartClassNames(scoreBoard) {

@@ -119,6 +119,7 @@ function ScoreOverlay({ ScoreComponent, position, score, clickHandler }) {
                 score={scoreNumber}
                 type={score.type}
                 clickHandler={clickHandler}
+                numTeams={newScoreboard.length}
               />
             </div>
           )
