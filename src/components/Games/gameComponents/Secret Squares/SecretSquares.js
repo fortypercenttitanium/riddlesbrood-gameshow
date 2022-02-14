@@ -6,26 +6,6 @@ import React, {
   useState,
 } from 'react';
 import {
-  WhatHomeScreen,
-  TitleContainer,
-  Title,
-  PictureDiv,
-  GameImg,
-  BlocksDiv,
-  Block,
-  Veil,
-  VeilImg,
-  ScoreH1,
-  ScoreH2,
-  H3,
-  AudioImg,
-  Controls,
-  Button,
-  ScoreBoardDiv,
-  ScoreCardDiv,
-  ScoreBody,
-} from '../gameComponentStyles/whatIsItStyles';
-import {
   initGame,
   stopAllSounds,
   StoreContextCP,
@@ -36,11 +16,14 @@ import {
   toggleTitleReveal,
   nextPicture,
   revealHandleCallback,
-  veilImage,
   importAll,
-  playButton,
-  pauseButton,
-} from '../../helpers/whatIsIt/imports';
+} from '../../helpers/squares/imports';
+import ScoreOverlay from '../ScoreOverlay';
+import SquaresContainer from './SquaresContainer';
+import SquaresTitle from './SquaresTitle';
+import SquaresControls from './SquaresControls';
+import SquaresScoreComponent from './SquaresScoreComponent';
+import SquaresImageContainer from './SquaresImageContainer';
 
 const pictures = importAll(
   require.context(
@@ -180,75 +163,36 @@ export default function SecretSquares({ windowInstance }) {
   }, [timer, dispatch, revealHandler, blocks, timerDidUpdate]);
 
   return state.gameController.gameStarted ? (
-    <WhatHomeScreen>
-      <TitleContainer>
-        <Title
-          show={Boolean(
-            state.gameController.answerRevealed ||
-              windowInstance === 'controlPanel',
-          )}
-        >
-          {currentQuestion.title}
-        </Title>
-      </TitleContainer>
-      <PictureDiv>
-        {timer.time < 24 &&
+    <SquaresContainer>
+      <SquaresTitle
+        show={(
+          state.gameController.answerRevealed ||
+          windowInstance === 'controlPanel'
+        ).toString()}
+        title={currentQuestion.title}
+      />
+      <SquaresImageContainer
+        showVeil={
+          timer.time < 24 &&
           !timer.running &&
           !state.gameController.answerRevealed &&
-          !blocks.every((block) => !block) && (
-            <Veil>
-              <VeilImg src={veilImage} />
-            </Veil>
-          )}
-        <GameImg
-          src={
-            currentQuestion.file.slice(0, 6) === 'app://'
-              ? currentQuestion.file
-              : pictures[currentQuestion.file]
-          }
-        />
-        <BlocksDiv>
-          {blocks.map((block, blockIndex) =>
-            block ? (
-              <Block key={blockIndex} revealed={false} />
-            ) : (
-              <Block key={blockIndex} revealed={true} />
-            ),
-          )}
-        </BlocksDiv>
-      </PictureDiv>
+          !blocks.every((block) => !block)
+        }
+        gameImage={
+          currentQuestion.file.slice(0, 6) === 'app://'
+            ? currentQuestion.file
+            : pictures[currentQuestion.file]
+        }
+        blocks={blocks}
+      />
       {windowInstance === 'controlPanel' && (
-        <Controls>
-          <Button onClick={handleClickReveal}>
-            <H3>
-              {state.gameController.answerRevealed ? 'Unreveal' : 'Reveal'}
-            </H3>
-          </Button>
-          <AudioImg
-            src={timer.running ? pauseButton : playButton}
-            alt=""
-            onClick={handleClickPlayPause}
-          />
-          <Button onClick={handleClickNext}>
-            <H3>Next picture</H3>
-          </Button>
-        </Controls>
-      )}
-      {windowInstance === 'gameboard' && (
-        <ScoreBoardDiv>
-          {score.scoreBoard.map((scoreNum, scoreIndex) => {
-            return (
-              <ScoreCardDiv key={scoreIndex} index={scoreIndex}>
-                <ScoreH2>
-                  {score.type === 'player' ? 'Player' : 'Team'} {scoreIndex + 1}
-                </ScoreH2>
-                <ScoreBody>
-                  <ScoreH1>{scoreNum}</ScoreH1>
-                </ScoreBody>
-              </ScoreCardDiv>
-            );
-          })}
-        </ScoreBoardDiv>
+        <SquaresControls
+          answerRevealed={state.gameController.answerRevealed}
+          handleClickReveal={handleClickReveal}
+          timer={timer}
+          handleClickPlayPause={handleClickPlayPause}
+          handleClickNext={handleClickNext}
+        />
       )}
       <ReactAudioPlayer
         ref={sfxPlayer}
@@ -271,7 +215,12 @@ export default function SecretSquares({ windowInstance }) {
             loop
           />
         )}
-    </WhatHomeScreen>
+      <ScoreOverlay
+        position="corners"
+        score={score}
+        ScoreComponent={SquaresScoreComponent}
+      />
+    </SquaresContainer>
   ) : (
     <div />
   );

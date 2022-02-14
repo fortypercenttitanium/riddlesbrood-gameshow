@@ -93,8 +93,8 @@ export function App() {
   //   dispatch({
   //     type: 'SET_GAME',
   //     payload: {
-  //       title: '$25,000 Ponzi Scheme',
-  //       logo: 'Ponzi Scheme Logo.jpg',
+  //       title: 'Secret Squares',
+  //       logo: 'Secret Squares Logo.jpg',
   //       version: 0,
   //     },
   //   });
