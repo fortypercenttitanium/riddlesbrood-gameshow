@@ -10,6 +10,7 @@ const ScoreOverlayContainer = styled.div`
   height: 100%;
   position: absolute;
   display: flex;
+  pointer-events: none;
 
   .pa {
     position: absolute;

@@ -4,6 +4,7 @@ import playerOneScoreContainer from '../../../../assets/images/game_images/ponzi
 import playerTwoScoreContainer from '../../../../assets/images/game_images/ponziScheme/player-2-score-container.png';
 
 const ScoreContainer = styled.div`
+  pointer-events: all;
   background: center / contain no-repeat
     url(${(props) => props.backgroundImage});
   height: 220px;
