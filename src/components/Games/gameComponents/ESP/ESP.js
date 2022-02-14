@@ -1,13 +1,4 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import {
-  ScoreH1,
-  ScoreH2,
-  H3,
-  Controls,
-  Button,
-  ScoreBoardDiv,
-  ScoreCardDiv,
-} from '../gameComponentStyles/espStyles';
 import ESPScoreComponent from './ESPScoreComponent';
 import {
   initGame,
