@@ -58,7 +58,7 @@
     "electron-devtools-installer": "^3.2.0",
     "electron-react-devtools": "^0.5.3",
     "electron-updater": "^4.3.8",
-    "nanoid": "^3.1.20",
+    "nanoid": "^3.1.31",
     "react": "^16.13.1",
     "react-audio-player": "^0.13.0",
     "react-dom": "^16.13.1",
