@@ -15,6 +15,7 @@ electron-builder.env
 # production
 /dist
 /build
+deploy.sh
 
 # large files
 src/assets
