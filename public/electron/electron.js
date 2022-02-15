@@ -155,9 +155,11 @@ function createGameWindows() {
 }
 
 app.on('ready', () => {
-  installExtension(REACT_DEVELOPER_TOOLS)
-    .then((name) => console.log(`Added Extension:  ${name}`))
-    .catch((err) => console.log('An error occurred: ', err));
+  if (isDev) {
+    installExtension(REACT_DEVELOPER_TOOLS)
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log('An error occurred: ', err));
+  }
 
   protocol.registerFileProtocol('app', (req, cb) => {
     const url = req.url.substr(6);
