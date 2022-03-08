@@ -79,14 +79,14 @@ function createStartScreen() {
       : `file://${path.join(app.getAppPath(), 'build', 'index.html')}`,
   );
 
-  ipcMain.once('LAUNCH_GAME', () => {
-    createGameWindows();
+  ipcMain.once('LAUNCH_GAME', (_, { debugging }) => {
+    createGameWindows({ debugging });
     startScreenWindow.close();
     startScreenWindow = null;
   });
 }
 
-function createGameWindows() {
+function createGameWindows({ debugging }) {
   gameWindowConfig.x = projectorDisplay ? projectorDisplay.bounds.x + 50 : 0;
   gameWindowConfig.y = projectorDisplay ? projectorDisplay.bounds.y + 50 : 0;
   gameWindowConfig.fullscreen = !!projectorDisplay;
@@ -122,6 +122,11 @@ function createGameWindows() {
   });
 
   if (isDev) gameWindow.webContents.openDevTools();
+
+  if (debugging) {
+    gameWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
+  }
 
   gameWindow.on('maximize', (e) => {
     gameWindow.setFullScreen(true);
