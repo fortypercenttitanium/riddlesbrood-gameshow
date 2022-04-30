@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import veilImage from '../../../../assets/images/game_images/what_is_it/veil.png';
+import veilImage from '../../../../assets/images/game_images/squares/veil.png';
 
 const ImageContainer = styled.div`
   display: flex;

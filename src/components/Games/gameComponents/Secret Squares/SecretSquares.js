@@ -24,10 +24,11 @@ import SquaresTitle from './SquaresTitle';
 import SquaresControls from './SquaresControls';
 import SquaresScoreComponent from './SquaresScoreComponent';
 import SquaresImageContainer from './SquaresImageContainer';
+import bgMusic from '../../../../assets/sound_fx/bg_music/secret_squares.mp3';
 
 const pictures = importAll(
   require.context(
-    '../../../../assets/images/game_images/what_is_it',
+    `../../../../assets/images/game_images/squares/game`,
     false,
     /\.jpg$|\.jpeg$|\.png$/,
   ),
@@ -53,6 +54,7 @@ export default function SecretSquares({ windowInstance }) {
         ...initState,
         currentQuestion: initState.board[0],
         currentAnswer: initState.board[0].title,
+        bgMusic: true,
         timer: {
           time: 24,
           running: false,
@@ -210,7 +212,7 @@ export default function SecretSquares({ windowInstance }) {
               (state.audio.volume.master / 100) *
               (state.audio.volume.music / 100)
             }
-            src=""
+            src={bgMusic}
             autoPlay
             loop
           />

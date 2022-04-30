@@ -1,8 +1,13 @@
-import React, { useContext, useEffect, useRef, useCallback } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useCallback,
+  useState,
+} from 'react';
 import {
   WheelContainer,
   CategoryContainer,
-  CategoryCard,
   Board,
   BoardWrapper,
   LetterCell,
@@ -12,7 +17,6 @@ import {
   LetterSpan,
   ReturnButton,
   SolvePuzzle,
-  CategoryH3,
   CategoryDisplayText,
 } from '../gameComponentStyles/wheelStyles';
 import {
@@ -43,6 +47,8 @@ export default function Wheel({ windowInstance }) {
   } else if (windowInstance === 'gameboard') {
     StoreContext = StoreContextGB;
   }
+
+  const [selected, setSelected] = useState(0);
 
   const { state, dispatch } = useContext(StoreContext);
 
@@ -133,13 +139,17 @@ export default function Wheel({ windowInstance }) {
     [guessLetter, checkGuessedLetters, activateLetterCells, state],
   );
 
-  const handleClickCategory = (item, index) => {
-    clickHandlerCategory(item, index, {
+  const handleClickCategory = () => {
+    clickHandlerCategory(state.gameController.board[selected], selected, {
       setCurrentQuestion,
       dispatch,
       actions,
       state,
     });
+    console.log(state.gameController.board.findIndex((game) => !game.solved));
+    setSelected(
+      state.gameController.board.findIndex((game) => !game.solved) || 0,
+    );
   };
 
   const handleClickReturn = () => {
@@ -176,19 +186,20 @@ export default function Wheel({ windowInstance }) {
       />
       {windowInstance === 'controlPanel' && (
         <CategoryContainer display={state.gameController.display}>
-          {state.gameController.board.map((item, index) => {
-            return (
-              <CategoryCard
-                done={item.solved}
-                key={index}
-                onClick={() => {
-                  handleClickCategory(item, index);
-                }}
-              >
-                <CategoryH3>{item.puzzle}</CategoryH3>
-              </CategoryCard>
-            );
-          })}
+          <select
+            className="category-select"
+            onChange={(e) => setSelected(e.target.value)}
+            value={selected}
+          >
+            {state.gameController.board.map((item, index) => {
+              return (
+                <option disabled={item.solved} key={index} value={index}>
+                  {item.puzzle}
+                </option>
+              );
+            })}
+          </select>
+          <button onClick={handleClickCategory}>Select version</button>
         </CategoryContainer>
       )}
       {(state.gameController.display === 'board' ||

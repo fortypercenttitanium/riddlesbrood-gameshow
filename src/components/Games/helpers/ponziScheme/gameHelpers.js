@@ -2,9 +2,9 @@ import playSound from '../shared/audioHelpers';
 import { pyramidBell } from './imports';
 import tickSound from '../../../../assets/sound_fx/shared/Time countdown.mp3';
 // Change when new streak video added
-import streakVideo from '../../../../assets/videos/ponzi/excellent.mp4';
+import bonus1 from '../../../../assets/videos/ponzi/bonus1.mp4';
+import bonus2 from '../../../../assets/videos/ponzi/bonus2.mp4';
 // Change when new end round video added
-import endRoundVideo from '../../../../assets/videos/ponzi/Gnarly.mp4';
 const { ipcRenderer } = window.require('electron');
 
 const playVideo = (file) => {
@@ -35,12 +35,22 @@ const resetStreak = ({ dispatch, actions }) => {
 };
 
 const addBonusTime = (seconds, { dispatch, actions, state }) => {
-  dispatch({
-    type: actions.SET_TIMER,
-    payload: state.gameController.timer.time + seconds,
-  });
-  dispatch({ type: actions.RUN_TIMER });
-  playVideo(streakVideo);
+  dispatch({ type: 'PAUSE_TIMER' });
+  if (seconds !== 5 && seconds !== 10)
+    throw new Error(
+      'Please select 5 or 10 seconds to add, or add another bonus video!',
+    );
+  const video = seconds === 5 ? bonus1 : bonus2;
+  playVideo(video);
+
+  setTimeout(() => {
+    dispatch({
+      type: actions.SET_TIMER,
+      payload: state.gameController.timer.time + seconds,
+    });
+
+    dispatch({ type: actions.RUN_TIMER });
+  }, 5000);
 };
 
 const clickHandlerCategory = (question, { state, dispatch }) => {
@@ -64,7 +74,7 @@ const clickHandlerCategory = (question, { state, dispatch }) => {
 };
 
 const endRound = ({ dispatch }) => {
-  playVideo(endRoundVideo);
+  // playVideo(endRoundVideo);
   dispatch({ type: 'END_PONZI_ROUND' });
 };
 
@@ -103,9 +113,9 @@ const correctHandler = (
 
   if (newStreak >= STREAK_FIRST_BONUS) {
     if ((newStreak - STREAK_FIRST_BONUS) % STREAK_BONUS_INTERVAL === 0) {
-      const bonusTimeMultiplier =
-        (newStreak - STREAK_FIRST_BONUS) / STREAK_BONUS_INTERVAL + 1;
+      const bonusTimeMultiplier = newStreak - STREAK_FIRST_BONUS === 0 ? 1 : 2;
       const bonusTime = BONUS_TIME_VALUE * bonusTimeMultiplier;
+
       addBonusTime(bonusTime, {
         dispatch,
         actions,
