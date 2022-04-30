@@ -1,18 +1,10 @@
-import tickTock from '../../../../assets/sound_fx/ticktock.wav';
-import { stopAllSounds } from '../shared/audioHelpers';
-
 const playPauseHandler = ({ sfxPlayer, timer, blocks, dispatch, actions }) => {
-  const player = sfxPlayer.current.audioEl.current;
   if (!timer.running && blocks.every((block) => block)) {
-    player.src = tickTock;
-    player.play().catch((err) => console.log(err));
     dispatch({ type: actions.RUN_TIMER });
   } else if (timer.running) {
-    player.pause();
     dispatch({ type: actions.PAUSE_TIMER });
   } else if (timer.time > 0) {
     dispatch({ type: actions.RUN_TIMER });
-    player.play();
   }
 };
 
@@ -24,14 +16,10 @@ const clearBlocks = ({ dispatch, actions }) => {
   dispatch({ type: actions.SET_BLOCKS, payload: arr });
 };
 
-const toggleTitleReveal = (
-  setting,
-  { dispatch, actions, sfxPlayer, musicPlayer },
-) => {
+const toggleTitleReveal = (setting, { dispatch, actions }) => {
   dispatch({ type: actions.SET_ANSWER_REVEALED, payload: setting });
   setting && clearBlocks({ dispatch, actions });
   setting && dispatch({ type: actions.KILL_TIMER });
-  stopAllSounds({ sfxPlayer, musicPlayer });
 };
 
 const resetBlocks = ({ dispatch, actions }) => {

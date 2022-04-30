@@ -199,7 +199,7 @@ export default function Wheel({ windowInstance }) {
               );
             })}
           </select>
-          <button onClick={handleClickCategory}>Select version</button>
+          <button onClick={handleClickCategory}>Select puzzle</button>
         </CategoryContainer>
       )}
       {(state.gameController.display === 'board' ||

@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import {
   initGame,
-  stopAllSounds,
   StoreContextCP,
   StoreContextGB,
   actions,
@@ -58,7 +57,6 @@ export default function SecretSquares({ windowInstance }) {
         timer: {
           time: 24,
           running: false,
-          tickSound: '',
         },
         score: {
           type: 'player',
@@ -110,7 +108,7 @@ export default function SecretSquares({ windowInstance }) {
   };
 
   const handleClickPlayPause = () => {
-    playPauseHandler({ sfxPlayer, timer, blocks, dispatch, actions });
+    playPauseHandler({ timer, blocks, dispatch, actions });
   };
 
   const handleClickNext = () => {
@@ -156,7 +154,6 @@ export default function SecretSquares({ windowInstance }) {
         case 0:
           revealHandler(8, { blocks, dispatch, actions });
           dispatch({ type: actions.KILL_TIMER });
-          stopAllSounds({ sfxPlayer, musicPlayer });
           break;
         default:
           break;
