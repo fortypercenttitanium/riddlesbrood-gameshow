@@ -38,6 +38,8 @@ import {
   ScoreComponent,
 } from '../../helpers/wheel/imports';
 
+import bgMusic from '../../../../assets/sound_fx/bg_music/wheel.mp3';
+
 const { ipcRenderer } = window.require('electron');
 
 export default function Wheel({ windowInstance }) {
@@ -80,6 +82,7 @@ export default function Wheel({ windowInstance }) {
           guessedLetters: [],
           solved: false,
         },
+        bgMusic: true,
       };
       dispatch({
         type: actions.INIT_GAME,
@@ -264,7 +267,7 @@ export default function Wheel({ windowInstance }) {
               (state.audio.volume.master / 100) *
               (state.audio.volume.music / 100)
             }
-            src=""
+            src={bgMusic}
             autoPlay
             loop
           />
