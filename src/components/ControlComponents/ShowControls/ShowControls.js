@@ -52,9 +52,10 @@ export default function ShowControls({ projectorMode }) {
   };
 
   const handleClickCommercial = () => {
+    const commercialFile = commercialVideos[currentCommercial];
     ipcRenderer.send('PLAY_VIDEO_SEND', {
       file: showControlVideos['brb.mp4'],
-      callbackQueue: [{ file: commercialVideos[currentCommercial] }],
+      callbackQueue: [{ file: commercialFile }],
     });
 
     const nextCommercial =
