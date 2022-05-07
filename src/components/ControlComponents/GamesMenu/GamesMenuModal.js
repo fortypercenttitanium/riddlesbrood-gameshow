@@ -69,7 +69,6 @@ export default function GamesMenuModal() {
       const shortName = gamesList.find(
         (game) => game.title === title,
       )?.shortName;
-      console.log(shortName);
 
       if (versions.length) {
         const content = versions[selectedVersion].content;
