@@ -45,9 +45,21 @@ export const Title = styled.h1`
 export const CategoryContainer = styled.div`
   display: ${(props) => (props.display === 'select' ? 'flex' : 'none')};
   flex-direction: column;
-  height: 50%;
-  width: 30%;
-  margin: auto;
+  margin: 220px auto;
+  gap: 48px;
+  justify-content: space-between;
+  align-items: center;
+
+  select {
+    height: 120px;
+    padding-left: 24px;
+    font-size: 3.5rem;
+  }
+
+  button {
+    padding: 24px;
+    font-size: 3rem;
+  }
 `;
 
 export const CategoryCard = styled.button`
@@ -197,7 +209,7 @@ export const CategoryDisplay = styled.div`
 
 export const CategoryH3 = styled.h3`
   margin: auto;
-  font-size: 3rem;
+  font-size: 2rem;
 `;
 
 export const CategoryDisplayText = styled.h1`

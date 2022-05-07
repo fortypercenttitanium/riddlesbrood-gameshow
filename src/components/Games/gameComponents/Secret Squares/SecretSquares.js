@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import {
   initGame,
-  stopAllSounds,
   StoreContextCP,
   StoreContextGB,
   actions,
@@ -24,10 +23,11 @@ import SquaresTitle from './SquaresTitle';
 import SquaresControls from './SquaresControls';
 import SquaresScoreComponent from './SquaresScoreComponent';
 import SquaresImageContainer from './SquaresImageContainer';
+import bgMusic from '../../../../assets/sound_fx/bg_music/secret_squares.mp3';
 
 const pictures = importAll(
   require.context(
-    '../../../../assets/images/game_images/what_is_it',
+    `../../../../assets/images/game_images/squares/game`,
     false,
     /\.jpg$|\.jpeg$|\.png$/,
   ),
@@ -53,10 +53,10 @@ export default function SecretSquares({ windowInstance }) {
         ...initState,
         currentQuestion: initState.board[0],
         currentAnswer: initState.board[0].title,
+        bgMusic: true,
         timer: {
           time: 24,
           running: false,
-          tickSound: '',
         },
         score: {
           type: 'player',
@@ -108,7 +108,7 @@ export default function SecretSquares({ windowInstance }) {
   };
 
   const handleClickPlayPause = () => {
-    playPauseHandler({ sfxPlayer, timer, blocks, dispatch, actions });
+    playPauseHandler({ timer, blocks, dispatch, actions });
   };
 
   const handleClickNext = () => {
@@ -154,7 +154,6 @@ export default function SecretSquares({ windowInstance }) {
         case 0:
           revealHandler(8, { blocks, dispatch, actions });
           dispatch({ type: actions.KILL_TIMER });
-          stopAllSounds({ sfxPlayer, musicPlayer });
           break;
         default:
           break;
@@ -210,7 +209,7 @@ export default function SecretSquares({ windowInstance }) {
               (state.audio.volume.master / 100) *
               (state.audio.volume.music / 100)
             }
-            src=""
+            src={bgMusic}
             autoPlay
             loop
           />

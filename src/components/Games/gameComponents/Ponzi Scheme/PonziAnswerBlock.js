@@ -10,7 +10,8 @@ const AnswerBlockContainer = styled.div`
   margin-top: 200px;
   h1 {
     color: black;
-    font-size: ${({ answerLength }) => (answerLength < 15 ? '112px' : '72px')};
+    font-size: ${({ answerLength }) =>
+      answerLength < 15 ? '112px' : answerLength < 20 ? '72px' : '48px'};
   }
 
   h2 {

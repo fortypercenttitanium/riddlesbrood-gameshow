@@ -31,6 +31,14 @@ const videos = importAll(
   require.context('../../../../assets/videos/jeopardy', false, /\.mp4$/),
 );
 
+const pictures = importAll(
+  require.context(
+    `../../../../assets/images/game_images/jeopardy/game`,
+    false,
+    /\.jpg$|\.jpeg$|\.png$/,
+  ),
+);
+
 export default function Jeopardy({ windowInstance }) {
   let StoreContext;
   if (windowInstance === 'controlPanel') {
@@ -138,6 +146,14 @@ export default function Jeopardy({ windowInstance }) {
             <DailyImg src={dailyDoubleImage} alt="" />
           </div>
         )}
+        {state.gameController.display === 'question' &&
+          state.gameController.currentQuestion.type === 'image' && (
+            <img
+              className="question-image"
+              src={pictures[state.gameController.currentQuestion.question]}
+              alt="jeopardy question"
+            />
+          )}
         <h2 className="question-text">
           {state.gameController.display === 'question' &&
           state.gameController.currentQuestion.type === 'text'
