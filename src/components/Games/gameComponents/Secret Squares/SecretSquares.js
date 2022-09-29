@@ -55,7 +55,7 @@ export default function SecretSquares({ windowInstance }) {
         currentAnswer: initState.board[0].title,
         bgMusic: true,
         timer: {
-          time: 24,
+          time: 21,
           running: false,
         },
         score: {
@@ -130,7 +130,7 @@ export default function SecretSquares({ windowInstance }) {
     if (timer.running && timerDidUpdate) {
       setTimerDidUpdate(false);
       switch (timer.time) {
-        case 21:
+        case 20:
           revealHandler(1, { blocks, dispatch, actions });
           break;
         case 18:
@@ -172,7 +172,7 @@ export default function SecretSquares({ windowInstance }) {
       />
       <SquaresImageContainer
         showVeil={
-          timer.time < 24 &&
+          timer.time < 21 &&
           !timer.running &&
           !state.gameController.answerRevealed &&
           !blocks.every((block) => !block)

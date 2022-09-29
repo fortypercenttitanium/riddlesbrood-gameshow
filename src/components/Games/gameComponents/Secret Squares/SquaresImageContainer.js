@@ -45,7 +45,6 @@ const ImageContainer = styled.div`
     height: 100%;
     width: 100%;
     border-radius: 4px;
-    transition: ${(props) => props.transition};
   }
 
   .green {
@@ -55,7 +54,7 @@ const ImageContainer = styled.div`
 
   .transparent {
     background-color: transparent;
-    transition: 3s ease-in;
+    transition: 2s ease-in;
   }
 `;
 

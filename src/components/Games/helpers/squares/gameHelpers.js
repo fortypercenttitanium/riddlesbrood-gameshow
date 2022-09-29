@@ -42,7 +42,7 @@ const nextPicture = ({
     board.findIndex((question) => currentQuestion.title === question.title) + 1;
   if (nextQuestionIndex <= board.length - 1) {
     resetBlocks({ dispatch, actions });
-    dispatch({ type: actions.SET_TIMER, payload: 24 });
+    dispatch({ type: actions.SET_TIMER, payload: 21 });
     toggleTitleReveal(false, { dispatch, actions, sfxPlayer, musicPlayer });
     dispatch({
       type: actions.SET_QUESTION,

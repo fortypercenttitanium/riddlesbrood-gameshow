@@ -140,8 +140,6 @@ export default function GamesMenuModal() {
         dispatch({ type: 'SET_GAME', payload: selectedGame });
       }, 1000);
     } else {
-      ipcRenderer.send('STOP_VIDEO_SEND');
-      dispatch({ type: 'RESET_GAME' });
       dispatch({ type: 'GO_TO_VERSION_SELECT', payload: selectedGame });
     }
   };
@@ -155,6 +153,8 @@ export default function GamesMenuModal() {
       version: localState.selectedVersion[title],
       video,
     };
+    ipcRenderer.send('STOP_VIDEO_SEND');
+    dispatch({ type: 'RESET_GAME' });
     dispatch({ type: 'CLOSE_GAMES_MENU' });
     ipcRenderer.send('PLAY_VIDEO_SEND', selectedGame.video);
     setTimeout(() => {
