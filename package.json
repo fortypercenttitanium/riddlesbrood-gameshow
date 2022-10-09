@@ -78,7 +78,7 @@
     "dev": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
     "prebuild": "npm run react-build",
     "deploy_prod": "electron-builder -c.extraMetadata.main=build/electron/electron.js -p always",
-    "deploy": "./deploy.sh",
+    "deploy": "deploy.sh",
     "predeploy": "npm run react-build"
   },
   "eslintConfig": {
