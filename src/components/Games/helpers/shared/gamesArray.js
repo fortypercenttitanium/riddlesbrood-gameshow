@@ -5,7 +5,7 @@ const videos = importAll(
   require.context(
     '../../../../assets/videos/game_intro_videos',
     true,
-    /\.mp4|\.mov|\.mp3$/,
+    /\.mp4|\.m4v|\.mov|\.mp3$/,
   ),
 );
 

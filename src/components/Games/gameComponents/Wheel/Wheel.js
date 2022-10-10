@@ -92,8 +92,6 @@ export default function Wheel({ windowInstance }) {
     if (!state.gameController.gameStarted) {
       initialize();
     }
-
-    console.log(state.gameController.board);
   }, [dispatch, state]);
 
   const setCurrentQuestion = useCallback(

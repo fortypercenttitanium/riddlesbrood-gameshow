@@ -28,7 +28,7 @@ import {
 } from '../../helpers/jeopardy/imports';
 
 const videos = importAll(
-  require.context('../../../../assets/videos/jeopardy', false, /\.mp4$/),
+  require.context('../../../../assets/videos/jeopardy', false, /\.mp4|\.m4v$/),
 );
 
 const pictures = importAll(

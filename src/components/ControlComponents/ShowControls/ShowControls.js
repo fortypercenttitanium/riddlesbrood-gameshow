@@ -16,7 +16,7 @@ const showControlVideos = importAll(
   require.context(
     '../../../assets/videos/show_control_videos',
     false,
-    /\.mp4|\.mov$/,
+    /\.mp4|\.m4v|\.mov$/,
   ),
 );
 
