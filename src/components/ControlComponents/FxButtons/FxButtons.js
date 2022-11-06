@@ -24,6 +24,10 @@ const coreFiles = importAll(
   ),
 );
 
+const NUM_FX_BUTTON_PAGES = 8;
+const NUM_FX_BUTTONS_PER_PAGE = 8;
+const NUM_FX_BUTTONS = NUM_FX_BUTTON_PAGES * NUM_FX_BUTTONS_PER_PAGE;
+
 export default function FxButtons() {
   const { state, dispatch } = useContext(StoreContext);
   const { audio, fxButtons } = state;
@@ -49,13 +53,12 @@ export default function FxButtons() {
       const buttons = await ipcRenderer.invoke('GET_FX_BUTTONS');
 
       // fill in remainder of buttons
-      const numberOfButtons = 24;
-      for (let i = 0; i < numberOfButtons; i++) {
+      for (let i = 0; i < NUM_FX_BUTTONS; i++) {
         if (!buttons[i]) {
           buttons[i] = {
-            name: null,
-            file: null,
-            type: null,
+            name: '',
+            file: '',
+            type: '',
           };
         }
       }
@@ -117,7 +120,7 @@ export default function FxButtons() {
   };
 
   const handlePageClick = () => {
-    setButtonPage(buttonPage < 3 ? buttonPage + 1 : 1);
+    setButtonPage(buttonPage < NUM_FX_BUTTON_PAGES ? buttonPage + 1 : 1);
   };
 
   const paginateButtons = () => {

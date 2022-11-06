@@ -1,10 +1,8 @@
 import playSound from '../shared/audioHelpers';
 import { pyramidBell } from './imports';
 import tickSound from '../../../../assets/sound_fx/shared/Time countdown.mp3';
-// Change when new streak video added
 import bonus1 from '../../../../assets/videos/ponzi/bonus1.mp4';
 import bonus2 from '../../../../assets/videos/ponzi/bonus2.mp4';
-// Change when new end round video added
 const { ipcRenderer } = window.require('electron');
 
 const playVideo = (file) => {
