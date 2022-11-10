@@ -9,7 +9,7 @@ const CustomMessageWrapper = styled.div`
   height: 100%;
   text-align: center;
   color: #eee;
-  font-family: Dobkin;
+  font-family: GreatVibes;
 
   .video {
     position: absolute;
