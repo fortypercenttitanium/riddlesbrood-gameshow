@@ -1,3 +1,7 @@
+import playSound from '../shared/audioHelpers';
+import revealSound from '../../../../assets/sound_fx/secret_squares/ss_reveal.mp3';
+import vanishSound from '../../../../assets/sound_fx/secret_squares/ss_vanish.mp3';
+
 const playPauseHandler = ({ sfxPlayer, timer, blocks, dispatch, actions }) => {
   if (!timer.running && blocks.every((block) => block)) {
     dispatch({ type: actions.RUN_TIMER });
@@ -16,7 +20,11 @@ const clearBlocks = ({ dispatch, actions }) => {
   dispatch({ type: actions.SET_BLOCKS, payload: arr });
 };
 
-const toggleTitleReveal = (setting, { dispatch, actions }) => {
+const toggleTitleReveal = (
+  setting,
+  { dispatch, actions, sfxPlayer, musicPlayer },
+) => {
+  if (sfxPlayer) playSound(revealSound, 'sfx', { sfxPlayer, musicPlayer });
   dispatch({ type: actions.SET_ANSWER_REVEALED, payload: setting });
   setting && clearBlocks({ dispatch, actions });
   setting && dispatch({ type: actions.KILL_TIMER });
@@ -30,20 +38,13 @@ const resetBlocks = ({ dispatch, actions }) => {
   dispatch({ type: actions.SET_BLOCKS, payload: arr });
 };
 
-const nextPicture = ({
-  board,
-  currentQuestion,
-  dispatch,
-  actions,
-  sfxPlayer,
-  musicPlayer,
-}) => {
+const nextPicture = ({ board, currentQuestion, dispatch, actions }) => {
   const nextQuestionIndex =
     board.findIndex((question) => currentQuestion.title === question.title) + 1;
   if (nextQuestionIndex <= board.length - 1) {
     resetBlocks({ dispatch, actions });
     dispatch({ type: actions.SET_TIMER, payload: 21 });
-    toggleTitleReveal(false, { dispatch, actions, sfxPlayer, musicPlayer });
+    toggleTitleReveal(false, { dispatch, actions });
     dispatch({
       type: actions.SET_QUESTION,
       payload: board[nextQuestionIndex],
@@ -55,7 +56,11 @@ const nextPicture = ({
   }
 };
 
-const revealHandleCallback = (level, { blocks, dispatch, actions }) => {
+const revealHandleCallback = (
+  level,
+  { blocks, dispatch, actions, sfxPlayer, musicPlayer },
+) => {
+  playSound(vanishSound, 'sfx', { sfxPlayer, musicPlayer });
   // order in which the blocks will be removed
   const removalOrder = [
     [7, 14],

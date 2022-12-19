@@ -54,7 +54,7 @@ const ImageContainer = styled.div`
 
   .transparent {
     background-color: transparent;
-    transition: 2s ease-in;
+    transition: 0.2s;
   }
 `;
 

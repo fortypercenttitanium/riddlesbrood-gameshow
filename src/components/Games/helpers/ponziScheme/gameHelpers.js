@@ -1,5 +1,5 @@
 import playSound from '../shared/audioHelpers';
-import { pyramidBell } from './imports';
+import { pyramidBell, buzzer } from './imports';
 import tickSound from '../../../../assets/sound_fx/shared/Time countdown.mp3';
 import bonus1 from '../../../../assets/videos/ponzi/bonus1.mp4';
 import bonus2 from '../../../../assets/videos/ponzi/bonus2.mp4';
@@ -142,7 +142,17 @@ const correctHandler = (
   });
 };
 
-const incorrectHandler = ({ state, dispatch, actions }) => {
+const incorrectHandler = ({
+  state,
+  dispatch,
+  actions,
+  sfxPlayer,
+  musicPlayer,
+}) => {
+  playSound(buzzer, 'sfx', {
+    sfxPlayer,
+    musicPlayer,
+  });
   setCurrentQuestion(
     {
       category: state.gameController.currentQuestion.category,

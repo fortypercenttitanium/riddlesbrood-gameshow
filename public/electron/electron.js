@@ -159,6 +159,12 @@ function createGameWindows({ debugging }) {
   }
 }
 
+// remove media key functionality from app
+app.commandLine.appendSwitch(
+  'disable-features',
+  'HardwareMediaKeyHandling,MediaSessionService',
+);
+
 app.on('ready', () => {
   if (isDev) {
     installExtension(REACT_DEVELOPER_TOOLS)

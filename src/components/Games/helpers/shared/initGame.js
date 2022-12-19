@@ -5,6 +5,7 @@ export default async function initGame(state, game, initialDisplay = 'init') {
   const initState = {
     display: initialDisplay,
     currentQuestion: null,
+    category: games[game][state.currentGame.version],
     board: games[game][state.currentGame.version].content,
     currentAnswer: '',
     timer: {

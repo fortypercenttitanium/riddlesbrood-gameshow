@@ -6,10 +6,10 @@ import Router from './Router';
 import StoreProvider from './store/context';
 
 ReactDOM.render(
-	<StoreProvider>
-		<Router />
-	</StoreProvider>,
-	document.getElementById('root')
+  <StoreProvider>
+    <Router />
+  </StoreProvider>,
+  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

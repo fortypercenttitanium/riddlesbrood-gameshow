@@ -1,5 +1,7 @@
 import playSound from '../shared/audioHelpers';
 import { wheelBuzzer, wheelDing } from './imports';
+import puzzleChosenSound from '../../../../assets/sound_fx/wheel/wheel_puzzle_chosen.mp3';
+import solveSound from '../../../../assets/sound_fx/wheel/wheel_reveal.mp3';
 
 const renderPuzzle = (state) => {
   const { puzzle } = state.gameController.currentQuestion;
@@ -91,7 +93,7 @@ const changeGameDisplay = (displaySetting, { dispatch, actions }) => {
 const clickHandlerCategory = (
   puzzle,
   index,
-  { setCurrentQuestion, dispatch, actions, state },
+  { setCurrentQuestion, dispatch, actions, state, sfxPlayer, musicPlayer },
 ) => {
   setCurrentQuestion({
     category: puzzle.category,
@@ -100,11 +102,18 @@ const clickHandlerCategory = (
     solved: false,
   });
   setCategorySolved(index, { state, dispatch, actions });
+  playSound(puzzleChosenSound, 'sfx', {
+    sfxPlayer,
+    musicPlayer,
+  });
   dispatch({ type: actions.SET_ANSWER, payload: puzzle.puzzle });
   changeGameDisplay('board', { dispatch, actions });
 };
 
-const setQuestionCallback = (question, { dispatch, actions }) => {
+const setQuestionCallback = (
+  question,
+  { dispatch, actions, sfxPlayer, musicPlayer },
+) => {
   dispatch({ type: actions.SET_QUESTION, payload: question });
 };
 
@@ -181,9 +190,13 @@ const keyPressCallback = (
   }
 };
 
-const solvePuzzle = ({ state, dispatch, actions }) => {
+const solvePuzzle = ({ state, dispatch, actions, sfxPlayer, musicPlayer }) => {
   const question = state.gameController.currentQuestion;
   question.solved = true;
+  playSound(solveSound, 'sfx', {
+    sfxPlayer,
+    musicPlayer,
+  });
   dispatch({ type: actions.SET_QUESTION, payload: question });
 };
 

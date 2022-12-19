@@ -24,6 +24,7 @@ import SquaresControls from './SquaresControls';
 import SquaresScoreComponent from './SquaresScoreComponent';
 import SquaresImageContainer from './SquaresImageContainer';
 import bgMusic from '../../../../assets/sound_fx/bg_music/secret_squares.mp3';
+import SquaresCategory from './SquaresCategory';
 
 const pictures = importAll(
   require.context(
@@ -42,7 +43,6 @@ export default function SecretSquares({ windowInstance }) {
   }
 
   const { state, dispatch } = useContext(StoreContext);
-
   let musicPlayer = useRef();
   let sfxPlayer = useRef();
 
@@ -131,28 +131,76 @@ export default function SecretSquares({ windowInstance }) {
       setTimerDidUpdate(false);
       switch (timer.time) {
         case 20:
-          revealHandler(1, { blocks, dispatch, actions });
+          revealHandler(1, {
+            blocks,
+            dispatch,
+            actions,
+            sfxPlayer,
+            musicPlayer,
+          });
           break;
         case 18:
-          revealHandler(2, { blocks, dispatch, actions });
+          revealHandler(2, {
+            blocks,
+            dispatch,
+            actions,
+            sfxPlayer,
+            musicPlayer,
+          });
           break;
         case 15:
-          revealHandler(3, { blocks, dispatch, actions });
+          revealHandler(3, {
+            blocks,
+            dispatch,
+            actions,
+            sfxPlayer,
+            musicPlayer,
+          });
           break;
         case 12:
-          revealHandler(4, { blocks, dispatch, actions });
+          revealHandler(4, {
+            blocks,
+            dispatch,
+            actions,
+            sfxPlayer,
+            musicPlayer,
+          });
           break;
         case 9:
-          revealHandler(5, { blocks, dispatch, actions });
+          revealHandler(5, {
+            blocks,
+            dispatch,
+            actions,
+            sfxPlayer,
+            musicPlayer,
+          });
           break;
         case 6:
-          revealHandler(6, { blocks, dispatch, actions });
+          revealHandler(6, {
+            blocks,
+            dispatch,
+            actions,
+            sfxPlayer,
+            musicPlayer,
+          });
           break;
         case 3:
-          revealHandler(7, { blocks, dispatch, actions });
+          revealHandler(7, {
+            blocks,
+            dispatch,
+            actions,
+            sfxPlayer,
+            musicPlayer,
+          });
           break;
         case 0:
-          revealHandler(8, { blocks, dispatch, actions });
+          revealHandler(8, {
+            blocks,
+            dispatch,
+            actions,
+            sfxPlayer,
+            musicPlayer,
+          });
           dispatch({ type: actions.KILL_TIMER });
           break;
         default:
@@ -184,7 +232,7 @@ export default function SecretSquares({ windowInstance }) {
         }
         blocks={blocks}
       />
-      {windowInstance === 'controlPanel' && (
+      {windowInstance === 'controlPanel' ? (
         <SquaresControls
           answerRevealed={state.gameController.answerRevealed}
           handleClickReveal={handleClickReveal}
@@ -192,6 +240,8 @@ export default function SecretSquares({ windowInstance }) {
           handleClickPlayPause={handleClickPlayPause}
           handleClickNext={handleClickNext}
         />
+      ) : (
+        <SquaresCategory category={state.gameController.category.title} />
       )}
       <ReactAudioPlayer
         ref={sfxPlayer}

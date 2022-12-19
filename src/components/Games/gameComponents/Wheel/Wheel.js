@@ -96,7 +96,10 @@ export default function Wheel({ windowInstance }) {
 
   const setCurrentQuestion = useCallback(
     (question) => {
-      setQuestionCallback(question, { dispatch, actions });
+      setQuestionCallback(question, {
+        dispatch,
+        actions,
+      });
     },
     [dispatch],
   );
@@ -148,8 +151,10 @@ export default function Wheel({ windowInstance }) {
       dispatch,
       actions,
       state,
+      sfxPlayer,
+      musicPlayer,
     });
-    console.log(state.gameController.board.findIndex((game) => !game.solved));
+
     setSelected(
       state.gameController.board.findIndex((game) => !game.solved) || 0,
     );
@@ -160,7 +165,7 @@ export default function Wheel({ windowInstance }) {
   };
 
   const handleClickSolve = () => {
-    solvePuzzle({ state, dispatch, actions });
+    solvePuzzle({ state, dispatch, actions, sfxPlayer, musicPlayer });
   };
 
   useEffect(() => {
