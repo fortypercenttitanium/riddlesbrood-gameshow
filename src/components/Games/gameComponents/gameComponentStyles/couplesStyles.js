@@ -94,26 +94,11 @@ export const ControlPanelOverlay = styled.div`
 export const Controls = styled.div`
   display: flex;
   position: absolute;
+  padding: 0 24px;
+  justify-content: space-between;
   bottom: 0;
   left: 0;
   right: 0;
-  button {
-    position: absolute;
-    bottom: 0;
-  }
-  button:first-child {
-    left: 24px;
-    right: auto;
-  }
-  button:last-child {
-    left: auto;
-    right: 24px;
-  }
-  button:nth-child(2) {
-    margin: auto;
-    left: 0;
-    right: 0;
-  }
 `;
 
 export const Button = styled.button`
