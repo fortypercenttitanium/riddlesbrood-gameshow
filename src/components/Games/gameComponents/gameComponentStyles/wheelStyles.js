@@ -127,8 +127,8 @@ export const LetterSpan = styled.span`
 export const ReturnButton = styled.button`
   padding: 1rem;
   position: absolute;
-  bottom: 24px;
-  right: 100px;
+  bottom: 76px;
+  left: 40%;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
   text-align: center;
   margin: auto;
@@ -174,6 +174,30 @@ export const SolvePuzzle = styled.button`
     background: white;
   }
   .solve {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+`;
+
+export const GuessNextLetter = styled.button`
+  display: ${(props) =>
+    props.display === 'board' && props.screen === 'controlPanel'
+      ? 'flex'
+      : 'none'};
+  position: absolute;
+  bottom: 24px;
+  right: 100px;
+  padding: 14px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+  transition: 0.3s;
+  margin: auto;
+  background: lightblue;
+  cursor: pointer;
+  border-radius: 10px;
+  &:hover {
+    background: white;
+  }
+  .guess {
     font-size: 2rem;
     font-weight: bold;
   }

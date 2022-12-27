@@ -135,7 +135,14 @@ const guessLetterCallback = (
 const activateLetterCellsCallback = (
   letter,
   index = 0,
-  { sfxPlayer, musicPlayer, activateLetterCells, windowInstance },
+  {
+    sfxPlayer,
+    musicPlayer,
+    activateLetterCells,
+    windowInstance,
+    dispatch,
+    guessedLetters,
+  },
 ) => {
   const spans = Array.from(document.querySelectorAll('[data-cell')).filter(
     (span) => {
@@ -169,29 +176,31 @@ const activateLetterCellsCallback = (
       if (index < spans.length) {
         activateLetterCells(letter, index + 1);
       }
+      if (index === spans.length - 1) {
+        const timerTime =
+          guessedLetters.length <= 3 ? 9 : guessedLetters.length <= 6 ? 7 : 5;
+        dispatch({ type: 'SET_TIMER', payload: timerTime });
+        dispatch({ type: 'RUN_TIMER' });
+      }
     }, 2000);
   }
 };
 
 const keyPressCallback = (
-  e,
+  letter,
   { state, checkGuessedLetters, guessLetter, ipcRenderer, activateLetterCells },
 ) => {
   if (state.gameController.display === 'board') {
-    if (
-      e.keyCode >= 65 &&
-      e.keyCode <= 90 &&
-      !checkGuessedLetters(e.key.toUpperCase())
-    ) {
-      guessLetter(e.key.toUpperCase());
-      ipcRenderer.send('WHEEL_GUESS_SEND', e.key);
-      activateLetterCells(e.key.toUpperCase());
+    if (!checkGuessedLetters(letter.toUpperCase())) {
+      guessLetter(letter.toUpperCase());
+      ipcRenderer.send('WHEEL_GUESS_SEND', letter);
+      activateLetterCells(letter.toUpperCase());
     }
   }
 };
 
 const solvePuzzle = ({ state, dispatch, actions, sfxPlayer, musicPlayer }) => {
-  const question = state.gameController.currentQuestion;
+  const question = { ...state.gameController.currentQuestion };
   question.solved = true;
   playSound(solveSound, 'sfx', {
     sfxPlayer,

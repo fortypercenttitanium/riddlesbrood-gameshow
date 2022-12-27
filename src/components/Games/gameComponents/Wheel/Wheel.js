@@ -13,11 +13,10 @@ import {
   LetterCell,
   Span,
   CategoryDisplay,
-  GuessedLettersDisplay,
-  LetterSpan,
   ReturnButton,
   SolvePuzzle,
   CategoryDisplayText,
+  GuessNextLetter,
 } from '../gameComponentStyles/wheelStyles';
 import {
   renderPuzzle,
@@ -36,9 +35,13 @@ import {
   returnHandler,
   ScoreOverlay,
   ScoreComponent,
+  playSound,
 } from '../../helpers/wheel/imports';
+import tickSound from '../../../../assets/sound_fx/shared/beep.mp3';
+import buzzer from '../../../../assets/sound_fx/shared/buzzer.mp3';
 
 import bgMusic from '../../../../assets/sound_fx/bg_music/wheel.mp3';
+import TimerDisplay from './TimerDisplay';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -51,6 +54,7 @@ export default function Wheel({ windowInstance }) {
   }
 
   const [selected, setSelected] = useState(0);
+  const [letterSelectionDisabled, setLetterSelectionDisabled] = useState(false);
 
   const { state, dispatch } = useContext(StoreContext);
 
@@ -83,6 +87,11 @@ export default function Wheel({ windowInstance }) {
           solved: false,
         },
         bgMusic: true,
+        timer: {
+          time: null,
+          running: false,
+          tickSound,
+        },
       };
       dispatch({
         type: actions.INIT_GAME,
@@ -93,6 +102,22 @@ export default function Wheel({ windowInstance }) {
       initialize();
     }
   }, [dispatch, state]);
+
+  useEffect(() => {
+    if (
+      state.gameController.timer.running &&
+      state.gameController.timer.time <= 0
+    ) {
+      if (windowInstance === 'controlPanel') {
+        playSound(buzzer, 'sfx', {
+          sfxPlayer,
+          musicPlayer,
+        });
+      }
+      dispatch({ type: 'KILL_TIMER' });
+      setLetterSelectionDisabled(false);
+    }
+  }, [state.gameController.timer, dispatch, windowInstance]);
 
   const setCurrentQuestion = useCallback(
     (question) => {
@@ -111,9 +136,15 @@ export default function Wheel({ windowInstance }) {
         musicPlayer,
         activateLetterCells,
         windowInstance,
+        dispatch,
+        guessedLetters: state.gameController.currentQuestion.guessedLetters,
       });
     },
-    [windowInstance],
+    [
+      dispatch,
+      state.gameController.currentQuestion.guessedLetters,
+      windowInstance,
+    ],
   );
 
   const checkGuessedLetters = useCallback(
@@ -132,18 +163,57 @@ export default function Wheel({ windowInstance }) {
     [checkGuessedLetters, setCurrentQuestion, state],
   );
 
-  const handleKeyPress = useCallback(
-    (e) => {
-      keyPressCallback(e, {
-        state,
-        checkGuessedLetters,
-        guessLetter,
-        ipcRenderer,
-        activateLetterCells,
-      });
-    },
-    [guessLetter, checkGuessedLetters, activateLetterCells, state],
-  );
+  const handleGuessLetter = useCallback(() => {
+    if (
+      state.gameController.timer.running ||
+      state.gameController.currentQuestion.solved ||
+      letterSelectionDisabled
+    )
+      return;
+
+    setLetterSelectionDisabled(true);
+
+    const lettersNotChosen = state.gameController.currentQuestion.puzzle
+      .split('')
+      .filter(
+        (letter) =>
+          letter !== ' ' &&
+          !state.gameController.currentQuestion.guessedLetters.includes(letter),
+      );
+
+    if (lettersNotChosen.length === 0) return;
+    const uniqueLetters = [...new Set(lettersNotChosen)];
+    for (let i = uniqueLetters.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [uniqueLetters[i], uniqueLetters[j]] = [
+        uniqueLetters[j],
+        uniqueLetters[i],
+      ];
+    }
+    const vowels = ['A', 'E', 'I', 'O', 'U'];
+    const vowelsArray = uniqueLetters.filter((letter) =>
+      vowels.includes(letter),
+    );
+    const consonantsArray = uniqueLetters.filter(
+      (letter) => !vowels.includes(letter),
+    );
+    const shuffledLetters = [...consonantsArray, ...vowelsArray];
+    const randomLetter = shuffledLetters[0];
+
+    keyPressCallback(randomLetter, {
+      state,
+      checkGuessedLetters,
+      guessLetter,
+      ipcRenderer,
+      activateLetterCells,
+    });
+  }, [
+    state,
+    letterSelectionDisabled,
+    checkGuessedLetters,
+    guessLetter,
+    activateLetterCells,
+  ]);
 
   const handleClickCategory = () => {
     clickHandlerCategory(state.gameController.board[selected], selected, {
@@ -165,13 +235,10 @@ export default function Wheel({ windowInstance }) {
   };
 
   const handleClickSolve = () => {
+    dispatch({ type: 'KILL_TIMER' });
+    setLetterSelectionDisabled(false);
     solvePuzzle({ state, dispatch, actions, sfxPlayer, musicPlayer });
   };
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyPress);
-    return () => document.removeEventListener('keydown', handleKeyPress);
-  }, [handleKeyPress]);
 
   useEffect(() => {
     if (state.gameController.currentQuestion.solved) {
@@ -228,13 +295,8 @@ export default function Wheel({ windowInstance }) {
           </Board>
         </BoardWrapper>
       )}
+      <TimerDisplay timer={state.gameController.timer} />
       <CategoryDisplay display={state.gameController.display}>
-        <GuessedLettersDisplay>
-          Guessed:
-          <LetterSpan>
-            {state.gameController.currentQuestion.guessedLetters.join(', ')}
-          </LetterSpan>
-        </GuessedLettersDisplay>
         <CategoryDisplayText>
           {state.gameController.currentQuestion.category.toUpperCase()}
         </CategoryDisplayText>
@@ -256,6 +318,13 @@ export default function Wheel({ windowInstance }) {
       >
         <p className="solve">Solve puzzle</p>
       </SolvePuzzle>
+      <GuessNextLetter
+        screen={windowInstance}
+        display={state.gameController.display}
+        onClick={handleGuessLetter}
+      >
+        <p className="guess">Guess Letter</p>
+      </GuessNextLetter>
       <ReactAudioPlayer
         ref={sfxPlayer}
         volume={
