@@ -173,7 +173,7 @@ app.on('ready', () => {
   }
 
   protocol.registerFileProtocol('app', (req, cb) => {
-    const url = req.url.substr(6);
+    const url = req.url.substring(6);
     const userDataPath = app.getPath('userData');
     cb({ path: path.join(userDataPath, url) });
   });

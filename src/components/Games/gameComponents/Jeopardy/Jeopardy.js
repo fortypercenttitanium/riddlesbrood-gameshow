@@ -48,9 +48,17 @@ export default function Jeopardy({ windowInstance }) {
   }
 
   const { state, dispatch } = useContext(StoreContext);
+  const [buttonsDisabled, setButtonsDisabled] = useState(false);
 
   let musicPlayer = useRef();
   let sfxPlayer = useRef();
+
+  function disableButtonDoublePress() {
+    setButtonsDisabled(true);
+    setTimeout(() => {
+      setButtonsDisabled(false);
+    }, 1000);
+  }
 
   // initialize game
   useEffect(() => {
@@ -112,6 +120,7 @@ export default function Jeopardy({ windowInstance }) {
   };
 
   const handleClickBoard = (question, categoryIndex, questionIndex) => {
+    disableButtonDoublePress();
     openQuestion(question, categoryIndex, questionIndex, {
       state,
       dispatch,
@@ -123,6 +132,7 @@ export default function Jeopardy({ windowInstance }) {
   };
 
   const handleClickModal = () => {
+    disableButtonDoublePress();
     modalClick({
       state,
       dispatch,
@@ -133,7 +143,7 @@ export default function Jeopardy({ windowInstance }) {
   };
 
   return state.gameController.gameStarted ? (
-    <JeopardyContainer>
+    <JeopardyContainer disableTouch={buttonsDisabled}>
       <ScoreOverlay
         ScoreComponent={ScoreComponent}
         position={'top'}

@@ -7,6 +7,7 @@ const JeopardyContainer = styled.div`
   display: flex;
   background: #222;
   position: relative;
+  pointer-events: ${(props) => (props.disableTouch ? 'none' : 'auto')};
 `;
 
 const Board = styled.div`

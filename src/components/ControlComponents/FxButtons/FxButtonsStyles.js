@@ -1,16 +1,17 @@
 import styled from 'styled-components';
 
 const FxButtonsDiv = styled.div`
-  grid-area: 7 / 1 / 11 / 4;
+  grid-area: 6 / 1 / 11 / 4;
   display: grid;
   grid-gap: 5px;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  margin: 2px 2px 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  margin: 0 2px 4px;
 `;
 
 const FxButton = styled.div`
   display: flex;
+  height: 100%;
   text-align: center;
   justify-content: center;
   align-items: center;

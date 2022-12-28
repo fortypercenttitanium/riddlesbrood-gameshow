@@ -37,7 +37,7 @@ import {
   ScoreComponent,
   playSound,
 } from '../../helpers/wheel/imports';
-import tickSound from '../../../../assets/sound_fx/shared/beep.mp3';
+import tickSound from '../../../../assets/sound_fx/wheel/wheel_tick.mp3';
 import buzzer from '../../../../assets/sound_fx/wheel/wheel_triple_buzz.mp3';
 
 import bgMusic from '../../../../assets/sound_fx/bg_music/wheel.mp3';

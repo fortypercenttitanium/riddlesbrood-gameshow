@@ -2,10 +2,10 @@ import styled from 'styled-components';
 
 const ShowControlsDiv = styled.div`
   display: grid;
-  grid-area: 4 / 1 / 7 / 4;
+  grid-area: 3 / 1 / 6 / 4;
   grid-gap: 5px;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
   margin: 2px;
 
   .split-button {
@@ -67,7 +67,7 @@ const HalfButton = styled(Button)`
 
 const Label = styled.h2`
   margin: auto;
-  font-size: 19px;
+  font-size: 18px;
   user-select: none;
   overflow-wrap: break-word;
 `;
