@@ -1,5 +1,5 @@
 import playSound from '../shared/audioHelpers';
-import { pyramidBell, buzzer } from './imports';
+import { pyramidBell, ponziPassBuzz } from './imports';
 import tickSound from '../../../../assets/sound_fx/shared/Time countdown.mp3';
 import bonus1 from '../../../../assets/videos/ponzi/bonus1.mp4';
 import bonus2 from '../../../../assets/videos/ponzi/bonus2.mp4';
@@ -149,7 +149,7 @@ const incorrectHandler = ({
   sfxPlayer,
   musicPlayer,
 }) => {
-  playSound(buzzer, 'sfx', {
+  playSound(ponziPassBuzz, 'sfx', {
     sfxPlayer,
     musicPlayer,
   });
