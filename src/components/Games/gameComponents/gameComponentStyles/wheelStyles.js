@@ -161,7 +161,7 @@ export const SolvePuzzle = styled.button`
       ? 'flex'
       : 'none'};
   position: absolute;
-  bottom: 24px;
+  bottom: 12px;
   left: 100px;
   padding: 14px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
@@ -185,13 +185,13 @@ export const GuessNextLetter = styled.button`
       ? 'flex'
       : 'none'};
   position: absolute;
-  bottom: 24px;
+  bottom: 12px;
   right: 100px;
-  padding: 14px;
+  padding: 4px 14px;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
   transition: 0.3s;
   margin: auto;
-  background: lightblue;
+  background: #5ae85d;
   cursor: pointer;
   border-radius: 10px;
   &:hover {
@@ -201,6 +201,11 @@ export const GuessNextLetter = styled.button`
     font-size: 2rem;
     font-weight: bold;
   }
+`;
+
+export const GuessNext2Letters = styled(GuessNextLetter)`
+  bottom: 136px;
+  background: #f56245;
 `;
 
 export const GuessedLettersDisplay = styled.div`

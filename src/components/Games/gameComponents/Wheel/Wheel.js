@@ -17,6 +17,7 @@ import {
   SolvePuzzle,
   CategoryDisplayText,
   GuessNextLetter,
+  GuessNext2Letters,
 } from '../gameComponentStyles/wheelStyles';
 import {
   renderPuzzle,
@@ -60,8 +61,8 @@ export default function Wheel({ windowInstance }) {
 
   useEffect(() => {
     if (windowInstance === 'gameboard') {
-      ipcRenderer.on('WHEEL_GUESS_RECEIVE', function (e, key) {
-        activateLetterCells(key.toUpperCase());
+      ipcRenderer.on('WHEEL_GUESS_RECEIVE', function (e, letters) {
+        activateLetterCells(letters.map((letter) => letter.toUpperCase()));
       });
     }
     return () => ipcRenderer.removeAllListeners('WHEEL_GUESS_RECEIVE');
@@ -130,8 +131,8 @@ export default function Wheel({ windowInstance }) {
   );
 
   const activateLetterCells = useCallback(
-    (letter, index = 0) => {
-      activateLetterCellsCallback(letter, index, {
+    (letters, index = 0) => {
+      activateLetterCellsCallback(letters, index, {
         sfxPlayer,
         musicPlayer,
         activateLetterCells,
@@ -148,13 +149,13 @@ export default function Wheel({ windowInstance }) {
   );
 
   const checkGuessedLetters = useCallback(
-    (letter) => checkLettersCallback(letter, { state }),
+    (letters) => checkLettersCallback(letters, { state }),
     [state],
   );
 
   const guessLetter = useCallback(
-    (letter) => {
-      guessLetterCallback(letter, {
+    (letters) => {
+      guessLetterCallback(letters, {
         checkGuessedLetters,
         setCurrentQuestion,
         state,
@@ -163,57 +164,62 @@ export default function Wheel({ windowInstance }) {
     [checkGuessedLetters, setCurrentQuestion, state],
   );
 
-  const handleGuessLetter = useCallback(() => {
-    if (
-      state.gameController.timer.running ||
-      state.gameController.currentQuestion.solved ||
-      letterSelectionDisabled
-    )
-      return;
+  const handleGuessLetter = useCallback(
+    (numberOfLetters = 1) => {
+      if (
+        state.gameController.timer.running ||
+        state.gameController.currentQuestion.solved ||
+        letterSelectionDisabled
+      )
+        return;
 
-    setLetterSelectionDisabled(true);
+      setLetterSelectionDisabled(true);
 
-    const lettersNotChosen = state.gameController.currentQuestion.puzzle
-      .split('')
-      .filter(
-        (letter) =>
-          letter !== ' ' &&
-          !state.gameController.currentQuestion.guessedLetters.includes(letter),
+      const lettersNotChosen = state.gameController.currentQuestion.puzzle
+        .split('')
+        .filter(
+          (letter) =>
+            letter !== ' ' &&
+            !state.gameController.currentQuestion.guessedLetters.includes(
+              letter,
+            ),
+        );
+
+      if (lettersNotChosen.length === 0) return;
+      const uniqueLetters = [...new Set(lettersNotChosen)];
+      for (let i = uniqueLetters.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [uniqueLetters[i], uniqueLetters[j]] = [
+          uniqueLetters[j],
+          uniqueLetters[i],
+        ];
+      }
+      const vowels = ['A', 'E', 'I', 'O', 'U'];
+      const vowelsArray = uniqueLetters.filter((letter) =>
+        vowels.includes(letter),
       );
+      const consonantsArray = uniqueLetters.filter(
+        (letter) => !vowels.includes(letter),
+      );
+      const shuffledLetters = [...consonantsArray, ...vowelsArray];
+      const randomLetters = shuffledLetters.slice(0, numberOfLetters);
 
-    if (lettersNotChosen.length === 0) return;
-    const uniqueLetters = [...new Set(lettersNotChosen)];
-    for (let i = uniqueLetters.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [uniqueLetters[i], uniqueLetters[j]] = [
-        uniqueLetters[j],
-        uniqueLetters[i],
-      ];
-    }
-    const vowels = ['A', 'E', 'I', 'O', 'U'];
-    const vowelsArray = uniqueLetters.filter((letter) =>
-      vowels.includes(letter),
-    );
-    const consonantsArray = uniqueLetters.filter(
-      (letter) => !vowels.includes(letter),
-    );
-    const shuffledLetters = [...consonantsArray, ...vowelsArray];
-    const randomLetter = shuffledLetters[0];
-
-    keyPressCallback(randomLetter, {
+      keyPressCallback(randomLetters, {
+        state,
+        checkGuessedLetters,
+        guessLetter,
+        ipcRenderer,
+        activateLetterCells,
+      });
+    },
+    [
       state,
+      letterSelectionDisabled,
       checkGuessedLetters,
       guessLetter,
-      ipcRenderer,
       activateLetterCells,
-    });
-  }, [
-    state,
-    letterSelectionDisabled,
-    checkGuessedLetters,
-    guessLetter,
-    activateLetterCells,
-  ]);
+    ],
+  );
 
   const handleClickCategory = () => {
     clickHandlerCategory(state.gameController.board[selected], selected, {
@@ -318,12 +324,19 @@ export default function Wheel({ windowInstance }) {
       >
         <p className="solve">Solve puzzle</p>
       </SolvePuzzle>
+      <GuessNext2Letters
+        screen={windowInstance}
+        display={state.gameController.display}
+        onClick={() => handleGuessLetter(2)}
+      >
+        <p className="guess">Guess 2 Letters</p>
+      </GuessNext2Letters>
       <GuessNextLetter
         screen={windowInstance}
         display={state.gameController.display}
-        onClick={handleGuessLetter}
+        onClick={() => handleGuessLetter(1)}
       >
-        <p className="guess">Guess Letter</p>
+        <p className="guess">Guess 1 Letter</p>
       </GuessNextLetter>
       <ReactAudioPlayer
         ref={sfxPlayer}

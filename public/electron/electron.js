@@ -107,8 +107,8 @@ function createGameWindows({ debugging }) {
     }
   });
 
-  ipcMain.on('WHEEL_GUESS_SEND', (e, key) => {
-    gameWindow.webContents.send('WHEEL_GUESS_RECEIVE', key);
+  ipcMain.on('WHEEL_GUESS_SEND', (e, letters) => {
+    gameWindow.webContents.send('WHEEL_GUESS_RECEIVE', letters);
   });
 
   ipcMain.on('PLAY_VIDEO_SEND', (e, payload) => {

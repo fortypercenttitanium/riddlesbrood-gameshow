@@ -117,23 +117,25 @@ const setQuestionCallback = (
   dispatch({ type: actions.SET_QUESTION, payload: question });
 };
 
-const checkLettersCallback = (letter, { state }) => {
-  return state.gameController.currentQuestion.guessedLetters.includes(letter);
+const checkLettersCallback = (letters, { state }) => {
+  return state.gameController.currentQuestion.guessedLetters.some((curr) =>
+    letters.includes(curr),
+  );
 };
 
 const guessLetterCallback = (
-  letter,
+  letters,
   { checkGuessedLetters, setCurrentQuestion, state },
 ) => {
-  if (!checkGuessedLetters(letter)) {
+  if (!checkGuessedLetters(letters)) {
     let question = state.gameController.currentQuestion;
-    question.guessedLetters.push(letter);
+    question.guessedLetters.push(...letters);
     setCurrentQuestion(question);
   }
 };
 
 const activateLetterCellsCallback = (
-  letter,
+  letters,
   index = 0,
   {
     sfxPlayer,
@@ -144,10 +146,9 @@ const activateLetterCellsCallback = (
     guessedLetters,
   },
 ) => {
+  if (typeof letters === 'string') letters = [letters];
   const spans = Array.from(document.querySelectorAll('[data-cell')).filter(
-    (span) => {
-      return span.textContent === letter;
-    },
+    (span) => letters.includes(span.textContent),
   );
   if (spans.length === 0) {
     // only play sounds from one window
@@ -174,11 +175,11 @@ const activateLetterCellsCallback = (
     }
     setTimeout(() => {
       if (index < spans.length) {
-        activateLetterCells(letter, index + 1);
+        activateLetterCells(letters, index + 1);
       }
       if (index === spans.length - 1) {
-        const timerTime =
-          guessedLetters.length <= 3 ? 9 : guessedLetters.length <= 6 ? 7 : 5;
+        const timerTime = 5;
+        // guessedLetters.length <= 3 ? 9 : guessedLetters.length <= 6 ? 7 : 5;
         dispatch({ type: 'SET_TIMER', payload: timerTime });
         dispatch({ type: 'RUN_TIMER' });
       }
@@ -187,14 +188,15 @@ const activateLetterCellsCallback = (
 };
 
 const keyPressCallback = (
-  letter,
+  letters,
   { state, checkGuessedLetters, guessLetter, ipcRenderer, activateLetterCells },
 ) => {
   if (state.gameController.display === 'board') {
-    if (!checkGuessedLetters(letter.toUpperCase())) {
-      guessLetter(letter.toUpperCase());
-      ipcRenderer.send('WHEEL_GUESS_SEND', letter);
-      activateLetterCells(letter.toUpperCase());
+    const upperCaseLetters = letters.map((letter) => letter.toUpperCase());
+    if (!checkGuessedLetters(upperCaseLetters)) {
+      guessLetter(upperCaseLetters);
+      ipcRenderer.send('WHEEL_GUESS_SEND', upperCaseLetters);
+      activateLetterCells(upperCaseLetters);
     }
   }
 };
