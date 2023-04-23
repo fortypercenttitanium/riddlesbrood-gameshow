@@ -26,6 +26,7 @@ const commercialVideos = Object.values(
 
 export default function ShowControls({ projectorMode }) {
   const { state, dispatch } = useContext(StoreContext);
+  const { videoIsPlaying } = state;
   const [currentCommercial, setCurrentCommercial] = useState(0);
 
   // set preloaded custom message
@@ -52,6 +53,8 @@ export default function ShowControls({ projectorMode }) {
   };
 
   const handleClickCommercial = () => {
+    if (videoIsPlaying) return ipcRenderer.send('STOP_VIDEO_SEND');
+
     const commercialFile = commercialVideos[currentCommercial];
     ipcRenderer.send('PLAY_VIDEO_SEND', {
       file: showControlVideos['brb.mp4'],

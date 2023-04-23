@@ -78,6 +78,11 @@ export default function VideoPlayer({ windowInstance }) {
     [allVideos, restoreVolume],
   );
 
+  // update the videoIsPlaying state in the context to match the component state
+  useEffect(() => {
+    dispatch({ type: 'SET_VIDEO_IS_PLAYING', payload: isVideoPlaying });
+  }, [isVideoPlaying, dispatch]);
+
   useEffect(() => {
     ipcRenderer.on('PLAY_VIDEO_RECEIVE', (_, payload) => {
       if (isVideoPlaying) {

@@ -307,6 +307,11 @@ export const reducer = (state, { type, payload }) => {
         },
       };
     }
+    case 'SET_VIDEO_IS_PLAYING':
+      return {
+        ...state,
+        videoIsPlaying: payload,
+      };
     default:
       return state;
   }
